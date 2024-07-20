@@ -1,6 +1,5 @@
 import Link from "next/link"
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
+import { ToggleMode } from "./toggle-mode"
 
 export default function LandingNavbar(){
     return (
@@ -11,6 +10,7 @@ export default function LandingNavbar(){
               <span className="font-bold">Centometer</span>
             </Link>
             <div className="flex items-center gap-4">
+
               <Link
                 href="#"
                 className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -18,7 +18,7 @@ export default function LandingNavbar(){
               >
                 Get Started
               </Link>
-             
+              <ToggleMode/>
             </div>
           </div>
         </header>
@@ -45,27 +45,8 @@ function MenuIcon(props:any) {
       </svg>
     )
   }
-  
-  
-  function MountainIcon(props:any) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
-      </svg>
-    )
-  }
-  
+ 
+ 
   function BarChartIcon(props:any) {
     return (
       <svg

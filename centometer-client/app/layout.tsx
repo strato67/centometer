@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Manrope } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
@@ -31,7 +32,16 @@ export default function RootLayout({
       <body
         className={cn("antialiased", fontHeading.variable, fontBody.variable)}
       >
+        <ThemeProvider
+         attribute="class"
+         defaultTheme="light"
+         enableSystem
+         disableTransitionOnChange
+        >
         {children}
+        </ThemeProvider>
+
+
         <Analytics/>
       </body>
     </html>
