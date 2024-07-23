@@ -17,6 +17,7 @@ export default function Page() {
                   width="550"
                   height="550"
                   alt="Hero"
+                  priority
                   className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
                 />
                 <div className="flex flex-col justify-center space-y-4">
