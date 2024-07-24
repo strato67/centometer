@@ -10,8 +10,20 @@ import {
   BarChartIcon,
   MenuIcon,
   NewspaperIcon,
+  LogOut,
+  Settings,
+  User,
 } from "lucide-react";
 import React from "react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   const navItems = [
@@ -64,14 +76,8 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
               ))}
             </nav>
           </div>
-          <div className="p-4 flex flex-col max-w-full">
-            <div className="flex items-center gap-4 overflow-hidden ">
-              <Avatar>
-                <AvatarImage src="https://github.com/strato67.png" />
-                <AvatarFallback>SS</AvatarFallback>
-              </Avatar>
-              <p className="text-lg font-bold truncate">Profile Name</p>
-            </div>
+          <div className="p-4 flex max-w-full items-center gap-1">
+            <SidebarDropdownMenu />
             <ToggleMode />
           </div>
         </aside>
@@ -97,20 +103,13 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
                         className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
                       >
                         {navItem.icon}
-                        {navItem.itemName}
+                        <p className="text-lg">{navItem.itemName}</p>
                       </Link>
                     );
                   })}
                 </nav>
-                <div className="p-6 flex flex-col mt-auto">
-                <div className="flex items-center gap-4 overflow-hidden ">
-              <Avatar>
-                <AvatarImage src="https://github.com/strato67.png" />
-                <AvatarFallback>SS</AvatarFallback>
-              </Avatar>
-              <p className="text-lg font-bold truncate">Profile Name</p>
-            </div>
-
+                <div className="p-6 flex items-center gap-4  mt-auto">
+                  <SidebarDropdownMenu />
                   <ToggleMode />
                 </div>
               </SheetContent>
@@ -120,5 +119,45 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
         </div>
       </div>
     </>
+  );
+}
+
+function SidebarDropdownMenu() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          className="flex items-center gap-2 overflow-hidden py-8 w-full rounded-xl"
+          variant="ghost"
+        >
+          <Avatar>
+            <AvatarImage src="https://github.com/strato67.png" />
+            <AvatarFallback>SS</AvatarFallback>
+          </Avatar>
+          <p className="text-sm font-bold overflow-hidden">strato67</p>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56 mx-auto">
+        <DropdownMenuLabel className="text-lg">My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <User className="mr-2 h-4 w-4" />
+            <span>Profile</span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem>
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <LogOut className="mr-2 h-4 w-4" />
+          <span className="font-bold">Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
