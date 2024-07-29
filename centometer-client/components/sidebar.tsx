@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -14,7 +16,7 @@ import {
   Settings,
   User,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -24,6 +26,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { signout } from "@/app/actions/account";
+import { createClient } from "@/utils/supabase/client";
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   const navItems = [
@@ -123,6 +127,21 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
 }
 
 function SidebarDropdownMenu() {
+  const supabase = createClient();
+
+  const [userName, setUserName] = useState("User");
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUserName(user?.email!);
+    };
+    getUser();
+  }, [supabase]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -134,7 +153,7 @@ function SidebarDropdownMenu() {
             <AvatarImage src="https://github.com/strato67.png" />
             <AvatarFallback>SS</AvatarFallback>
           </Avatar>
-          <p className="text-sm font-bold overflow-hidden">strato67</p>
+          <p className="text-sm font-bold overflow-hidden">{userName}</p>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mx-auto">
@@ -153,7 +172,7 @@ function SidebarDropdownMenu() {
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => signout()}>
           <LogOut className="mr-2 h-4 w-4" />
           <span className="font-bold">Log out</span>
         </DropdownMenuItem>

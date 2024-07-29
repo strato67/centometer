@@ -12,11 +12,10 @@ export default function Navbar() {
         </Link>
         <div className="flex items-center gap-4">
           <Link
-            href="#"
+            href="/dashboard"
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            prefetch={false}
           >
-            Get Started
+            Dashboard
           </Link>
           <ToggleMode />
         </div>
