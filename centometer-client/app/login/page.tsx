@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { login, signup } from "@/app/actions/account";
+import { login } from "@/app/actions/account";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
