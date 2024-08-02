@@ -103,7 +103,7 @@ export default function SignupPage() {
             </div>
 
 
-          <Button variant={"outline"} className="w-full" onClick={LoginWithGoogle}><Image width={24} height={24} className="mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"/><span>Sign up with Google</span></Button>
+          <Button variant={"outline"} className="w-full" onClick={LoginWithGoogle}><Image width={24} height={24} className="mr-2" src="google.svg" loading="lazy" alt="google logo"/><span>Sign up with Google</span></Button>
             <p className="self-start">
               Already have an account?{" "}
               <Link href={"/login"} className="font-bold text-primary ">
