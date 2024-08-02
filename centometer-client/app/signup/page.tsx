@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import {
   Card,
@@ -16,12 +16,18 @@ import {
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { signup } from "../actions/account";
-import { useState } from "react";
-import { createClient } from '@/utils/supabase/client'
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+
 
 export default function SignupPage() {
   const [error, setError] = useState("");
+  const [domain, setDomain] = useState("");
   const supabase = createClient();
+
+  useEffect(()=>{
+    setDomain(window.location.host)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,11 +45,10 @@ export default function SignupPage() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `http://localhost:3000/auth/callback`,
+        redirectTo: `http://${domain}/auth/callback`,
       },
-    })
+    });
   };
-
 
   return (
     <>
@@ -94,16 +99,27 @@ export default function SignupPage() {
             </form>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            
-
             <div className="flex items-center w-full overflow-hidden justify-center">
-            <Separator className="" />
-            <p className="mx-5">OR</p>
-            <Separator className="" />
+              <Separator className="" />
+              <p className="mx-5">OR</p>
+              <Separator className="" />
             </div>
 
-
-          <Button variant={"outline"} className="w-full" onClick={LoginWithGoogle}><Image width={24} height={24} className="mr-2" src="google.svg" loading="lazy" alt="google logo"/><span>Sign up with Google</span></Button>
+            <Button
+              variant={"outline"}
+              className="w-full"
+              onClick={LoginWithGoogle}
+            >
+              <Image
+                width={24}
+                height={24}
+                className="mr-2"
+                src="google.svg"
+                loading="lazy"
+                alt="google logo"
+              />
+              <span>Sign up with Google</span>
+            </Button>
             <p className="self-start">
               Already have an account?{" "}
               <Link href={"/login"} className="font-bold text-primary ">
@@ -111,8 +127,6 @@ export default function SignupPage() {
               </Link>
             </p>
           </CardFooter>
-
-
         </Card>
       </div>
     </>
