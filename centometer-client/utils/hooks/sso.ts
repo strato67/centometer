@@ -18,6 +18,5 @@ export default function useGoogleSSO() {
     });
   };
 
-
-  return {LoginWithGoogle};
+  return { LoginWithGoogle };
 }
