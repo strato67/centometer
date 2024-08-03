@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import useGoogleSSO from "@/utils/hooks/sso";
 import {
   Card,
   CardContent,
@@ -15,18 +16,12 @@ import {
 import Link from "next/link";
 import { login } from "@/app/actions/account";
 import { ArrowLeft } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { createClient } from "@/utils/supabase/client";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
-  const [domain, setDomain] = useState("");
-  const supabase = createClient();
-
-  useEffect(()=>{
-    setDomain(window.location.host)
-  }, [])
+  const { LoginWithGoogle } = useGoogleSSO()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,15 +33,6 @@ export default function LoginPage() {
     if (response && response.error) {
       setError(response.error.message);
     }
-  };
-
-  const LoginWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `http://${domain}/auth/callback`,
-      },
-    });
   };
 
   return (
