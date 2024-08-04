@@ -2,9 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import useGoogleSSO from "@/utils/hooks/sso";
+import Link from "next/link";
+import { login } from "@/app/actions/account";
+import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 import {
   Card,
   CardContent,
@@ -13,23 +20,35 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
-import { login } from "@/app/actions/account";
-import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
-import { Separator } from "@/components/ui/separator";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+
+const formSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string({ message: "A password is required" }),
+})
+
 
 export default function LoginPage() {
   const [error, setError] = useState("");
   const { LoginWithGoogle } = useGoogleSSO()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    }
+  })
 
-    const formData = new FormData(e.currentTarget);
-
-    const response = await login(formData);
-
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    const response = await login(data);
     if (response && response.error) {
       setError(response.error.message);
     }
@@ -50,36 +69,60 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="someone@example.com"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="your password"
-                required
-              />
+          <Form {...form}>
+            <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel >Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="someone@example.com"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel >Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="password"
+                          type="password"
+                          placeholder="enter a password"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               {error && (
                 <div className="text-sm text-destructive font-bold">
                   {error}
                 </div>
               )}
-            </div>
-            <Button className="w-full " type="submit">
-              Log In
-            </Button>
-          </form>
+              <Button className="w-full mt-2 " type="submit">
+                Log In
+              </Button>
+            </form>
+          </Form>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
           <div className="flex items-center w-full justify-center overflow-hidden">
