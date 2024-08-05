@@ -127,9 +127,22 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
 }
 
 function SidebarDropdownMenu() {
+  type Metadata = {
+    email: string,
+    username: string | undefined,
+    picture: string | undefined
+  }
+
+  const initalData :Metadata = {
+    email: "User",
+    username: "",
+    picture: ""
+  }
+
+
   const supabase = createClient();
 
-  const [userName, setUserName] = useState("User");
+  const [userMetadata, setUserMetadata] = useState<Metadata>(initalData);
 
   useEffect(() => {
     const getUser = async () => {
@@ -137,7 +150,11 @@ function SidebarDropdownMenu() {
         data: { user },
       } = await supabase.auth.getUser();
 
-      setUserName(user?.email!);
+      setUserMetadata({
+        email: user?.user_metadata.email,
+        username: user?.user_metadata.name,
+        picture: user?.user_metadata.picture
+      });
     };
     getUser();
   }, [supabase]);
@@ -150,10 +167,10 @@ function SidebarDropdownMenu() {
           variant="ghost"
         >
           <Avatar>
-            <AvatarImage src="https://github.com/strato67.png" />
-            <AvatarFallback>SS</AvatarFallback>
+            <AvatarImage src={userMetadata.picture} />
+            <AvatarFallback>{userMetadata.email.slice(0,2).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <p className="text-sm font-bold overflow-hidden">{userName}</p>
+          <p className="text-sm font-bold overflow-hidden">{userMetadata.username || userMetadata.email}</p>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mx-auto">
