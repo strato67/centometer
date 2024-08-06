@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, memo } from "react";
-import Link from "next/link";
 
-function SymbolOverview() {
+function SymbolOverview({ticker}:{ticker:string}) {
   const container = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -12,23 +12,24 @@ function SymbolOverview() {
     script.async = true;
     script.innerText = `
   {
-  "symbol": "NVDA",
-  "width": 350,
-  "height": 220,
+  "symbol": "${ticker}",
+  "width": "100%",
+  "height": "100%",
   "locale": "en",
-  "dateRange": "12M",
+  "dateRange": "1M",
   "colorTheme": "dark",
   "isTransparent": false,
   "autosize": false,
-  "largeChartUrl": ""
+  "largeChartUrl": "http://localhost:3000/dashboard/watchlist/"
 }`;
     if (container.current) {
       container.current.appendChild(script);
     }
     return () => script.remove();
-  }, []);
+  }, [ticker]);
 
   return <div className="tradingview-widget-container" ref={container}></div>;
 }
 
 export default memo(SymbolOverview);
+
