@@ -16,7 +16,7 @@ function SymbolOverview({ticker}:{ticker:string}) {
   "width": "100%",
   "height": "100%",
   "locale": "en",
-  "dateRange": "1M",
+  "dateRange": "1D",
   "colorTheme": "dark",
   "isTransparent": false,
   "autosize": false,

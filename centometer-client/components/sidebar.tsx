@@ -56,7 +56,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="flex h-screen w-full">
-        <aside className="hidden h-full border-r bg-background md:flex w-64 relative  md:flex-col justify-between">
+        <aside className="hidden h-full border-r bg-background md:flex w-64 fixed  md:flex-col justify-between">
           <div>
             <div className="flex h-14 items-center justify-between border-b px-4">
               <Link
@@ -119,7 +119,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
               </SheetContent>
             </Sheet>
           </header>
-          <main className="flex-1 p-4 md:p-6">{children}</main>
+          <main className="flex-1 p-4 md:p-6 overflow-y-scroll md:ml-64 ">{children}</main>
         </div>
       </div>
     </>
