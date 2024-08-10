@@ -1,9 +1,7 @@
 import csv
 import os
 
-txtfile="./data/ASX.txt"
-outputFile="ASX.csv"
-
+destination_folder="./tmp"
 
 def convert_text_to_csv(file_input):
 
@@ -14,8 +12,10 @@ def convert_text_to_csv(file_input):
             for line in reader:
                 writer.writerow(line)
 
+if not os.path.exists(destination_folder):
+    os.makedirs(destination_folder)
 
-
-for file in os.listdir("./data"):
+for file in os.listdir(destination_folder):
     if file.endswith(".txt"):
-        convert_text_to_csv(os.path.join("./data", file))
+        convert_text_to_csv(os.path.join(destination_folder, file))
+    os.remove(os.path.join(destination_folder, file))
