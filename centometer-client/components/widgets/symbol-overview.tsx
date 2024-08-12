@@ -20,7 +20,7 @@ function SymbolOverview({ticker}:{ticker:string}) {
   "colorTheme": "dark",
   "isTransparent": false,
   "autosize": false,
-  "largeChartUrl": "http://localhost:3000/dashboard/watchlist/"
+  "largeChartUrl": "http://localhost:3000/dashboard/stock/"
 }`;
     if (container.current) {
       container.current.appendChild(script);

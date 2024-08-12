@@ -19,7 +19,12 @@ const results = [
 
 ];
 
-export function SearchTable() {
+export default function SearchTable() {
+
+  if (results.length === 0) {
+    return(<p className="text-center mt-4">No results found.</p>)
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -32,7 +37,7 @@ export function SearchTable() {
       </TableHeader>
       <TableBody>
         {results.map((stock) => (
-          <Link href={"/"} legacyBehavior key={stock.symbol}>
+          <Link href={`/dashboard/stock/?tvwidgetsymbol=${stock.symbol}`} legacyBehavior key={stock.symbol}>
             <TableRow>
               <TableCell className="font-medium">{stock.symbol}</TableCell>
               <TableCell>{stock.company}</TableCell>
