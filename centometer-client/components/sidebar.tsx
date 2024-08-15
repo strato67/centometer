@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signout } from "@/app/actions/account";
 import { createClient } from "@/utils/supabase/client";
+import { Suspense } from "react";
+import Loading from "@/app/dashboard/loading";
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   const navItems = [
@@ -119,7 +121,9 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
               </SheetContent>
             </Sheet>
           </header>
-          <main className="flex-1 p-4 md:p-6 overflow-y-scroll md:ml-64 ">{children}</main>
+          <Suspense fallback={<Loading/>}>
+            <main className="flex-1 p-4 md:p-6 overflow-y-scroll md:ml-64 ">{children}</main>
+          </Suspense>
         </div>
       </div>
     </>
@@ -133,7 +137,7 @@ function SidebarDropdownMenu() {
     picture: string | undefined
   }
 
-  const initalData :Metadata = {
+  const initalData: Metadata = {
     email: "User",
     username: "",
     picture: ""
@@ -168,7 +172,7 @@ function SidebarDropdownMenu() {
         >
           <Avatar>
             <AvatarImage src={userMetadata.picture} />
-            <AvatarFallback>{userMetadata.email.slice(0,2).toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{userMetadata.email.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <p className="text-sm font-bold overflow-hidden">{userMetadata.username || userMetadata.email}</p>
         </Button>
