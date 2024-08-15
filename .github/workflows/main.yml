@@ -1,22 +1,20 @@
-name: deploy_lambda
+name: Deploy
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+    - main
 
 jobs:
-    deploy_stock_search:
-        name: deploy stock search lambda function
-        runs-on: ubuntu-latest
-        steps: 
-            - name: checkout source code
-              uses: actions/checkout@v2
-            - name: install node
-              uses: actions/setup-node@v2
-              with:
-                node-version: "20.x"
-            - name: Install serverless
-              run: npm install -g serverless
-            - name: Install npm dependencies
-              run: npm install
+  deploy_lambda:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+      - name: npm install
+        env:
+          CI: true
+        run: |
+          npm ci
