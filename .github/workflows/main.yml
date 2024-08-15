@@ -19,4 +19,4 @@ jobs:
             - name: Install serverless
               run: npm install -g serverless
             - name: Install npm dependencies
-              run: npm ci
+              run: npm install
