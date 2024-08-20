@@ -4,5 +4,8 @@
     "@types/node": "^22.3.0",
     "@vercel/ncc": "^0.38.1",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "yahoo-finance2": "^2.11.3"
   }
 }
