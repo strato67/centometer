@@ -11,18 +11,13 @@ export const handler = async (event: APIGatewayProxyEvent) => {
   return response;
 };
 
-const searchStock = async (searchItem: string | undefined) => {
+export const searchStock = async (searchItem: string | undefined) => {
 
-  if (searchItem === undefined) {
-    return
-  }
+    try {
+      await yahooFinance.search(searchItem!);
+    } catch (e) {
+      throw Error("could not find stock")
+    }
 
-
-  const results = await yahooFinance.search(searchItem)
-
-  console.log(results)
-
-
-};
-
-searchStock("APPL")
+}
+//
