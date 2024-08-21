@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import yahooFinance from "yahoo-finance2";
+yahooFinance.setGlobalConfig({ validation: { logErrors: false } });
 
 export const handler = async (event: APIGatewayProxyEvent) => {
   const query = event.queryStringParameters?.query;
@@ -12,28 +13,45 @@ export const handler = async (event: APIGatewayProxyEvent) => {
 };
 
 export const searchStock = async (searchItem: string | undefined) => {
-  try {
-    const response = await yahooFinance.search(searchItem!, {
-      lang: "en-US",
-      newsCount: 0,
-    });
-    const { quotes } = response;
+  if (searchItem === "" || searchItem === undefined) {
+    return Promise.reject(new Error("Undefined search parameters"));
+  }
 
-    const filteredQuotes = quotes.filter((quote) =>
+  let result;
+
+  try {
+    result = await yahooFinance.search(
+      searchItem,
+      {
+        lang: "en-US",
+        newsCount: 0,
+      },
+      { validateResult: false }
+    );
+  } catch (error: any) {
+    
+    result = error.result;
+  }
+
+  if (result && result.quotes){
+    
+    const { quotes } = result;
+
+    const filteredQuotes = quotes.filter((quote:any) =>
       quote.hasOwnProperty("exchDisp")
     );
-
-    const symbolList = filteredQuotes.map((quote) => quote.symbol);
+    
+    const symbolList = filteredQuotes.map((quote:any) => quote.symbol);
 
     const prices = await yahooFinance.quote(symbolList, {
       fields: ["regularMarketPrice", "regularMarketChangePercent"],
-    });
+    }, {validateResult:false});
 
-    const quotesWithPrice = filteredQuotes.map((quote) => {
+    const quotesWithPrice = filteredQuotes.map((quote:any) => {
       const symbol = quote.symbol;
 
       const quotePriceObject = prices.find(
-        (priceItem) => priceItem.symbol === symbol
+        (priceItem:any) => priceItem.symbol === symbol
       );
 
       const regularMarketPrice = quotePriceObject?.regularMarketPrice || 0;
@@ -48,7 +66,12 @@ export const searchStock = async (searchItem: string | undefined) => {
     });
 
     return quotesWithPrice;
-  } catch (e) {
-    throw Error("could not find stock");
+
   }
+  return Promise.reject(new Error("Could not retrieve results"));
+
 };
+
+(async () => {
+  console.log(await searchStock("taiwan"))
+})()
