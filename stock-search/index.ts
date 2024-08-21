@@ -71,7 +71,3 @@ export const searchStock = async (searchItem: string | undefined) => {
   return Promise.reject(new Error("Could not retrieve results"));
 
 };
-
-(async () => {
-  console.log(await searchStock("taiwan"))
-})()
