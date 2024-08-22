@@ -1,0 +1,22 @@
+name: Tests
+
+on: push
+
+jobs:
+
+  stock_search_test:
+    
+    name: test stock search lambda function
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: ./stock-search
+    steps:
+        - name: Checkout source code
+          uses: actions/checkout@v3
+
+        - name: Install modules
+          run: yarn
+          
+        - name: Run tests
+          run: yarn test
