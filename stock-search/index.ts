@@ -6,10 +6,12 @@ export const handler = async (event: APIGatewayProxyEvent) => {
   const query = event.queryStringParameters?.query;
 
   try {
+    const response = await searchStock(query)
+
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: await searchStock(query),
+        message: response,
       }),
     };
   } catch (error) {
