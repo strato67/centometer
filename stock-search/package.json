@@ -11,8 +11,7 @@
     "@babel/preset-env": "^7.25.3",
     "babel-jest": "^29.7.0",
     "node-fetch": "^3.3.2",
-    "ts-jest": "^29.2.4",
-    "yahoo-finance2": "^2.11.3"
+    "ts-jest": "^29.2.4"
   },
   "scripts": {
     "test": "jest"
