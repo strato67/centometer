@@ -6,7 +6,8 @@ import {
   GetCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-const client = new DynamoDBClient({});
+
+const client = new DynamoDBClient({region:"ca-central-1"});
 const dynamo = DynamoDBDocumentClient.from(client);
 const tableName = "symbol-storage";
 
