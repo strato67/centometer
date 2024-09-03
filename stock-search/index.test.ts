@@ -11,17 +11,29 @@ describe("Stock search", () => {
 });
 
 describe("Specific queries", () => {
-  it.skip("query is AAPL", async () => {
+  it("query is AAPL", async () => {
     const response = await searchStock("aapl");
+    expect(response).toBeDefined();
 
-    expect(response).toBeInstanceOf(Array);
-    /*expect(response[0]).toHaveProperty("symbol");
-    expect(response[0]).toHaveProperty("exchDisp");*/
+    if (response) {
+      expect(response).toBeInstanceOf(Array);
+      expect(response[0]).toHaveProperty("Symbol");
+      expect(response[0]).toHaveProperty("Index");
+      expect(response[0]).toHaveProperty("Description");
+    }
   });
 
-  it.skip("query is full company name", async () => {
+  it("query is full company name", async () => {
     const response = await searchStock("Advanced Micro Devices");
-    expect(response).toBeInstanceOf(Array);
-    //expect(response[0].symbol).toBe("AMD");
+    expect(response).toBeDefined();
+
+    if (response) {
+      expect(response).toBeInstanceOf(Array);
+      expect(response[0]).toHaveProperty("Symbol");
+    }
+  });
+
+  it("query does not exist", async () => {
+    await expect(searchStock("blah blah bafdad")).rejects.toThrow();
   });
 });

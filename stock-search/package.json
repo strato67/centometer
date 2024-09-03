@@ -8,6 +8,8 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.637.0",
+    "@aws-sdk/lib-dynamodb": "^3.637.0",
     "@babel/preset-env": "^7.25.3",
     "babel-jest": "^29.7.0",
     "node-fetch": "^3.3.2",
