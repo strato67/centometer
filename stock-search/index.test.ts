@@ -20,6 +20,7 @@ describe("Specific queries", () => {
       expect(response[0]).toHaveProperty("Symbol");
       expect(response[0]).toHaveProperty("Index");
       expect(response[0]).toHaveProperty("Description");
+      expect(response[0].Symbol).toBe("AAPL")
     }
   });
 
