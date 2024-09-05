@@ -3,12 +3,12 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   DynamoDBDocumentClient,
   ScanCommand,
-  GetCommand,
+  QueryCommand
 } from "@aws-sdk/lib-dynamodb";
 
 const client = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(client);
-const tableName = "symbol-list";
+const tableName = "symbol-storage";
 
 export const handler = async (event: APIGatewayProxyEvent) => {
   const query = event.queryStringParameters?.query;
@@ -38,17 +38,25 @@ export const searchStock = async (searchItem: string | undefined) => {
 
   const tickerQuery = {
     TableName: tableName,
-    Key: {
-      Symbol: searchItem.toUpperCase(),
+    KeyConditionExpression: 'Symbol = :s',
+    ExpressionAttributeValues: {
+      ":s": searchItem.toUpperCase(),
     },
   };
+  
+  const query = new QueryCommand(tickerQuery);
+  const tickerResponse = await dynamo.send(query)
+  const tickerResults = tickerResponse.Items
+
+  if (tickerResults && tickerResults.length > 0 ) {
+    return tickerResults
+  }
 
   const generalQuery = {
     TableName: tableName,
-    FilterExpression: "#Symbol = :d OR contains(#Description, :d)",
+    FilterExpression: "#Description = :d OR contains(#Description, :d)",
     ExpressionAttributeNames: {
       "#Description": "Description",
-      "#Symbol": "Symbol"
     },
     ExpressionAttributeValues: {
       ":d": searchItem.toUpperCase(),
@@ -61,13 +69,6 @@ export const searchStock = async (searchItem: string | undefined) => {
 
   if (results?.length === 0) {
     return Promise.reject(new Error("No symbols found"));
-  }
-
-
-  const filteredResults = results?.filter(result=>result.Symbol === searchItem.toUpperCase() || result.Description === searchItem.toUpperCase())
-
-  if (filteredResults?.length !== 0){
-    return filteredResults
   }
 
   return results;
