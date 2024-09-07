@@ -25,7 +25,7 @@ describe("Specific queries", () => {
   });
 
   it("query is full company name", async () => {
-    const response = await searchStock("Advanced Micro Devices");
+    const response = await searchStock("Nvidia");
     expect(response).toBeDefined();
 
     if (response) {
