@@ -16,6 +16,9 @@ export const handler = async (event: APIGatewayProxyEvent) => {
   try {
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+    },
       body: JSON.stringify({
         message: await searchStock(query),
       }),
