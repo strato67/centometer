@@ -8,6 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 const results = [
   {
@@ -21,8 +23,36 @@ const results = [
 
 export default function SearchTable() {
 
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("results");
+/*
+  useEffect(() => {
+    const getSearchResults = async (searchQuery: string) => {
+      try {
+        const url = process.env.NEXT_PUBLIC_LAMBDA_SEARCH_URL
+        const response = await fetch(`${url?.concat(searchQuery)}`)
+
+        if (!response.ok) {
+          console.log("error")
+        }
+        const json = await response.json()
+
+        console.log(json)
+      } catch (error) {
+        console.log("error")
+      }
+    }
+
+    if (search) {
+      getSearchResults(search)
+    }
+
+
+  }, [search])
+*/
   if (results.length === 0) {
-    return(<p className="text-center mt-4">No results found.</p>)
+    return (<p className="text-center mt-4">No results found.</p>)
   }
 
   return (
