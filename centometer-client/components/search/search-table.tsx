@@ -26,7 +26,7 @@ export default function SearchTable() {
   const searchParams = useSearchParams();
 
   const search = searchParams.get("results");
-/*
+
   useEffect(() => {
     const getSearchResults = async (searchQuery: string) => {
       try {
@@ -50,7 +50,7 @@ export default function SearchTable() {
 
 
   }, [search])
-*/
+
   if (results.length === 0) {
     return (<p className="text-center mt-4">No results found.</p>)
   }

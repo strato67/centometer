@@ -27,6 +27,9 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     console.log(error);
     return {
       statusCode: 500,
+      headers : {
+        "Access-Control-Allow-Origin": "*",
+      },
       body: JSON.stringify({
         message: (error as Error).message,
       }),
