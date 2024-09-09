@@ -11,7 +11,7 @@ import {
 export default function StockBreadCrumb({ currentStock }: { currentStock: string }) {
 	return (<>
 		<Breadcrumb>
-			<BreadcrumbList>
+			<BreadcrumbList className="text-md">
 				<BreadcrumbItem>
 					<BreadcrumbLink href="/dashboard">Home</BreadcrumbLink>
 				</BreadcrumbItem>
