@@ -30,7 +30,7 @@ export default function SearchTable() {
   }, [search]);
 
   if (loading) {
-    return <div className="w-full flex justify-center mt-4"><LoadingSpinner/></div>;
+    return <div className="w-full flex justify-center mt-4"><LoadingSpinner /></div>;
   }
 
   if (results && results.length === 0) {
@@ -51,7 +51,7 @@ export default function SearchTable() {
         {results &&
           results.map((stock, index) => (
             <Link
-              href={`/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}`}
+              href={stock.Index === "IDX" ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}` : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`}
               legacyBehavior
               key={index}
             >
