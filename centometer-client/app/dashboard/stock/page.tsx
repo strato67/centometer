@@ -1,10 +1,19 @@
 "use client"
 
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import StockBreadCrumb from "@/components/stock-breadcrumb";
 
-export default function Page(){
+
+export default function Page() {
     const searchParams = useSearchParams();
 
     const symbol = searchParams.get("tvwidgetsymbol");
-    return(<>{symbol}</>)
+    return (<>
+        <div className="px-4 mt-6 w-full">
+            {symbol && <StockBreadCrumb currentStock={symbol}/>}
+            <h1 className="text-3xl font-semibold ">{symbol}</h1>
+        </div>
+
+    </>)
 }
