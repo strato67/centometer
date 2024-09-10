@@ -1,8 +1,9 @@
 "use client"
 
 import { useSearchParams } from "next/navigation";
-import StockBreadCrumb from "@/components/stock-breadcrumb";
+import StockBreadCrumb from "@/components/stock/stock-breadcrumb";
 import StockChart from "@/components/widgets/stock-chart"
+import OverviewCard from "@/components/stock/overview-card";
 
 export default function Page() {
     const searchParams = useSearchParams();
@@ -14,9 +15,17 @@ export default function Page() {
             <h1 className="text-3xl font-semibold my-4">{symbol}</h1>
             <div className="grid">
 
-                <div className="h-96">
-                {symbol && <StockChart ticker={symbol}/>}
+
+                <div className="flex flex-col">
+                    <div className="h-96">
+                        {symbol && <StockChart ticker={symbol} />}
+                    </div>
+                    <div>
+                        <OverviewCard/>
+                    </div>
+
                 </div>
+
 
             </div>
         </div>

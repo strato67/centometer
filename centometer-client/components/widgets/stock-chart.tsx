@@ -31,7 +31,7 @@ function StockChart({ticker}:{ticker:string}) {
   );
 
   return (
-    <div className="tradingview-widget-container" ref={container} style={{ height: "100%", width: "100%" }}>
+    <div className="tradingview-widget-container shadow-sm" ref={container} style={{ height: "100%", width: "100%" }}>
 
    
     </div>

@@ -51,7 +51,7 @@ export default function SearchTable() {
         {results &&
           results.map((stock, index) => (
             <Link
-              href={stock.Index === "IDX" ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}` : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`}
+              href={stock.Index === "IDX" || stock.Index === "NYSE American" ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}` : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`}
               legacyBehavior
               key={index}
             >
