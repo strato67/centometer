@@ -1,14 +1,18 @@
-name: deploy_lambda
+name: Deploy Lambda Functions
 
 on:
   push:
     branches:
       - development
       - main
+    paths:
+      - stock-search/
+      - stock-overview/
+      - .github/workflows/**
 
 jobs:
   deploy_stock_search:
-    name: deploy stock search lambda function
+    name: Stock Search
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -42,7 +46,7 @@ jobs:
           aws lambda update-function-code --function-name=stockSearch --zip-file=fileb://deploy.zip
 
   deploy_stock_overview:
-    name: deploy stock overview lambda function
+    name: Stock Overview
     runs-on: ubuntu-latest
     defaults:
       run:
