@@ -21,8 +21,8 @@ def lambda_handler(event, context):
             }
         else:
             raise("No search parameters provided")
-    except:
-        
+    except ValueError as ve:
+        print(ve)
         return {
             'statusCode': 500,
             'headers': {
