@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/carousel";
 
 export default function PinnedCard() {
-  const tickers = ["NVDA", "AMD", "INTC", "AAPL", "GOOGL", "META"];
+  const tickers = ["NASDAQ:NVDA", "NASDAQ:AMD", "NASDAQ:INTC", "NASDAQ:AAPL", "NASDAQ:GOOGL", "NASDAQ:META"];
 
   return (
     <>

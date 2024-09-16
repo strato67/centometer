@@ -1,12 +1,16 @@
 name: Tests
 
-on: push
+on:
+  push:
+    paths:
+      - stock-search/
+      - .github/workflows/**
 
 jobs:
 
   stock_search_test:
     
-    name: test stock search lambda function
+    name: Test Stock Search
     runs-on: ubuntu-latest
     defaults:
         run:

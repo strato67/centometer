@@ -9,50 +9,32 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-
-const results = [
-  {
-    symbol: "AAPL",
-    company: "Apple Inc.",
-    currentPrice: "$210.00",
-    analystRating: "Buy",
-  },
-
-];
+import { useEffect, useState } from "react";
+import { getSearchResults, StockResult } from "@/app/dashboard/search/search";
+import { LoadingSpinner } from "../ui/loading-spinner";
 
 export default function SearchTable() {
-
   const searchParams = useSearchParams();
-
   const search = searchParams.get("results");
-/*
+  const [results, setResults] = useState<Array<StockResult> | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const getSearchResults = async (searchQuery: string) => {
-      try {
-        const url = process.env.NEXT_PUBLIC_LAMBDA_SEARCH_URL
-        const response = await fetch(`${url?.concat(searchQuery)}`)
-
-        if (!response.ok) {
-          console.log("error")
-        }
-        const json = await response.json()
-
-        console.log(json)
-      } catch (error) {
-        console.log("error")
+    (async () => {
+      if (search) {
+        setLoading(true);
+        setResults(await getSearchResults(search));
+        setLoading(false);
       }
-    }
+    })();
+  }, [search]);
 
-    if (search) {
-      getSearchResults(search)
-    }
+  if (loading) {
+    return <div className="w-full flex justify-center mt-4"><LoadingSpinner /></div>;
+  }
 
-
-  }, [search])
-*/
-  if (results.length === 0) {
-    return (<p className="text-center mt-4">No results found.</p>)
+  if (results && results.length === 0) {
+    return <p className="text-center mt-4">No results found.</p>;
   }
 
   return (
@@ -60,24 +42,27 @@ export default function SearchTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Symbol</TableHead>
-          <TableHead>Company Name</TableHead>
-          <TableHead>Current Price</TableHead>
-          <TableHead className="text-right">Analyst Rating</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Index</TableHead>
+          <TableHead className="text-right"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {results.map((stock) => (
-          <Link href={`/dashboard/stock/?tvwidgetsymbol=${stock.symbol}`} legacyBehavior key={stock.symbol}>
-            <TableRow>
-              <TableCell className="font-medium">{stock.symbol}</TableCell>
-              <TableCell>{stock.company}</TableCell>
-              <TableCell>{stock.currentPrice}</TableCell>
-              <TableCell className="text-right">
-                {stock.analystRating}
-              </TableCell>
-            </TableRow>
-          </Link>
-        ))}
+        {results &&
+          results.map((stock, index) => (
+            <Link
+              href={stock.Index === "IDX" || stock.Index === "NYSE American" ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}` : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`}
+              legacyBehavior
+              key={index}
+            >
+              <TableRow className="select-none">
+                <TableCell className="font-medium">{stock.Symbol}</TableCell>
+                <TableCell>{stock.Description}</TableCell>
+                <TableCell>{stock.Index}</TableCell>
+                <TableCell className="text-right">Add</TableCell>
+              </TableRow>
+            </Link>
+          ))}
       </TableBody>
       <TableFooter></TableFooter>
     </Table>
