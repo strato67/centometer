@@ -6,7 +6,7 @@ import {
 
 } from "@/components/ui/card";
 
-export default function OverviewCard() {
+export default function OverviewCard({ ticker }: { ticker: string }) {
 
   return (<>
 
@@ -27,8 +27,6 @@ export default function OverviewCard() {
 function OverviewTable({ }) {
 
   const data = { "Previous Close": 242, "Test": 222 }
-
-
 
   return (<>
     <CardContent>
