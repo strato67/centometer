@@ -1,26 +1,27 @@
 "use client"
 
 import { useSearchParams } from "next/navigation";
-import StockBreadCrumb from "@/components/stock/stock-breadcrumb";
-import StockChart from "@/components/widgets/stock-chart"
-import OverviewCard from "@/components/stock/overview-card";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
 import { getStockOverview } from "./stock-info";
+import StockBreadCrumb from "@/components/stock/stock-breadcrumb";
+import StockChart from "@/components/widgets/stock-chart"
+import OverviewCard from "@/components/stock/overview-card";
+import CompanyInfo from "@/components/stock/company-info";
 
 export default function Page() {
     const searchParams = useSearchParams();
     const symbol = searchParams.get("tvwidgetsymbol");
 
-    const stockMap = {
-        indexName: symbol?.includes(":") ? symbol.split(":")[0] : undefined,
-        symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol
-    }
 
     useEffect(() => {
         (async () => {
             if (symbol) {
-                console.log(await getStockOverview(symbol))
+                const stockMap = {
+                    indexName: symbol?.includes(":") ? symbol.split(":")[0] : undefined,
+                    symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol
+                }
+                console.log(await getStockOverview(stockMap))
 
             }
         })();

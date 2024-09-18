@@ -10,7 +10,7 @@ export default function OverviewCard({ ticker }: { ticker: string }) {
 
   return (<>
 
-    <Card className="w-full rounded-b-3xl rounded-t-none p-4 pb-12">
+    <Card className="w-full rounded-b-3xl rounded-t-none p-2 pb-12">
       <CardHeader className="flex flex-row w-full justify-between">
         <div className="space-y-1.5">
           <CardTitle>Overview</CardTitle>
@@ -30,13 +30,13 @@ function OverviewTable({ }) {
 
   return (<>
     <CardContent>
-      <div className="grid  grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-2">
+      <div className="grid  grid-cols-2 md:grid-cols-4 md:gap-x-12 gap-y-2 gap-x-6">
         {
           Object.entries(data).map(([key, value], index) => {
             return (
               <div className="flex justify-between border-b border-b-card-foreground items-center" key={index}>
                 <p>{key}</p>
-                <p className="text-lg font-bold">{value}</p>
+                <p className="font-bold">{value}</p>
               </div>
 
             )

@@ -50,7 +50,7 @@ export default function SearchBar() {
                                         <Input
                                             type="text"
                                             placeholder="Enter a company name or symbol"
-                                            className="rounded-l-3xl rounded-r-none outline-none w-80"
+                                            className="rounded-l-3xl rounded-r-none outline-none md:w-80 w-64"
                                             autoComplete="off"
                                             {...field}
                                         />
