@@ -10,7 +10,7 @@ export default function OverviewCard({ ticker }: { ticker: string }) {
 
   return (<>
 
-    <Card className="w-full rounded-b-3xl rounded-t-none p-2 pb-12">
+    <Card className="w-full rounded-b-2xl rounded-t-none p-2 pb-12">
       <CardHeader className="flex flex-row w-full justify-between">
         <div className="space-y-1.5">
           <CardTitle>Overview</CardTitle>

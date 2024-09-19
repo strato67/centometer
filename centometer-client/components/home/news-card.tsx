@@ -14,7 +14,7 @@ export default function NewsCard({
   description: string;
 }) {
   return (<>
-    <Card className="w-96 md:w-full rounded-3xl p-4 h-96">
+    <Card className="w-96 md:w-full rounded-2xl p-4 h-96">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

@@ -2,16 +2,18 @@
 
 import { useSearchParams } from "next/navigation";
 import { notFound } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getStockOverview } from "./stock-info";
 import StockBreadCrumb from "@/components/stock/stock-breadcrumb";
 import StockChart from "@/components/widgets/stock-chart"
 import OverviewCard from "@/components/stock/overview-card";
 import CompanyInfo from "@/components/stock/company-info";
+import { StockInfo } from "@/components/stock/stockType";
 
 export default function Page() {
     const searchParams = useSearchParams();
     const symbol = searchParams.get("tvwidgetsymbol");
+    const [companyInfo, setCompanyInfo] = useState<StockInfo>({})
 
 
     useEffect(() => {
@@ -21,8 +23,8 @@ export default function Page() {
                     indexName: symbol?.includes(":") ? symbol.split(":")[0] : undefined,
                     symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol
                 }
+                setCompanyInfo(await getStockOverview(stockMap))
                 console.log(await getStockOverview(stockMap))
-
             }
         })();
     }, [symbol])
@@ -33,9 +35,9 @@ export default function Page() {
             <div className="px-4 mt-6 w-full">
                 <StockBreadCrumb currentStock={symbol} />
                 <h1 className="text-3xl font-semibold my-4">{symbol}</h1>
-                <div className="grid">
+                <div className="grid xl:grid-cols-3 xl:gap-5">
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col xl:col-span-2">
                         <div className="h-96">
                             <StockChart ticker={symbol} />
                         </div>
@@ -44,6 +46,7 @@ export default function Page() {
                         </div>
                     </div>
 
+                <CompanyInfo companyInfo={companyInfo}/>
                 </div>
             </div>
 
