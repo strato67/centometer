@@ -13,6 +13,7 @@ import { StockInfo } from "@/components/stock/stockType";
 export default function Page() {
     const searchParams = useSearchParams();
     const symbol = searchParams.get("tvwidgetsymbol");
+    const [loading, setLoading] = useState(true)
     const [companyInfo, setCompanyInfo] = useState<StockInfo>({})
 
 
@@ -24,6 +25,7 @@ export default function Page() {
                     symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol
                 }
                 setCompanyInfo(await getStockOverview(stockMap))
+                setLoading(false)
                 console.log(await getStockOverview(stockMap))
             }
         })();
@@ -46,7 +48,7 @@ export default function Page() {
                         </div>
                     </div>
 
-                <CompanyInfo companyInfo={companyInfo}/>
+                <CompanyInfo companyInfo={companyInfo} loading={loading}/>
                 </div>
             </div>
 
