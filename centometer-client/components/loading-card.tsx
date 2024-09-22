@@ -8,17 +8,12 @@ export default function LoadingCard({className}: {className?: string}) {
         <Card className={cn(className)} >
             <CardHeader className="flex flex-row w-full justify-between">
                 <div className="space-y-1.5">
-                    <Skeleton className="h-12 w-80 rounded-xl"/>
+                    <Skeleton className="h-12 w-56 rounded-xl"/>
                 </div>                
             </CardHeader>
             <CardContent>
-                <div className="space-y-8 mt-4">
+                <div className="space-y-2 mt-4">
                 <Skeleton className="h-4 w-[250px]" />
-                <Skeleton className="h-4 w-[200px]" />
-                <Skeleton className="h-4 w-[250px]" />
-                <Skeleton className="h-4 w-[200px]" />
-                <Skeleton className="h-4 w-[250px]" />
-                <Skeleton className="h-4 w-[200px]" />
 
 
                 </div>
