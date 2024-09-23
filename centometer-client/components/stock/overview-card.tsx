@@ -27,7 +27,9 @@ export default function OverviewCard({
         </Card>
       </>
     );
-  }
+  } 
+
+
 
   return (
     <>
@@ -44,20 +46,25 @@ export default function OverviewCard({
 }
 
 function OverviewTable({ companyInfo }: { companyInfo: StockInfo }) {
+
+  const roundVal = (value: number) => Intl.NumberFormat("en", {notation: "compact"}).format(value)
+
   const data = {
-    "Previous Close": companyInfo.previousClose,
-    Open: companyInfo.open,
-    Bid: companyInfo.bid,
-    Ask: companyInfo.ask,
-    "Day Range": `${companyInfo.dayLow} - ${companyInfo.dayHigh}`,
-    "52 Week Range": `${companyInfo.fiftyTwoWeekLow} - ${companyInfo.fiftyTwoWeekHigh}`,
-    "Avg. Volume": companyInfo.averageVolume,
-    "Market Cap": companyInfo.marketCap,
+    "Previous Close": companyInfo.previousClose?.toFixed(2),
+    Open: companyInfo.open?.toFixed(2),
+    Bid: companyInfo.bid?.toFixed(2),
+    Ask: companyInfo.ask?.toFixed(2),
+    "Day Range": `${companyInfo.dayLow?.toFixed(2)} - ${companyInfo.dayHigh?.toFixed(2)}`,
+    "52 Week Range": `${companyInfo.fiftyTwoWeekLow?.toFixed(2)} - ${companyInfo.fiftyTwoWeekHigh?.toFixed(2)}`,
+    "Avg. Volume": companyInfo.averageVolume && roundVal(companyInfo.averageVolume),
+    "Market Cap": companyInfo.marketCap && roundVal(companyInfo.marketCap),
     "P/E Ratio": companyInfo.pegRatio,
     EPS: companyInfo.trailingEps,
-    Dividend: `${companyInfo.dividendRate} (${
-      companyInfo.dividendYield && (companyInfo.dividendYield * 100).toFixed(2)
-    }%)`,
+    Dividend: companyInfo.dividendRate 
+    ? `${companyInfo.dividendRate?.toFixed(2)} (${
+        companyInfo.dividendYield ? (companyInfo.dividendYield * 100).toFixed(2) : "N/A"
+      }%)`
+    : "N/A"
   };
 
   return (
@@ -67,11 +74,11 @@ function OverviewTable({ companyInfo }: { companyInfo: StockInfo }) {
           {Object.entries(data).map(([key, value], index) => {
             return (
               <div
-                className="flex justify-between border-b border-b-neutral-700 items-center"
+                className="flex justify-between border-b border-b-neutral-700 items-center text-sm"
                 key={index}
               >
                 <p>{key}</p>
-                <p className="font-bold text-right">{value}</p>
+                <p className="font-bold text-right">{value || "N/A"}</p>
               </div>
             );
           })}

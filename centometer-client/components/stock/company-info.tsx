@@ -38,7 +38,7 @@ export default function CompanyInfo({
 
   return (
     <>
-      <Card className="w-full rounded-2xl p-4  flex flex-col justify-center">
+      <Card className="w-full rounded-2xl p-4  ">
         <CardHeader className="flex flex-row w-full justify-between">
           <div className="space-y-1.5">
             <CardTitle>{companyInfo.shortName || companyInfo.symbol}</CardTitle>
@@ -73,7 +73,7 @@ export default function CompanyInfo({
               {companyInfo.website && (
                 <Link
                   href={companyInfo.website}
-                  target="about/blank"
+                  target="about:blank"
                   className="mt-2  underline text-ellipsis overflow-clip "
                 >
                   {companyInfo.website}
