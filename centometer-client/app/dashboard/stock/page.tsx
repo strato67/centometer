@@ -57,17 +57,17 @@ export default function Page() {
           </CardDescription>
         </div>
 
-        <div className="grid xl:grid-cols-3 xl:gap-5">
+        <div className="grid xl:grid-cols-3 xl:gap-5 gap-4">
           <div className="flex flex-col xl:col-span-2 xl:h-auto">
             <div className="h-96">
               <StockChart ticker={symbol} />
             </div>
-            <div>
-              <OverviewCard companyInfo={companyInfo} loading={loading} />
-            </div>
+
+            <OverviewCard companyInfo={companyInfo} loading={loading} />
           </div>
 
-          <CompanyInfo companyInfo={companyInfo} loading={loading} />
+            <CompanyInfo companyInfo={companyInfo} loading={loading} />
+
         </div>
       </div>
     </>

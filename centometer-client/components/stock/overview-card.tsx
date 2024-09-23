@@ -37,27 +37,41 @@ export default function OverviewCard({
             <CardTitle>Overview</CardTitle>
           </div>
         </CardHeader>
-        <OverviewTable />
+        <OverviewTable companyInfo={companyInfo} />
       </Card>
     </>
   );
 }
 
-function OverviewTable({ }) {
-  const data = { "Previous Close": 242, Test: 222 };
+function OverviewTable({ companyInfo }: { companyInfo: StockInfo }) {
+  const data = {
+    "Previous Close": companyInfo.previousClose,
+    Open: companyInfo.open,
+    Bid: companyInfo.bid,
+    Ask: companyInfo.ask,
+    "Day Range": `${companyInfo.dayLow} - ${companyInfo.dayHigh}`,
+    "52 Week Range": `${companyInfo.fiftyTwoWeekLow} - ${companyInfo.fiftyTwoWeekHigh}`,
+    "Avg. Volume": companyInfo.averageVolume,
+    "Market Cap": companyInfo.marketCap,
+    "P/E Ratio": companyInfo.pegRatio,
+    EPS: companyInfo.trailingEps,
+    Dividend: `${companyInfo.dividendRate} (${
+      companyInfo.dividendYield && (companyInfo.dividendYield * 100).toFixed(2)
+    }%)`,
+  };
 
   return (
     <>
       <CardContent>
-        <div className="grid  grid-cols-2 md:grid-cols-4 md:gap-x-12 gap-y-2 gap-x-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-12 gap-y-6 gap-x-6">
           {Object.entries(data).map(([key, value], index) => {
             return (
               <div
-                className="flex justify-between border-b border-b-card-foreground items-center"
+                className="flex justify-between border-b border-b-neutral-700 items-center"
                 key={index}
               >
                 <p>{key}</p>
-                <p className="font-bold">{value}</p>
+                <p className="font-bold text-right">{value}</p>
               </div>
             );
           })}

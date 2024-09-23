@@ -3,6 +3,8 @@ export type StockInfo = {
     city?: string;
     state?: string;
     zip?: string;
+    dividendRate?: number;
+    dividendYield?:number;
     country?: string;
     phone?: string;
     website?: string;
