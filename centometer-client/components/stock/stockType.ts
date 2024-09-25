@@ -138,3 +138,10 @@ export type StockInfo = {
     exercisedValue?: number;
     unexercisedValue?: number;
   }
+
+  export interface AnalystConsensus {
+    name: string;
+    colour: string;
+    text: string;
+  }
+  
