@@ -12,6 +12,7 @@ import { StockInfo } from "@/components/stock/stockType";
 import { Separator } from "@/components/ui/separator";
 import { CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import AddStockButton from "@/components/stock/add-stock";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -41,7 +42,7 @@ export default function Page() {
     <>
       <div className="px-4 mt-6 w-full">
         <StockBreadCrumb currentStock={symbol} />
-        <div className="flex flex-col my-4 max-w-fit gap-2">
+        <div className="flex flex-col mt-4 mb-2 max-w-fit gap-2">
           <div className="text-3xl font-semibold flex gap-4 items-center">
             {symbol}
             {companyInfo.currentPrice && (
@@ -52,8 +53,9 @@ export default function Page() {
           </div>
 
           <Separator />
-          <CardDescription>
+          <CardDescription className="flex items-baseline gap-x-4">
             {companyInfo.longName} - {companyInfo.quoteType}
+            <AddStockButton/>
           </CardDescription>
         </div>
 

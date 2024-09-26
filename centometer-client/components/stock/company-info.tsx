@@ -63,10 +63,21 @@ export default function CompanyInfo({
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 grid-flow-row">
+          <div className="grid w-full grid-cols-2 gap-x-4 gap-y-4 grid-flow-row">
             <ScrollArea className="max-h-64 rounded-md leading-relaxed tracking-wide col-span-2 mb-2">
               {companyInfo.longBusinessSummary}
             </ScrollArea>
+
+            {contactInfo.website && (
+                  <Link
+                    href={contactInfo.website}
+                    target="about:blank"
+                    className="underline text-ellipsis overflow-clip col-span-2 w-fit"
+                  >
+                    {contactInfo.website}
+                  </Link>
+                )}
+
 
             {companyInfo.recommendationKey && companyInfo.numberOfAnalystOpinions && (
               <div className="flex flex-col border rounded-2xl p-6 bg-background text-neutral gap-3  text-sm text-pretty overflow-hidden text-ellipsis max-h-56 overflow-y-auto items-center text-center  ">
@@ -95,15 +106,7 @@ export default function CompanyInfo({
                     </>
                   )}
                 <div>{contactInfo.phone}</div>
-                {contactInfo.website && (
-                  <Link
-                    href={contactInfo.website}
-                    target="about:blank"
-                    className="mt-2  underline text-ellipsis overflow-clip "
-                  >
-                    {contactInfo.website}
-                  </Link>
-                )}
+
               </div>
             )}
           </div>
