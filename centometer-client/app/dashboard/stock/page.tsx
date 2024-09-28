@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getStockOverview } from "./stock-info";
+import { getStockOverview, getWatchlistItem } from "./stock-info";
 import StockBreadCrumb from "@/components/stock/stock-breadcrumb";
 import StockChart from "@/components/widgets/stock-chart";
 import OverviewCard from "@/components/stock/overview-card";
@@ -13,12 +13,14 @@ import { Separator } from "@/components/ui/separator";
 import { CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import AddStockButton from "@/components/stock/add-stock";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Page() {
   const searchParams = useSearchParams();
   const symbol = searchParams.get("tvwidgetsymbol");
   const [loading, setLoading] = useState(true);
   const [companyInfo, setCompanyInfo] = useState<StockInfo>({});
+  const [added, setAdded] = useState<null | boolean>(null);
 
   useEffect(() => {
     (async () => {
@@ -28,6 +30,7 @@ export default function Page() {
           symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol,
         };
         setCompanyInfo(await getStockOverview(stockMap));
+        setAdded(await getWatchlistItem(stockMap));
         setLoading(false);
         console.log(await getStockOverview(stockMap));
       }
@@ -53,10 +56,16 @@ export default function Page() {
           </div>
 
           <Separator />
-          <CardDescription className="flex items-baseline gap-x-4">
-            {companyInfo.longName} - {companyInfo.quoteType}
-            <AddStockButton/>
-          </CardDescription>
+          {!companyInfo || added === null ? (
+            <Skeleton className="flex gap-x-4 w-64 h-6 rounded-full"/>
+          ) : (
+            <CardDescription className="flex items-baseline gap-x-4">
+              {companyInfo.longName} - {companyInfo.quoteType}
+              {added !== null && (
+                <AddStockButton isAdded={added} setAdded={setAdded} />
+              )}
+            </CardDescription>
+          )}
         </div>
 
         <div className="grid xl:grid-cols-3 xl:gap-5 gap-4">
@@ -68,8 +77,7 @@ export default function Page() {
             <OverviewCard companyInfo={companyInfo} loading={loading} />
           </div>
 
-            <CompanyInfo companyInfo={companyInfo} loading={loading} />
-
+          <CompanyInfo companyInfo={companyInfo} loading={loading} />
         </div>
       </div>
     </>
