@@ -1,8 +1,6 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-const supabase = createClient()
-
 type StockQuery = {
   indexName: string | undefined;
   symbolName: string;
@@ -13,6 +11,8 @@ const YFinanceSymbols: { [key: string]: string } = {
   TSX: "TO",
   LSE: "L",
 };
+
+const supabase = createClient();
 
 export const getStockOverview = async (searchQuery: StockQuery) => {
   try {
@@ -39,12 +39,11 @@ export const getStockOverview = async (searchQuery: StockQuery) => {
 };
 
 export const getWatchlistItem = async (searchQuery: StockQuery) => {
-
-
   try {
-    const { data: { user } } = await supabase.auth.getUser()
-    const user_id = user?.id
-
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const user_id = user?.id;
 
     const { data: watchlist } = await supabase
       .from("watchlist")
@@ -53,12 +52,47 @@ export const getWatchlistItem = async (searchQuery: StockQuery) => {
       .eq("symbol", searchQuery.symbolName)
       .eq("index", searchQuery.indexName);
 
-    if(watchlist){
-      return watchlist?.length > 0
+    if (watchlist) {
+      return watchlist?.length > 0;
     }
-    return false
-
+    return false;
   } catch (error) {
-    return false
+    return false;
   }
+};
+
+export const addWatchListItem = async (searchQuery: StockQuery) => {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const user_id = user?.id;
+
+    const { data } = await supabase
+      .from("watchlist")
+      .insert([
+        {
+          user_id: user_id,
+          symbol: searchQuery.symbolName,
+          index: searchQuery.indexName,
+        },
+      ])
+      .select();
+  } catch (error) {}
+};
+
+export const removeWatchListItem = async (searchQuery: StockQuery) => {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const user_id = user?.id;
+
+    const { error } = await supabase
+      .from("watchlist")
+      .delete()
+      .eq("user_id", user_id)
+      .eq("symbol", searchQuery.symbolName)
+      .eq("index", searchQuery.indexName);
+  } catch (error) {}
 };

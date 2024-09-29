@@ -62,7 +62,7 @@ export default function Page() {
             <CardDescription className="flex items-baseline gap-x-4">
               {companyInfo.longName} - {companyInfo.quoteType}
               {added !== null && (
-                <AddStockButton isAdded={added} setAdded={setAdded} />
+                <AddStockButton isAdded={added} setAdded={setAdded} symbol={symbol} />
               )}
             </CardDescription>
           )}
