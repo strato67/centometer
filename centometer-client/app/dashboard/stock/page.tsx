@@ -71,7 +71,7 @@ export default function Page() {
         <div className="grid xl:grid-cols-3 xl:gap-5 gap-4">
           <div className="flex flex-col xl:col-span-2 xl:h-auto">
             <div className="h-96">
-              <StockChart ticker={symbol} />
+              <StockChart ticker={symbol.includes(":") && symbol.split(":")[0] === "FOREX" ? symbol.split(":")[1] : symbol} />
             </div>
 
             <OverviewCard companyInfo={companyInfo} loading={loading} />

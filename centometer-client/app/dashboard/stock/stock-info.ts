@@ -7,9 +7,10 @@ type StockQuery = {
 };
 
 const YFinanceSymbols: { [key: string]: string } = {
-  ASX: "AX",
-  TSX: "TO",
-  LSE: "L",
+  ASX: ".AX",
+  TSX: ".TO",
+  LSE: ".L",
+  FOREX: "=X"
 };
 
 const supabase = createClient();
@@ -25,7 +26,7 @@ export const getStockOverview = async (searchQuery: StockQuery) => {
       YFinanceSymbols.hasOwnProperty(searchQuery.indexName)
     ) {
       modifiedQuery = modifiedQuery.concat(
-        "." + YFinanceSymbols[searchQuery.indexName]
+        YFinanceSymbols[searchQuery.indexName]
       );
     }
 
