@@ -60,7 +60,7 @@ export default function Page() {
             <Skeleton className="flex gap-x-4 w-64 h-6 rounded-full"/>
           ) : (
             <CardDescription className="flex items-baseline gap-x-4">
-              {companyInfo.longName} - {companyInfo.quoteType}
+              {companyInfo.longName || companyInfo.symbol} - {companyInfo.quoteType}
               {added !== null && (
                 <AddStockButton isAdded={added} setAdded={setAdded} symbol={symbol} />
               )}

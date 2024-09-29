@@ -24,7 +24,9 @@ export const getStockOverview = async (searchQuery: StockQuery) => {
       searchQuery.indexName &&
       YFinanceSymbols.hasOwnProperty(searchQuery.indexName)
     ) {
-      modifiedQuery.concat("." + YFinanceSymbols[searchQuery.indexName]);
+      modifiedQuery = modifiedQuery.concat(
+        "." + YFinanceSymbols[searchQuery.indexName]
+      );
     }
 
     const response = await fetch(`${url?.concat(modifiedQuery)}`);
@@ -45,12 +47,19 @@ export const getWatchlistItem = async (searchQuery: StockQuery) => {
     } = await supabase.auth.getUser();
     const user_id = user?.id;
 
-    const { data: watchlist } = await supabase
+    let query = supabase
       .from("watchlist")
       .select("*")
       .eq("user_id", user_id)
-      .eq("symbol", searchQuery.symbolName)
-      .eq("index", searchQuery.indexName);
+      .eq("symbol", searchQuery.symbolName);
+
+    if (searchQuery.indexName) {
+      query = query.eq("index", searchQuery.indexName);
+    } else {
+      query = query.is("index", null);
+    }
+
+    const { data: watchlist } = await query;
 
     if (watchlist) {
       return watchlist?.length > 0;
@@ -68,7 +77,7 @@ export const addWatchListItem = async (searchQuery: StockQuery) => {
     } = await supabase.auth.getUser();
     const user_id = user?.id;
 
-    const { data } = await supabase
+    await supabase
       .from("watchlist")
       .insert([
         {
@@ -88,11 +97,20 @@ export const removeWatchListItem = async (searchQuery: StockQuery) => {
     } = await supabase.auth.getUser();
     const user_id = user?.id;
 
-    const { error } = await supabase
-      .from("watchlist")
-      .delete()
-      .eq("user_id", user_id)
-      .eq("symbol", searchQuery.symbolName)
-      .eq("index", searchQuery.indexName);
+    if (!searchQuery.indexName) {
+      await supabase
+        .from("watchlist")
+        .delete()
+        .eq("user_id", user_id)
+        .eq("symbol", searchQuery.symbolName)
+        .is("index", null);
+    } else {
+      await supabase
+        .from("watchlist")
+        .delete()
+        .eq("user_id", user_id)
+        .eq("symbol", searchQuery.symbolName)
+        .eq("index", searchQuery.indexName);
+    }
   } catch (error) {}
 };
