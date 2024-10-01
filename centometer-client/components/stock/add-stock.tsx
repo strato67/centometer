@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Button } from "../ui/button";
 import { Star } from "lucide-react";
 import { Check } from "lucide-react";
@@ -26,17 +26,17 @@ export default function AddStockButton({
     <Button
       variant={"outline"}
       className=" text-xs rounded-3xl border border-neutral-700  h-fit py-1.5"
-      onClick={async() => {
-        setAdded(!isAdded);
-        console.log(stockMap)
-        if (!isAdded) {
+      onClick={async () => {
+        const action = isAdded ? removeWatchListItem : addWatchListItem;
+        const result = await action(stockMap);
 
-          addWatchListItem(stockMap);
+        if (result === 0) {
+          toast.error("Error updating watchlist.");
         } else {
-          removeWatchListItem(stockMap);
-        }
+          setAdded(!isAdded);
+          toast.success(`${isAdded ? "Removed from" : "Added to"} watchlist.`);
 
-        toast.success("Watchlist updated.");
+        }
       }}
     >
       {isAdded ? (

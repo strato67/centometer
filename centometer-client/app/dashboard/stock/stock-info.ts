@@ -10,7 +10,7 @@ const YFinanceSymbols: { [key: string]: string } = {
   ASX: ".AX",
   TSX: ".TO",
   LSE: ".L",
-  FOREX: "=X"
+  FOREX: "=X",
 };
 
 const supabase = createClient();
@@ -78,7 +78,7 @@ export const addWatchListItem = async (searchQuery: StockQuery) => {
     } = await supabase.auth.getUser();
     const user_id = user?.id;
 
-    await supabase
+    const response = await supabase
       .from("watchlist")
       .insert([
         {
@@ -88,7 +88,13 @@ export const addWatchListItem = async (searchQuery: StockQuery) => {
         },
       ])
       .select();
-  } catch (error) {}
+
+    if (response.error) {
+      throw response.error;
+    }
+  } catch (error) {
+    return 0;
+  }
 };
 
 export const removeWatchListItem = async (searchQuery: StockQuery) => {
@@ -98,20 +104,30 @@ export const removeWatchListItem = async (searchQuery: StockQuery) => {
     } = await supabase.auth.getUser();
     const user_id = user?.id;
 
+    let error;
+
     if (!searchQuery.indexName) {
-      await supabase
+      const response = await supabase
         .from("watchlist")
         .delete()
         .eq("user_id", user_id)
         .eq("symbol", searchQuery.symbolName)
         .is("index", null);
+      error = response.error;
     } else {
-      await supabase
+      const response = await supabase
         .from("watchlist")
         .delete()
         .eq("user_id", user_id)
         .eq("symbol", searchQuery.symbolName)
         .eq("index", searchQuery.indexName);
+      error = response.error;
     }
-  } catch (error) {}
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    return 0;
+  }
 };
