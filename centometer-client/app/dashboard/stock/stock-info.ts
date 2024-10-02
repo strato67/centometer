@@ -78,6 +78,11 @@ export const addWatchListItem = async (searchQuery: StockQuery) => {
     } = await supabase.auth.getUser();
     const user_id = user?.id;
 
+    if (await getWatchlistItem(searchQuery)){
+      throw Error;
+    }
+
+
     const response = await supabase
       .from("watchlist")
       .insert([
@@ -103,6 +108,10 @@ export const removeWatchListItem = async (searchQuery: StockQuery) => {
       data: { user },
     } = await supabase.auth.getUser();
     const user_id = user?.id;
+
+    if (!await getWatchlistItem(searchQuery)){
+      throw Error;
+    }
 
     let error;
 

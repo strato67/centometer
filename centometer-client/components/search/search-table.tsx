@@ -15,7 +15,7 @@ import AddSearchButton from "./add-search-button";
 
 export default function SearchTable() {
   const searchParams = useSearchParams();
-  const router = useRouter()
+  const router = useRouter();
   const search = searchParams.get("results");
   const [results, setResults] = useState<Array<StockResult> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -31,7 +31,11 @@ export default function SearchTable() {
   }, [search]);
 
   if (loading) {
-    return <div className="w-full flex justify-center mt-4"><LoadingSpinner /></div>;
+    return (
+      <div className="w-full flex justify-center mt-4">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (results && results.length === 0) {
@@ -42,27 +46,36 @@ export default function SearchTable() {
     <Table>
       <TableHeader>
         <TableRow>
-
           <TableHead>Symbol</TableHead>
           <TableHead className="w-7/12">Name</TableHead>
           <TableHead className="w-1/5"></TableHead>
-          <TableHead >Index</TableHead>
-
+          <TableHead>Index</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {results &&
           results.map((stock, index) => (
-
-              <TableRow className="select-none" key={index} onClick={()=>router.push(stock.Index === "IDX" || stock.Index === "NYSE American" ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}` : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`)}>
-
-                <TableCell className="font-medium">{stock.Symbol}</TableCell>
-                <TableCell>{stock.Description}</TableCell>
-                <TableCell className="text-right"><AddSearchButton/></TableCell>
-                <TableCell >{stock.Index}</TableCell>
-
-              </TableRow>
-
+            <TableRow
+              className="select-none"
+              key={index}
+              onClick={() =>
+                router.push(
+                  stock.Index === "IDX" || stock.Index === "NYSE American"
+                    ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}`
+                    : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`
+                )
+              }
+            >
+              <TableCell className="font-medium">{stock.Symbol}</TableCell>
+              <TableCell>{stock.Description}</TableCell>
+              <TableCell className="text-right">
+                <AddSearchButton
+                  indexName={stock.Index}
+                  symbolName={stock.Symbol}
+                />
+              </TableCell>
+              <TableCell>{stock.Index}</TableCell>
+            </TableRow>
           ))}
       </TableBody>
       <TableFooter></TableFooter>
