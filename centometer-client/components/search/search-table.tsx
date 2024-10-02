@@ -7,14 +7,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getSearchResults, StockResult } from "@/app/dashboard/search/search";
 import { LoadingSpinner } from "../ui/loading-spinner";
+import AddSearchButton from "./add-search-button";
 
 export default function SearchTable() {
   const searchParams = useSearchParams();
+  const router = useRouter()
   const search = searchParams.get("results");
   const [results, setResults] = useState<Array<StockResult> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -41,27 +42,27 @@ export default function SearchTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Symbol</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Index</TableHead>
-          <TableHead className="text-right"></TableHead>
+
+          <TableHead>Symbol</TableHead>
+          <TableHead className="w-7/12">Name</TableHead>
+          <TableHead className="w-1/5"></TableHead>
+          <TableHead >Index</TableHead>
+
         </TableRow>
       </TableHeader>
       <TableBody>
         {results &&
           results.map((stock, index) => (
-            <Link
-              href={stock.Index === "IDX" || stock.Index === "NYSE American" ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}` : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`}
-              legacyBehavior
-              key={index}
-            >
-              <TableRow className="select-none">
+
+              <TableRow className="select-none" key={index} onClick={()=>router.push(stock.Index === "IDX" || stock.Index === "NYSE American" ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}` : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`)}>
+
                 <TableCell className="font-medium">{stock.Symbol}</TableCell>
                 <TableCell>{stock.Description}</TableCell>
-                <TableCell>{stock.Index}</TableCell>
-                <TableCell className="text-right">Add</TableCell>
+                <TableCell className="text-right"><AddSearchButton/></TableCell>
+                <TableCell >{stock.Index}</TableCell>
+
               </TableRow>
-            </Link>
+
           ))}
       </TableBody>
       <TableFooter></TableFooter>
