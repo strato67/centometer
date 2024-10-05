@@ -67,6 +67,7 @@ export const getWatchlistItem = async (searchQuery: StockQuery) => {
     }
     return false;
   } catch (error) {
+    console.error(error)
     return false;
   }
 };
@@ -98,6 +99,7 @@ export const addWatchListItem = async (searchQuery: StockQuery) => {
       throw response.error;
     }
   } catch (error) {
+    console.error(error)
     return 0;
   }
 };
@@ -137,6 +139,7 @@ export const removeWatchListItem = async (searchQuery: StockQuery) => {
       throw error;
     }
   } catch (error) {
+    console.error(error)
     return 0;
   }
 };
