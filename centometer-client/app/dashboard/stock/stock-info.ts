@@ -13,8 +13,6 @@ const YFinanceSymbols: { [key: string]: string } = {
   FOREX: "=X",
 };
 
-const supabase = createClient();
-
 export const getStockOverview = async (searchQuery: StockQuery) => {
   try {
     const url =
@@ -42,6 +40,8 @@ export const getStockOverview = async (searchQuery: StockQuery) => {
 };
 
 export const getWatchlistItem = async (searchQuery: StockQuery) => {
+
+  const supabase = createClient();
   try {
     const {
       data: { user },
@@ -67,12 +67,14 @@ export const getWatchlistItem = async (searchQuery: StockQuery) => {
     }
     return false;
   } catch (error) {
-    console.error(error)
+
     return false;
   }
 };
 
 export const addWatchListItem = async (searchQuery: StockQuery) => {
+
+  const supabase = createClient();
   try {
     const {
       data: { user },
@@ -99,12 +101,12 @@ export const addWatchListItem = async (searchQuery: StockQuery) => {
       throw response.error;
     }
   } catch (error) {
-    console.error(error)
     return 0;
   }
 };
 
 export const removeWatchListItem = async (searchQuery: StockQuery) => {
+  const supabase = createClient();
   try {
     const {
       data: { user },
@@ -139,7 +141,7 @@ export const removeWatchListItem = async (searchQuery: StockQuery) => {
       throw error;
     }
   } catch (error) {
-    console.error(error)
+    
     return 0;
   }
 };
