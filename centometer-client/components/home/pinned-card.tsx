@@ -21,7 +21,7 @@ export default function PinnedCard() {
 
   return (
     <>
-      <Card className="w-96 md:w-full rounded-3xl p-4 pb-12 ">
+      <Card className="w-96 md:w-full rounded-2xl p-4 pb-12 ">
         <CardHeader className="flex flex-row w-full justify-between">
           <div className="space-y-1.5">
             <CardTitle>Pinned Stocks</CardTitle>

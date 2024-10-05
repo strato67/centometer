@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Manrope } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const fontHeading = Manrope({
@@ -39,6 +40,7 @@ export default function RootLayout({
          disableTransitionOnChange
         >
         {children}
+        <Toaster richColors/>
         </ThemeProvider>
 
 

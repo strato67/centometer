@@ -50,7 +50,7 @@ export default function SearchBar() {
                                         <Input
                                             type="text"
                                             placeholder="Enter a company name or symbol"
-                                            className="rounded-l-3xl rounded-r-none outline-none w-80"
+                                            className="rounded-l-3xl rounded-r-none outline-none md:w-80 w-64 bg-card-background drop-shadow-md"
                                             autoComplete="off"
                                             {...field}
                                         />
@@ -59,7 +59,7 @@ export default function SearchBar() {
                             )}
                         />
 
-                        <Button className="h-10 rounded-r-3xl rounded-l-none" type="submit">
+                        <Button className="h-10 rounded-r-3xl rounded-l-none drop-shadow-md" type="submit">
                             <Search />
                         </Button>
                     </form>

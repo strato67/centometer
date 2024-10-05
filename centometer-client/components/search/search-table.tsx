@@ -7,14 +7,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getSearchResults, StockResult } from "@/app/dashboard/search/search";
 import { LoadingSpinner } from "../ui/loading-spinner";
+import AddSearchButton from "./add-search-button";
 
 export default function SearchTable() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const search = searchParams.get("results");
   const [results, setResults] = useState<Array<StockResult> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -30,7 +31,11 @@ export default function SearchTable() {
   }, [search]);
 
   if (loading) {
-    return <div className="w-full flex justify-center mt-4"><LoadingSpinner /></div>;
+    return (
+      <div className="w-full flex justify-center mt-4">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (results && results.length === 0) {
@@ -41,27 +46,36 @@ export default function SearchTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Symbol</TableHead>
-          <TableHead>Name</TableHead>
+          <TableHead>Symbol</TableHead>
+          <TableHead className="w-7/12">Name</TableHead>
+          <TableHead className="w-1/5"></TableHead>
           <TableHead>Index</TableHead>
-          <TableHead className="text-right"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {results &&
           results.map((stock, index) => (
-            <Link
-              href={stock.Index === "IDX" || stock.Index === "NYSE American" ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}` : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`}
-              legacyBehavior
+            <TableRow
+              className="select-none"
               key={index}
+              onClick={() =>
+                router.push(
+                  stock.Index === "IDX" || stock.Index === "NYSE American"
+                    ? `/dashboard/stock/?tvwidgetsymbol=${stock.Symbol}`
+                    : `/dashboard/stock/?tvwidgetsymbol=${stock.Index}%3A${stock.Symbol}`
+                )
+              }
             >
-              <TableRow className="select-none">
-                <TableCell className="font-medium">{stock.Symbol}</TableCell>
-                <TableCell>{stock.Description}</TableCell>
-                <TableCell>{stock.Index}</TableCell>
-                <TableCell className="text-right">Add</TableCell>
-              </TableRow>
-            </Link>
+              <TableCell className="font-medium">{stock.Symbol}</TableCell>
+              <TableCell>{stock.Description}</TableCell>
+              <TableCell className="text-right">
+                <AddSearchButton
+                  indexName={stock.Index}
+                  symbolName={stock.Symbol}
+                />
+              </TableCell>
+              <TableCell>{stock.Index}</TableCell>
+            </TableRow>
           ))}
       </TableBody>
       <TableFooter></TableFooter>

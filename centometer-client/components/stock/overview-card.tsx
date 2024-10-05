@@ -1,51 +1,89 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StockInfo } from "./stockType";
+import LoadingCard from "../loading-card";
 
-} from "@/components/ui/card";
+export default function OverviewCard({
+  companyInfo,
+  loading,
+}: {
+  companyInfo: StockInfo;
+  loading: boolean;
+}) {
+  if (loading) {
+    return (
+      <LoadingCard className="w-full rounded-b-2xl rounded-t-none p-2 pb-12" />
+    );
+  }
 
-export default function OverviewCard() {
+  if (!loading && Object.keys(companyInfo).length === 0) {
+    return (
+      <>
+        <Card className="w-full rounded-b-2xl rounded-t-none p-2 pb-12">
+          <CardHeader className="flex flex-row w-full justify-between">
+            <div className="space-y-1.5">
+              <CardTitle>No Data Available</CardTitle>
+            </div>
+          </CardHeader>
+        </Card>
+      </>
+    );
+  } 
 
-  return (<>
 
-    <Card className="w-full rounded-b-3xl rounded-t-none p-4 pb-12">
-      <CardHeader className="flex flex-row w-full justify-between">
-        <div className="space-y-1.5">
-          <CardTitle>Overview</CardTitle>
 
-        </div>
-
-      </CardHeader>
-      <OverviewTable />
-    </Card>
-
-  </>)
+  return (
+    <>
+      <Card className="w-full rounded-b-2xl rounded-t-none p-2 pb-12">
+        <CardHeader className="flex flex-row w-full justify-between">
+          <div className="space-y-1.5">
+            <CardTitle>Overview</CardTitle>
+          </div>
+        </CardHeader>
+        <OverviewTable companyInfo={companyInfo} />
+      </Card>
+    </>
+  );
 }
 
-function OverviewTable({ }) {
+function OverviewTable({ companyInfo }: { companyInfo: StockInfo }) {
 
-  const data = { "Previous Close": 242, "Test": 222 }
+  const roundVal = (value: number) => Intl.NumberFormat("en", {notation: "compact"}).format(value)
 
+  const data = {
+    "Previous Close": companyInfo.previousClose?.toFixed(2),
+    Open: companyInfo.open?.toFixed(2),
+    Bid: companyInfo.bid?.toFixed(2),
+    Ask: companyInfo.ask?.toFixed(2),
+    "Day Range": companyInfo.dayLow && companyInfo.dayHigh ? `${companyInfo.dayLow?.toFixed(2)} - ${companyInfo.dayHigh?.toFixed(2)}` : "N/A",
+    "52 Week Range": companyInfo.fiftyTwoWeekLow && companyInfo.fiftyTwoWeekHigh ? `${companyInfo.fiftyTwoWeekLow?.toFixed(2)} - ${companyInfo.fiftyTwoWeekHigh?.toFixed(2)}` : "N/A",
+    "Avg. Volume": companyInfo.averageVolume && roundVal(companyInfo.averageVolume),
+    "Market Cap": companyInfo.marketCap && roundVal(companyInfo.marketCap),
+    "P/E Ratio": companyInfo.pegRatio,
+    EPS: companyInfo.trailingEps,
+    Dividend: companyInfo.dividendRate 
+    ? `${companyInfo.dividendRate?.toFixed(2)} (${
+        companyInfo.dividendYield ? (companyInfo.dividendYield * 100).toFixed(2) : "N/A"
+      }%)`
+    : "N/A"
+  };
 
-
-  return (<>
-    <CardContent>
-      <div className="grid  grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-2">
-        {
-          Object.entries(data).map(([key, value], index) => {
+  return (
+    <>
+      <CardContent>
+        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-12 gap-y-6 gap-x-6">
+          {Object.entries(data).map(([key, value], index) => {
             return (
-              <div className="flex justify-between border-b border-b-card-foreground items-center" key={index}>
+              <div
+                className="flex justify-between border-b border-b-neutral-700 items-center text-sm"
+                key={index}
+              >
                 <p>{key}</p>
-                <p className="text-lg font-bold">{value}</p>
+                <p className="font-bold text-right">{value || "N/A"}</p>
               </div>
-
-            )
-          })
-        }
-      </div>
-    </CardContent>
-
-  </>)
+            );
+          })}
+        </div>
+      </CardContent>
+    </>
+  );
 }
