@@ -11,14 +11,14 @@ export default function OverviewCard({
 }) {
   if (loading) {
     return (
-      <LoadingCard className="w-full rounded-b-2xl rounded-t-none p-2 pb-12" />
+      <LoadingCard className="w-full rounded-b-2xl rounded-t-none pt-2 md:px-2 pb-12" />
     );
   }
 
   if (!loading && Object.keys(companyInfo).length === 0) {
     return (
       <>
-        <Card className="w-full rounded-b-2xl rounded-t-none p-2 pb-12">
+        <Card className="w-full rounded-b-2xl rounded-t-none pt-2 md:px-2 pb-12">
           <CardHeader className="flex flex-row w-full justify-between">
             <div className="space-y-1.5">
               <CardTitle>No Data Available</CardTitle>
@@ -33,7 +33,7 @@ export default function OverviewCard({
 
   return (
     <>
-      <Card className="w-full rounded-b-2xl rounded-t-none p-2 pb-12">
+      <Card className="w-full rounded-b-2xl rounded-t-none pt-2 md:px-2 pb-12">
         <CardHeader className="flex flex-row w-full justify-between">
           <div className="space-y-1.5">
             <CardTitle>Overview</CardTitle>

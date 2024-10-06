@@ -43,7 +43,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="px-4 mt-6 w-full">
+      <div className="mt-4 md:px-1 w-full">
         <StockBreadCrumb currentStock={symbol} />
         <div className="flex flex-col mt-4 mb-2 max-w-fit gap-2">
           <div className="text-3xl font-semibold flex gap-4 items-center">

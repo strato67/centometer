@@ -50,7 +50,7 @@ export default function CompanyInfo({
 
   return (
     <>
-      <Card className="w-full rounded-2xl p-4  ">
+      <Card className="w-full rounded-2xl pt-2  pb-2">
         <CardHeader className="flex flex-row w-full justify-between">
           <div className="space-y-1.5">
             <CardTitle>{companyInfo.longName || companyInfo.shortName || companyInfo.symbol}</CardTitle>
@@ -149,7 +149,7 @@ function RecommendationBadge({
 
   return (
     <Badge
-      className={`${analystConsensus[consensus].colour} mt-2  text-md md:text-lg min-w-fit max-w-full  px-6 py-2 hover:${analystConsensus[consensus].colour} ${analystConsensus[consensus].text}`}
+      className={`${analystConsensus[consensus].colour} mt-2  text-md md:text-lg min-w-fit max-w-full  py-2 hover:${analystConsensus[consensus].colour} ${analystConsensus[consensus].text}`}
     >
       {analystConsensus[consensus].name}
     </Badge>
