@@ -36,7 +36,7 @@ export default function SearchBar() {
         <>
             <Form {...form}>
                 <div className="w-full flex flex-col items-center justify-center h-1/3 ">
-                    <h1 className="text-3xl font-semibold mb-4 ">Search</h1>
+                    <h1 className="text-4xl font-semibold mb-8 ">Search</h1>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="flex max-w-sm items-center space-x-1"

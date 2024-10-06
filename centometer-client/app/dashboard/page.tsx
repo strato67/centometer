@@ -4,9 +4,9 @@ import NewsCard from "@/components/home/news-card";
 export default function Page() {
   return (
     <>
-      <div className="px-4 mt-4 w-full">
-        <h1 className="text-3xl font-semibold ">Home</h1>
-        <div className="grid justify-center grid-rows-3 md:grid-rows-2 grid-flow-row md:grid-cols-2 w-full gap-4 md:gap-y-0 mt-4">
+      <div className="my-2 md:my-6 w-full">
+        <h1 className="text-4xl font-semibold ">Home</h1>
+        <div className="grid justify-center grid-flow-row md:grid-cols-2 w-full gap-4 md:gap-6 mt-4">
           <div className="md:col-span-2">
             <PinnedCard />
           </div>

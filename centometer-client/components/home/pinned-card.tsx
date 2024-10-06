@@ -17,11 +17,11 @@ import {
 } from "@/components/ui/carousel";
 
 export default function PinnedCard() {
-  const tickers = ["NASDAQ:NVDA", "NASDAQ:AMD", "NASDAQ:INTC", "NASDAQ:AAPL", "NASDAQ:GOOGL", "NASDAQ:META"];
+  const tickers = ["NASDAQ:TSLA", "NASDAQ:AMD", "NASDAQ:INTC", "NASDAQ:AAPL", "NASDAQ:GOOGL", "NASDAQ:META"];
 
   return (
     <>
-      <Card className="w-96 md:w-full rounded-2xl p-4 pb-12 ">
+      <Card className="w-full rounded-2xl pb-4 pt-2 min-h-80 max-h-fit">
         <CardHeader className="flex flex-row w-full justify-between">
           <div className="space-y-1.5">
             <CardTitle>Pinned Stocks</CardTitle>
@@ -31,7 +31,7 @@ export default function PinnedCard() {
           </div>
           <Button className="ml-6">Add Ticker</Button>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-10 md:px-8">
           <Carousel className="w-full h-full ">
             <CarouselContent>
               {tickers.map((ticker, index) => {
