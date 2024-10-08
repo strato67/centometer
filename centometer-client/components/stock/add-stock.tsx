@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import {
   addWatchListItem,
   removeWatchListItem,
-} from "@/app/dashboard/stock/stock-info";
+} from "@/app/actions/stock-info";
 
 export default function AddStockButton({
   isAdded,

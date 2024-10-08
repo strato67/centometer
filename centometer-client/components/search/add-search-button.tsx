@@ -11,7 +11,7 @@ import {
   removeWatchListItem,
   addWatchListItem,
   getWatchlistItem,
-} from "@/app/dashboard/stock/stock-info";
+} from "@/app/actions/stock-info";
 import { toast } from "sonner";
 
 export default function AddSearchButton({

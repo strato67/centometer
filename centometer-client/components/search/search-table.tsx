@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getSearchResults, StockResult } from "@/app/dashboard/search/search";
+import { getSearchResults, StockResult } from "@/app/actions/search";
 import { LoadingSpinner } from "../ui/loading-spinner";
 import AddSearchButton from "./add-search-button";
 

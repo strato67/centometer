@@ -1,9 +1,9 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getStockOverview, getWatchlistItem } from "./stock-info";
+import { getStockOverview, getWatchlistItem } from "../../actions/stock-info";
 import StockBreadCrumb from "@/components/stock/stock-breadcrumb";
 import StockChart from "@/components/widgets/stock-chart";
 import OverviewCard from "@/components/stock/overview-card";
@@ -14,6 +14,8 @@ import { CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import AddStockButton from "@/components/stock/add-stock";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -21,6 +23,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [companyInfo, setCompanyInfo] = useState<StockInfo>({});
   const [added, setAdded] = useState<null | boolean>(null);
+  const router = useRouter()
 
   useEffect(() => {
     (async () => {
@@ -47,6 +50,10 @@ export default function Page() {
         <StockBreadCrumb currentStock={symbol} />
         <div className="flex flex-col mt-4 mb-2 max-w-fit gap-2">
           <div className="text-3xl font-semibold flex gap-4 items-center">
+            <Button variant={"ghost"} onClick={()=>router.back()} className="rounded-full p-2 -mr-1">
+            <ArrowLeft />
+            </Button>
+
             {symbol}
             {companyInfo.currentPrice && (
               <Badge className="w-fit text-xl">
