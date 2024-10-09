@@ -35,7 +35,6 @@ export default function Page() {
         setCompanyInfo(await getStockOverview(stockMap));
         setAdded(await getWatchlistItem(stockMap));
         setLoading(false);
-        console.log(await getStockOverview(stockMap));
       }
     })();
   }, [symbol]);
