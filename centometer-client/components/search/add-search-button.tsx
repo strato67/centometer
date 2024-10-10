@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import {
   Tooltip,
@@ -10,25 +10,19 @@ import { Check } from "lucide-react";
 import {
   removeWatchListItem,
   addWatchListItem,
-  getWatchlistItem,
 } from "@/app/actions/stock-info";
 import { toast } from "sonner";
 
 export default function AddSearchButton({
   indexName,
   symbolName,
+  initialState,
 }: {
   indexName: string;
   symbolName: string;
+  initialState: boolean;
 }) {
-  const [added, setAdded] = useState(false);
-
-  useEffect(()=>{
-    (async () => {
-      setAdded(await getWatchlistItem({indexName, symbolName}))
-    })();
-  },[indexName, symbolName])
-
+  const [added, setAdded] = useState(initialState);
 
   return (
     <TooltipProvider>

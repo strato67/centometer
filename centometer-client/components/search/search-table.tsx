@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getSearchResults, StockResult } from "@/app/actions/search";
+import { getSearchResults, StockWatchListResult } from "@/app/actions/search";
 import { LoadingSpinner } from "../ui/loading-spinner";
 import AddSearchButton from "./add-search-button";
 
@@ -17,7 +17,7 @@ export default function SearchTable() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const search = searchParams.get("results");
-  const [results, setResults] = useState<Array<StockResult> | null>(null);
+  const [results, setResults] = useState<Array<StockWatchListResult> | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -72,6 +72,7 @@ export default function SearchTable() {
                 <AddSearchButton
                   indexName={stock.Index}
                   symbolName={stock.Symbol}
+                  initialState={stock.inWatchlist}
                 />
               </TableCell>
               <TableCell>{stock.Index}</TableCell>
