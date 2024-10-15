@@ -1,8 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -54,6 +55,32 @@ export const columns: ColumnDef<StockResult>[] = [
   },
   {
     id: "actions",
-    enableHiding: false
+    enableHiding: false,
+    cell: ({ row }) => {
+
+      const symbol = row.getValue("symbol")
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="h-8 w-8 p-0 border-foreground rounded-full">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions for {symbol as string}</DropdownMenuLabel>
+
+
+
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={(e) => {  e.stopPropagation() }}>Pin symbol</DropdownMenuItem>
+            <DropdownMenuItem onClick={(e) => { e.stopPropagation() }} className="text-destructive focus:text-destructive">Remove</DropdownMenuItem>
+
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    }
+
   }
 ];
