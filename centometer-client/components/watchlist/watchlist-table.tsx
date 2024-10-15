@@ -55,7 +55,7 @@ export function WatchlistTable<TData, TValue>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    state:{
+    state: {
       columnFilters,
       sorting
     }
@@ -67,7 +67,7 @@ export function WatchlistTable<TData, TValue>({
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-2">
         <Input
           placeholder="Search by symbol..."
           value={(table.getColumn("symbol")?.getFilterValue() as string) ?? ""}
@@ -78,7 +78,7 @@ export function WatchlistTable<TData, TValue>({
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="ml-auto bg-foreground text-background dark:bg-inherit dark:text-foreground">
               Columns <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -88,21 +88,16 @@ export function WatchlistTable<TData, TValue>({
               .filter((column) => column.getCanHide())
               .map((column) => {
                 return (
-
-                  <React.Fragment key={column.id}>
-                    {column.id !== "symbol" && column.id !== "name" && <DropdownMenuCheckboxItem
-                      
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>}
-
-                    </React.Fragment>
-
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
                 );
               })}
           </DropdownMenuContent>
@@ -135,7 +130,7 @@ export function WatchlistTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="select-none"
+                  className="select-none cursor-pointer"
                   onClick={() => {
                     const stock = row.original as StockResult;
                     router.push(

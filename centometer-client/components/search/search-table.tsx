@@ -56,7 +56,7 @@ export default function SearchTable() {
         {results &&
           results.map((stock, index) => (
             <TableRow
-              className="select-none"
+              className="select-none cursor-pointer"
               key={index}
               onClick={() =>
                 router.push(

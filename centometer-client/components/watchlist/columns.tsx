@@ -20,10 +20,12 @@ export const columns: ColumnDef<StockResult>[] = [
   {
     accessorKey: "symbol",
     header: "Symbol",
+    enableHiding: false
   },
   {
     accessorKey: "name",
     header: "Name",
+    enableHiding: false
   },
   {
     accessorKey: "price",
@@ -50,4 +52,8 @@ export const columns: ColumnDef<StockResult>[] = [
     accessorKey: "index",
     header: "Index",
   },
+  {
+    id: "actions",
+    enableHiding: false
+  }
 ];
