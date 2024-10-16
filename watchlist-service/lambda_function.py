@@ -1,8 +1,13 @@
 import json
 
 def lambda_handler(event, context):
-    # TODO implement
+
+    user_id = event['queryStringParameters']['id']
+
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda :D')
+        'headers': {
+            'Access-Control-Allow-Origin': "*"
+        },  
+        'body': json.dumps(user_id)
     }
