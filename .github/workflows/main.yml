@@ -8,6 +8,7 @@ on:
     paths:
       - stock-search/
       - stock-overview/
+      - watchlist-service/
       - .github/workflows/**
 
 jobs:
