@@ -6,9 +6,9 @@ on:
       - development
       - main
     paths:
-      - stock-search/
-      - stock-overview/
-      - watchlist-service/
+      - stock-search/**
+      - stock-overview/**
+      - watchlist-service/**
       - .github/workflows/**
 
 jobs:
