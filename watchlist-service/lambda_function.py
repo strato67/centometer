@@ -12,6 +12,16 @@ def lambda_handler(event, context):
     user_id = event['queryStringParameters']['id']
     watchlist = get_watchlist(user_id)
 
+    if not watchlist:
+        return {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Origin': "*"
+        },  
+        'body': json.dumps({'watchlist': watchlist})
+        }
+
+
     return {
         'statusCode': 200,
         'headers': {
@@ -27,11 +37,6 @@ def get_watchlist(id):
         return response.data
     except:
         return []
-
-
-
-
-
 
 
 
