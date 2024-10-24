@@ -2,7 +2,9 @@ import json
 import os
 from supabase import create_client, Client
 from dotenv import load_dotenv
+import yfinance as yf
 load_dotenv()
+
 
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_ANON_KEY")
@@ -38,8 +40,27 @@ def get_watchlist(id):
     except:
         return []
 
+def generate_query_list(stock_list):
+    
+    yfinancesymbols = {
+    'ASX': ".AX",
+    'TSX': ".TO",
+    'LSE': ".L",
+    'FOREX': "=X",
+    };
+
+    for item in stock_list:
+        symbol = item["symbol"]
+        index = item["index"]
+
+        if index in yfinancesymbols:
+            item["search_query"] = symbol+yfinancesymbols[index]
+        else:
+            item["search_query"] = symbol
+
+        
+    return stock_list
 
 
 
-
-
+# print(yf.Ticker('INTC').info)
