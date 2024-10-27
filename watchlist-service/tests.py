@@ -5,9 +5,6 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_ANON_KEY")
-
 mock_list = [{'symbol': 'AMD', 'index': 'NASDAQ'}, 
             {'symbol': 'BA', 'index': 'NYSE'}, 
             {'symbol': 'SPY', 'index': 'ASX'},
@@ -16,7 +13,6 @@ mock_list = [{'symbol': 'AMD', 'index': 'NASDAQ'},
             ]
 
 def test_invalid_user():
-
     mock_event = {'queryStringParameters':{
         'id': 'dddd'
     }}
