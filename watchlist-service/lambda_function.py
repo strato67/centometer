@@ -1,7 +1,7 @@
 import json
 import os
 from supabase import create_client, Client
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 import yfinance as yf
 
@@ -9,6 +9,7 @@ load_dotenv()
 
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_ANON_KEY")
+supabase: Client = create_client(url, key)
 
 def lambda_handler(event, context):
 
@@ -36,7 +37,7 @@ def lambda_handler(event, context):
     }
 
 def get_watchlist(id):
-    supabase: Client = create_client(url, key)
+
     try:
         response = supabase.table("watchlist").select("symbol, index").eq("user_id", id).execute()
         return response.data
@@ -81,6 +82,7 @@ def fetch_yfinance(item):
 def get_stock_info(query_list):
     
     with ThreadPoolExecutor() as executor:
-        updated_list = list(executor.map(fetch_yfinance, query_list))
+        futures = [executor.submit(fetch_yfinance, item) for item in query_list]
+        updated_list = [future.result() for future in as_completed(futures)]
 
     return updated_list
