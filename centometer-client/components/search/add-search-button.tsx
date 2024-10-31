@@ -34,10 +34,16 @@ export default function AddSearchButton({
               e.stopPropagation();
               setAdded(!added);
 
-              const modifiedIndex = indexName === "IDX" || indexName === "NYSE American" ? "" : indexName
+              const modifiedIndex =
+                indexName === "IDX" || indexName === "NYSE American"
+                  ? ""
+                  : indexName;
 
               const action = added ? removeWatchListItem : addWatchListItem;
-              const result = await action({ indexName: modifiedIndex, symbolName });
+              const result = await action({
+                indexName: modifiedIndex,
+                symbolName,
+              });
 
               if (result === 0) {
                 toast.error("Error updating watchlist.");
@@ -48,10 +54,11 @@ export default function AddSearchButton({
                 );
               }
             }}
-            className={`rounded-full hover:border-card-foreground  w-8 h-8 text-xl p-0  text-center ${added
+            className={`rounded-full hover:border-card-foreground  w-8 h-8 text-xl p-0  text-center ${
+              added
                 ? "bg-card-foreground hover:bg-card-foreground"
                 : "bg-card-background"
-              }`}
+            }`}
           >
             {added ? <Check size={16} className="text-background" /> : "+"}
           </Button>
