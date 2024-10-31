@@ -36,7 +36,7 @@ export const getSearchResults = async (
         return (
           watchlistItem.symbol === stock.Symbol &&
           (watchlistItem.index === stock.Index ||
-            (isSpecialIndex && watchlistItem.index === null))
+            (isSpecialIndex && watchlistItem.index === ""))
         );
       });
       return { ...stock, inWatchlist };
@@ -56,52 +56,25 @@ const getWatchlistfromBatch = async (searchResults: StockResult[]) => {
     } = await supabase.auth.getUser();
     const user_id = user?.id;
 
-    const symbolsWithNullIndexes = searchResults
-      .filter(
-        (stock) => stock.Index === "IDX" || stock.Index === "NYSE American"
-      )
-      .map((stock) => stock.Symbol);
+    const stocks = searchResults.map((stock) => stock.Symbol);
+    const indexes = searchResults.map((stock) =>
+      stock.Index === "NYSE American" || stock.Index === "IDX"
+        ? ""
+        : stock.Index
+    );
 
-    const symbolsWithNonNullIndexes = searchResults
-      .filter(
-        (stock) => stock.Index !== "IDX" && stock.Index !== "NYSE American"
-      )
-      .map((stock) => stock.Symbol);
-
-    const indexesWithoutNull = searchResults
-      .filter(
-        (stock) => stock.Index !== "IDX" && stock.Index !== "NYSE American"
-      )
-      .map((stock) => stock.Index);
-
-    const { data: watchlistNull, error: errorNull } = await supabase
+    const { data: watchlist, error: error } = await supabase
       .from("watchlist")
       .select("symbol, index")
       .eq("user_id", user_id)
-      .in("symbol", symbolsWithNullIndexes)
-      .is("index", null);
+      .in("symbol", stocks)
+      .in("index", indexes);
 
-    if (errorNull) {
-      console.error("Error fetching watchlist with null indexes:", errorNull);
+    if (error) {
+      console.error("Error fetching watchlist with non-null indexes:", error);
       return [];
     }
 
-    const { data: watchlistNonNull, error: errorNonNull } = await supabase
-      .from("watchlist")
-      .select("symbol, index")
-      .eq("user_id", user_id)
-      .in("symbol", symbolsWithNonNullIndexes)
-      .in("index", indexesWithoutNull);
-
-    if (errorNonNull) {
-      console.error(
-        "Error fetching watchlist with non-null indexes:",
-        errorNonNull
-      );
-      return [];
-    }
-
-    const watchlist = [...(watchlistNull || []), ...(watchlistNonNull || [])];
     return watchlist ?? [];
   } catch (error) {
     console.error("Error getting watchlist:", error);

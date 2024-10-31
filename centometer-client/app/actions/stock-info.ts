@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 type StockQuery = {
-  indexName: string | undefined;
+  indexName: string;
   symbolName: string;
 };
 
@@ -54,11 +54,7 @@ export const getWatchlistItem = async (searchQuery: StockQuery) => {
       .eq("user_id", user_id)
       .eq("symbol", searchQuery.symbolName);
 
-    if (searchQuery.indexName) {
       query = query.eq("index", searchQuery.indexName);
-    } else {
-      query = query.is("index", null);
-    }
 
     const { data: watchlist } = await query;
 
@@ -84,7 +80,6 @@ export const addWatchListItem = async (searchQuery: StockQuery) => {
     if (await getWatchlistItem(searchQuery)){
       throw Error;
     }
-
 
     const response = await supabase
       .from("watchlist")
@@ -119,15 +114,7 @@ export const removeWatchListItem = async (searchQuery: StockQuery) => {
 
     let error;
 
-    if (!searchQuery.indexName) {
-      const response = await supabase
-        .from("watchlist")
-        .delete()
-        .eq("user_id", user_id)
-        .eq("symbol", searchQuery.symbolName)
-        .is("index", null);
-      error = response.error;
-    } else {
+
       const response = await supabase
         .from("watchlist")
         .delete()
@@ -135,7 +122,7 @@ export const removeWatchListItem = async (searchQuery: StockQuery) => {
         .eq("symbol", searchQuery.symbolName)
         .eq("index", searchQuery.indexName);
       error = response.error;
-    }
+    
 
     if (error) {
       throw error;

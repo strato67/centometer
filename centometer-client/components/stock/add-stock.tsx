@@ -18,7 +18,7 @@ export default function AddStockButton({
   setAdded: Dispatch<SetStateAction<null | boolean>>;
 }) {
   const stockMap = {
-    indexName: symbol?.includes(":") ? symbol.split(":")[0] : undefined,
+    indexName: symbol?.includes(":") ? symbol.split(":")[0] : "",
     symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol,
   };
 

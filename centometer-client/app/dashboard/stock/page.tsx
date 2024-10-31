@@ -29,7 +29,7 @@ export default function Page() {
     (async () => {
       if (symbol) {
         const stockMap = {
-          indexName: symbol?.includes(":") ? symbol.split(":")[0] : undefined,
+          indexName: symbol?.includes(":") ? symbol.split(":")[0] : "",
           symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol,
         };
         setCompanyInfo(await getStockOverview(stockMap));
@@ -49,8 +49,8 @@ export default function Page() {
         <StockBreadCrumb currentStock={symbol} />
         <div className="flex flex-col mt-4 mb-2 max-w-fit gap-2">
           <div className="text-3xl font-semibold flex gap-4 items-center">
-            <Button variant={"ghost"} onClick={()=>router.back()} className="rounded-full p-2 -mr-1">
-            <ArrowLeft />
+            <Button variant={"ghost"} onClick={() => router.back()} className="rounded-full p-2 -mr-1">
+              <ArrowLeft />
             </Button>
 
             {symbol}
@@ -63,7 +63,7 @@ export default function Page() {
 
           <Separator />
           {!companyInfo || added === null ? (
-            <Skeleton className="flex gap-x-4 w-64 h-6 rounded-full"/>
+            <Skeleton className="flex gap-x-4 w-64 h-6 rounded-full" />
           ) : (
             <CardDescription className="flex items-baseline gap-x-4">
               {companyInfo.longName || companyInfo.symbol} - {companyInfo.quoteType}

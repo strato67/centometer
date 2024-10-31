@@ -31,12 +31,10 @@ export default function AddSearchButton({
           <Button
             variant={"outline"}
             onClick={async (e) => {
-              e.preventDefault();
               e.stopPropagation();
               setAdded(!added);
 
-
-              const modifiedIndex = indexName === "IDX" || indexName === "NYSE American" ? undefined : indexName
+              const modifiedIndex = indexName === "IDX" || indexName === "NYSE American" ? "" : indexName
 
               const action = added ? removeWatchListItem : addWatchListItem;
               const result = await action({ indexName: modifiedIndex, symbolName });
