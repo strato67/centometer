@@ -13,7 +13,7 @@ async function getData(): Promise<StockResult[]> {
 
   const response = await fetch(`${url + id}`, {
     headers: {
-      "x-api-key": `${process.env.NEXT_PUBLIC_AWS_WATCHLIST_KEY}`
+      "x-api-key": `${process.env.NEXT_PUBLIC_AWS_WATCHLIST}`
     }
   });
   if (!response.ok) {
