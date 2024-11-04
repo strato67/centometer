@@ -13,6 +13,7 @@ import {
 } from "../ui/dropdown-menu";
 import { removeWatchListItem } from "@/app/actions/stock-info";
 import { toast } from "sonner";
+import AnalystBadge from "../analyst-badge";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type StockResult = {
@@ -28,7 +29,17 @@ export type StockResult = {
 export const columns: ColumnDef<StockResult>[] = [
   {
     accessorKey: "symbol",
-    header: "Symbol",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Symbol
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     enableHiding: false,
   },
   {
@@ -56,6 +67,20 @@ export const columns: ColumnDef<StockResult>[] = [
   {
     accessorKey: "rating",
     header: "Analyst Rating",
+    cell: ({ row }) =>
+      row.getValue("rating") === "N/A" ? (
+        <div className="w-12 flex items-center justify-center">
+          N/A
+        </div>
+
+      ) : (
+        <div className="w-12 flex items-center justify-center">
+          <AnalystBadge
+            className="text-sm w-fit items-center"
+            consensus={row.getValue("rating") as string}
+          />
+        </div>
+      ),
   },
   {
     accessorKey: "index",
@@ -66,7 +91,7 @@ export const columns: ColumnDef<StockResult>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const symbol = row.getValue("symbol");
-      const index = row.getValue("index")
+      const index = row.getValue("index");
 
       return (
         <DropdownMenu>
@@ -93,16 +118,16 @@ export const columns: ColumnDef<StockResult>[] = [
               Pin symbol
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={async(e) => {
+              onClick={async (e) => {
                 e.stopPropagation();
-                const result = await removeWatchListItem({indexName: index as string, symbolName: symbol as string})
+                const result = await removeWatchListItem({
+                  indexName: index as string,
+                  symbolName: symbol as string,
+                });
                 if (result === 0) {
                   toast.error("Error updating watchlist.");
-                } else {                  
-                  toast.success(
-                    `${symbol} "Removed from watchlist.`
-                  );
-                  
+                } else {
+                  toast.success(`${symbol} "Removed from watchlist.`);
                 }
               }}
               className="text-destructive focus:text-destructive"

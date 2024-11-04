@@ -12,6 +12,7 @@ import LoadingCard from "../loading-card";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
 import { AnalystConsensus } from "./stockType";
+import AnalystBadge from "../analyst-badge";
 
 export default function CompanyInfo({
   companyInfo,
@@ -83,9 +84,8 @@ export default function CompanyInfo({
               companyInfo.numberOfAnalystOpinions && (
                 <div className="flex flex-col border rounded-2xl p-6 bg-background text-neutral gap-3  text-sm text-pretty overflow-hidden text-ellipsis max-h-56 overflow-y-auto items-center text-center  ">
                   <div className="text-lg font-semibold">Analyst Consensus</div>
-                  <RecommendationBadge
-                    consensus={companyInfo.recommendationKey}
-                  />
+                  <AnalystBadge consensus={companyInfo.recommendationKey} className="text-md md:text-lg min-w-fit max-w-full  py-2"/>
+               
                   <div>{companyInfo.numberOfAnalystOpinions} Analysts</div>
                 </div>
               )}
@@ -111,47 +111,5 @@ export default function CompanyInfo({
         </CardContent>
       </Card>
     </>
-  );
-}
-
-function RecommendationBadge({
-  consensus,
-}: {
-  consensus: keyof typeof analystConsensus;
-}) {
-  const analystConsensus: Record<string, AnalystConsensus> = {
-    strong_buy: {
-      name: "Strong Buy",
-      colour: "bg-green-900",
-      text: "",
-    },
-    buy: {
-      name: "Buy",
-      colour: "bg-green-600",
-      text: "",
-    },
-    hold: {
-      name: "Hold",
-      colour: "bg-yellow-400",
-      text: "text-black",
-    },
-    underperform: {
-      name: "Underperform",
-      colour: "bg-orange-500",
-      text: "",
-    },
-    sell: {
-      name: "Sell",
-      colour: "bg-red-800",
-      text: "",
-    },
-  };
-
-  return (
-    <Badge
-      className={`${analystConsensus[consensus].colour} mt-2  text-md md:text-lg min-w-fit max-w-full  py-2 hover:${analystConsensus[consensus].colour} ${analystConsensus[consensus].text}`}
-    >
-      {analystConsensus[consensus].name}
-    </Badge>
   );
 }
