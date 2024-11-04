@@ -3,8 +3,16 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { removeWatchListItem } from "@/app/actions/stock-info";
+import { toast } from "sonner";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type StockResult = {
@@ -21,12 +29,12 @@ export const columns: ColumnDef<StockResult>[] = [
   {
     accessorKey: "symbol",
     header: "Symbol",
-    enableHiding: false
+    enableHiding: false,
   },
   {
     accessorKey: "name",
     header: "Name",
-    enableHiding: false
+    enableHiding: false,
   },
   {
     accessorKey: "price",
@@ -57,30 +65,53 @@ export const columns: ColumnDef<StockResult>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-
-      const symbol = row.getValue("symbol")
+      const symbol = row.getValue("symbol");
+      const index = row.getValue("index")
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="h-8 w-8 p-0 border-foreground rounded-full">
+            <Button
+              variant="outline"
+              className="h-8 w-8 p-0 border-foreground rounded-full"
+            >
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions for {symbol as string}</DropdownMenuLabel>
-
-
+            <DropdownMenuLabel>
+              Actions for {symbol as string}
+            </DropdownMenuLabel>
 
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={(e) => {  e.stopPropagation() }}>Pin symbol</DropdownMenuItem>
-            <DropdownMenuItem onClick={(e) => { e.stopPropagation() }} className="text-destructive focus:text-destructive">Remove</DropdownMenuItem>
-
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              Pin symbol
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async(e) => {
+                e.stopPropagation();
+                const result = await removeWatchListItem({indexName: index as string, symbolName: symbol as string})
+                if (result === 0) {
+                  toast.error("Error updating watchlist.");
+                } else {                  
+                  toast.success(
+                    `${symbol} "Removed from watchlist.`
+                  );
+                  
+                }
+              }}
+              className="text-destructive focus:text-destructive"
+            >
+              Remove
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
-    }
-
-  }
+      );
+    },
+  },
 ];

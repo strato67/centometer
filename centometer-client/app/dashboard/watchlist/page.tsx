@@ -20,28 +20,9 @@ async function getData(): Promise<StockResult[]> {
     return [];
   }
   const json = await response.json();
-
+  
   return json.watchlist
 
-  return [
-    {
-      id: "dadadw22",
-      symbol: "AAPL",
-      name: "Apple Inc.",
-      price: 225,
-      rating: "buy",
-      index: "NASDAQ",
-    },
-    {
-      id: "dada3w22",
-      symbol: "AMD",
-      name: "Advanced Micro Devices",
-      price: 165,
-      rating: "buy",
-      index: "NASDAQ",
-    },
-    // ...
-  ];
 }
 
 export default async function Page() {

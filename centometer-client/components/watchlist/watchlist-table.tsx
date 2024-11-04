@@ -58,7 +58,7 @@ export function WatchlistTable<TData, TValue>({
     state: {
       columnFilters,
       sorting
-    }
+    },
   });
 
 
@@ -134,8 +134,8 @@ export function WatchlistTable<TData, TValue>({
                   onClick={() => {
                     const stock = row.original as StockResult;
                     router.push(
-                      stock.index === "IDX" || stock.index === "NYSE American"
-                        ? `/dashboard/stock/?tvwidgetsymbol=${stock.index}`
+                      stock.index === "IDX" || stock.index === "NYSE American" || stock.index === ""
+                        ? `/dashboard/stock/?tvwidgetsymbol=${stock.symbol}`
                         : `/dashboard/stock/?tvwidgetsymbol=${stock.index}%3A${stock.symbol}`
                     );
                   }}
