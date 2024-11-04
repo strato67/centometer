@@ -39,11 +39,13 @@ def test_query_list():
     
     assert {'symbol': 'SPY', 'index': None, 'search_query': 'SPY'} in query_list
     assert {'symbol': 'BCE', 'index': 'TSX', 'search_query': 'BCE.TO'} in query_list
-    assert {'symbol': 'SPY', 'index': 'ASX', 'search_query': 'SPY.AX'} in query_list
+    assert {'symbol': 'SPY', 'index': 'ASX', 'search_query': 'SPY.AX'} in query_list   
 
 def test_yfinance():
     query_list = generate_query_list(mock_list)
     finallist = get_stock_info(query_list)    
 
-    if all(all(key in result for key in ("name", "price", "rating", "symbol", "index")) for result in finallist):
+    print(query_list)
+
+    if all(all(key in result for key in ("id", "name", "price", "rating", "symbol", "index")) for result in finallist):
         assert True

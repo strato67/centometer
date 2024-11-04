@@ -4,6 +4,7 @@ from supabase import create_client, Client
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 import yfinance as yf
+import uuid
 
 load_dotenv()
 
@@ -67,7 +68,7 @@ def generate_query_list(stock_list):
 def fetch_yfinance(item):
     symbol = item["search_query"]
     data = yf.Ticker(symbol).info
-
+    item["id"] = str(uuid.uuid4())
     item["price"] = data.get('currentPrice') or data.get('regularMarketOpen') or 0
     item["name"] = data.get('longName')
     item["rating"] = data.get('recommendationKey', "N/A") 
