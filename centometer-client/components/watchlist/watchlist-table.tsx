@@ -37,16 +37,17 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function WatchlistTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export interface CustomTableMeta {
+  removeRow: (rowIndex: number) => void;
+}
+
+export function WatchlistTable<TData, TValue>({ columns, data: initialData }: DataTableProps<TData, TValue>) {
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
   const [sorting, setSorting] = useState<SortingState>([])
-
+  const [data, setData] = useState<TData[]>(initialData);
   const table = useReactTable({
     data,
     columns,
@@ -59,9 +60,12 @@ export function WatchlistTable<TData, TValue>({
       columnFilters,
       sorting
     },
+    meta: {
+      removeRow: (rowIndex: number) => {
+        setData((prevData) => prevData.filter((_, index) => index !== rowIndex));
+      },
+    } as CustomTableMeta,
   });
-
-
 
   const router = useRouter();
 

@@ -14,6 +14,7 @@ import {
 import { removeWatchListItem } from "@/app/actions/stock-info";
 import { toast } from "sonner";
 import AnalystBadge from "../analyst-badge";
+import { CustomTableMeta } from "./watchlist-table";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type StockResult = {
@@ -24,6 +25,7 @@ export type StockResult = {
   rating: string;
   index: string;
 };
+
 
 // symbol, name, price, index
 export const columns: ColumnDef<StockResult>[] = [
@@ -89,10 +91,10 @@ export const columns: ColumnDef<StockResult>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const symbol = row.getValue("symbol");
       const index = row.getValue("index");
-
+      const meta = table.options.meta as CustomTableMeta;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -128,6 +130,7 @@ export const columns: ColumnDef<StockResult>[] = [
                   toast.error("Error updating watchlist.");
                 } else {
                   toast.success(`${symbol} "Removed from watchlist.`);
+                  meta.removeRow(row.index)
                 }
               }}
               className="text-destructive focus:text-destructive"
