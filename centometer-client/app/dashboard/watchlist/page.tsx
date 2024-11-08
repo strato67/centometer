@@ -30,7 +30,7 @@ export default async function Page() {
   return (
     <>
       <div className="my-2 md:my-6 w-full">
-        <h1 className="text-4xl font-bold">Watchlist</h1>
+        <h1 className="text-4xl font-bold mb-4">Watchlist</h1>
         <Suspense>
           <WatchlistTable columns={columns} data={data} />
         </Suspense>

@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { removeWatchListItem } from "@/app/actions/stock-info";
+import { pinWatchlistItem, removeWatchListItem } from "@/app/actions/stock-info";
 import { toast } from "sonner";
 import AnalystBadge from "../analyst-badge";
 import { CustomTableMeta } from "./watchlist-table";
@@ -113,8 +113,18 @@ export const columns: ColumnDef<StockResult>[] = [
 
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.stopPropagation();
+                const result = await pinWatchlistItem({
+                  indexName: index as string,
+                  symbolName: symbol as string,
+                })
+
+                if(!result){
+                  toast.error("Error pinning item.")
+                }else{
+                  toast.success(result)
+                }
               }}
             >
               Pin symbol
@@ -129,7 +139,7 @@ export const columns: ColumnDef<StockResult>[] = [
                 if (result === 0) {
                   toast.error("Error updating watchlist.");
                 } else {
-                  toast.success(`${symbol} "Removed from watchlist.`);
+                  toast.success(`${symbol} removed from watchlist.`);
                   meta.removeRow(row.index)
                 }
               }}

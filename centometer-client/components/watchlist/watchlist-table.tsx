@@ -7,6 +7,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  getPaginationRowModel,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -41,12 +42,12 @@ export interface CustomTableMeta {
   removeRow: (rowIndex: number) => void;
 }
 
-export function WatchlistTable<TData, TValue>({ columns, data: initialData }: DataTableProps<TData, TValue>) {
-
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
-  const [sorting, setSorting] = useState<SortingState>([])
+export function WatchlistTable<TData, TValue>({
+  columns,
+  data: initialData,
+}: DataTableProps<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [data, setData] = useState<TData[]>(initialData);
   const table = useReactTable({
     data,
@@ -56,59 +57,82 @@ export function WatchlistTable<TData, TValue>({ columns, data: initialData }: Da
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       columnFilters,
-      sorting
+      sorting,
+    },
+    initialState: {
+      pagination: {
+        pageSize: 6,
+      },
     },
     meta: {
       removeRow: (rowIndex: number) => {
-        setData((prevData) => prevData.filter((_, index) => index !== rowIndex));
+        setData((prevData) =>
+          prevData.filter((_, index) => index !== rowIndex)
+        );
       },
     } as CustomTableMeta,
   });
 
   const router = useRouter();
+  const currentPage: number = React.useMemo(() => {
+    const isUndefined: Boolean =
+      table.options?.state?.pagination?.pageIndex === undefined ||
+      table.options?.state?.pagination?.pageIndex === null;
+    return isUndefined
+      ? 0
+      : (table.options?.state?.pagination?.pageIndex as number);
+  }, [table.options?.state?.pagination?.pageIndex]);
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4 gap-2">
-        <Input
-          placeholder="Search by symbol..."
-          value={(table.getColumn("symbol")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("symbol")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto bg-foreground text-background dark:bg-inherit dark:text-foreground">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
       <div className="rounded-md border">
+        <div className="grid items-center  pt-4 pb-2 mx-4 grid-cols-1 md:grid-cols-2">
+          <div className="flex items-center gap-2 max-w-sm">
+            <Input
+              placeholder="Search by symbol..."
+              value={
+                (table.getColumn("symbol")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("symbol")?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="ml-auto bg-foreground text-background dark:bg-inherit dark:text-foreground"
+                >
+                  Columns <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          
+        </div>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -119,9 +143,9 @@ export function WatchlistTable<TData, TValue>({ columns, data: initialData }: Da
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   );
                 })}
@@ -138,7 +162,9 @@ export function WatchlistTable<TData, TValue>({ columns, data: initialData }: Da
                   onClick={() => {
                     const stock = row.original as StockResult;
                     router.push(
-                      stock.index === "IDX" || stock.index === "NYSE American" || stock.index === ""
+                      stock.index === "IDX" ||
+                        stock.index === "NYSE American" ||
+                        stock.index === ""
                         ? `/dashboard/stock/?tvwidgetsymbol=${stock.symbol}`
                         : `/dashboard/stock/?tvwidgetsymbol=${stock.index}%3A${stock.symbol}`
                     );
@@ -166,8 +192,33 @@ export function WatchlistTable<TData, TValue>({ columns, data: initialData }: Da
             )}
           </TableBody>
         </Table>
+
+        <div className="grid items-center py-2 mx-4 grid-cols-2">
+          <div className="text-sm">{table.getRowCount()} Item(s)</div>
+          <div className="flex justify-end space-x-2 items-center">
+            <div className="text-sm">
+              {currentPage + 1} of {table.getPageCount()}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
