@@ -1,4 +1,4 @@
-from lambda_function import lambda_handler, generate_query_list, get_stock_info
+from lambda_function import lambda_handler, generate_query_list, get_stock_info, get_watchlist
 import pytest
 import json
 from dotenv import load_dotenv
@@ -42,10 +42,10 @@ def test_query_list():
     assert {'symbol': 'SPY', 'index': 'ASX', 'search_query': 'SPY.AX'} in query_list   
 
 def test_yfinance():
-    query_list = generate_query_list(mock_list)
+    user_id: str = os.environ.get("TEST_USER_ID")
+    watchlist = get_watchlist(user_id)
+    query_list = generate_query_list(watchlist)
     finallist = get_stock_info(query_list)    
 
-    print(query_list)
-
-    if all(all(key in result for key in ("id", "name", "price", "rating", "symbol", "index")) for result in finallist):
+    if all(all(key in result for key in ("id", "name", "price", "rating", "symbol", "index, pinned_stock")) for result in finallist):
         assert True

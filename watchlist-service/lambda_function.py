@@ -40,7 +40,7 @@ def lambda_handler(event, context):
 def get_watchlist(id):
 
     try:
-        response = supabase.table("watchlist").select("symbol, index").eq("user_id", id).execute()
+        response = supabase.table("watchlist").select("symbol, index, pinned_stock").eq("user_id", id).execute()
         return response.data
     except:
         return []
@@ -61,7 +61,6 @@ def generate_query_list(stock_list):
             item["search_query"] = symbol+yfinancesymbols[index]
         else:
             item["search_query"] = symbol
-
         
     return stock_list
 
@@ -78,7 +77,6 @@ def fetch_yfinance(item):
     del item["search_query"]
     
     return item
-
 
 def get_stock_info(query_list):
     
