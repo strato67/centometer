@@ -32,6 +32,7 @@ import { ChevronDown } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import React, { useState } from "react";
+import { Card } from "../ui/card";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -87,8 +88,8 @@ export function WatchlistTable<TData, TValue>({
   }, [table.options?.state?.pagination?.pageIndex]);
 
   return (
-    <div className="w-full">
-      <div className="rounded-md border">
+
+      <Card className=" w-full rounded-md border">
         <div className="grid items-center  pt-4 pb-2 mx-4 grid-cols-1 md:grid-cols-2">
           <div className="flex items-center gap-2 max-w-sm">
             <Input
@@ -218,7 +219,7 @@ export function WatchlistTable<TData, TValue>({
             </Button>
           </div>
         </div>
-      </div>
-    </div>
+      </Card>
+
   );
 }

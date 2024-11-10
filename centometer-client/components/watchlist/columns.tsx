@@ -24,6 +24,7 @@ export type StockResult = {
   price: number;
   rating: string;
   index: string;
+  pinned_stock: boolean;
 };
 
 

@@ -1,7 +1,9 @@
 import { WatchlistTable } from "@/components/watchlist/watchlist-table";
 import { StockResult, columns } from "@/components/watchlist/columns";
 import { createClient } from "@/utils/supabase/server";
-import { Suspense } from "react";
+
+import { PinnedTable } from "@/components/watchlist/pinned-table";
+
 
 async function getData(): Promise<StockResult[]> {
 
@@ -31,9 +33,15 @@ export default async function Page() {
     <>
       <div className="my-2 md:my-6 w-full">
         <h1 className="text-4xl font-bold mb-4">Watchlist</h1>
-        <Suspense>
-          <WatchlistTable columns={columns} data={data} />
-        </Suspense>
+
+        <div className="flex flex-col gap-8">
+        <PinnedTable columns={columns} data={data}/>
+        <WatchlistTable columns={columns} data={data} />
+
+        </div>
+
+
+
 
 
       </div>
