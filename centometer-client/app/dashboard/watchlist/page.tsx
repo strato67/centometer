@@ -1,42 +1,45 @@
+"use client"
+
 import { WatchlistTable } from "@/components/watchlist/watchlist-table";
-import { StockResult, columns } from "@/components/watchlist/columns";
-import { createClient } from "@/utils/supabase/server";
-
+import { columns, StockResult } from "@/components/watchlist/columns";
 import { PinnedTable } from "@/components/watchlist/pinned-table";
+import { getUserWatchlist } from "@/app/actions/stock-info";
+import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
 
-
-async function getData(): Promise<StockResult[]> {
-
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const id = user?.id
-  const url = process.env.NEXT_PUBLIC_LAMBDA_SEARCH_URL + "watchlistService?id="
-
-  const response = await fetch(`${url + id}`, {
-    headers: {
-      "x-api-key": `${process.env.NEXT_PUBLIC_AWS_WATCHLIST}`
-    }
-  });
-  if (!response.ok) {
-    return [];
-  }
-  const json = await response.json();
-  return json.watchlist
-
+export interface StockContextType {
+  columns: typeof columns;
+  data: StockResult[] | null;
+  setData: Dispatch<SetStateAction<StockResult[] | null>>;
 }
 
-export default async function Page() {
-  const data = await getData();
+export const StockContext = createContext<StockContextType | null>(null);
+
+export default function Page() {
+
+
+  const [data, setData] = useState<StockResult[] | null>(null)
+
+  useEffect(()=>{
+    (async () => {
+      setData(await getUserWatchlist())
+    })();
+  }, [])
+
   return (
     <>
       <div className="my-2 md:my-6 w-full">
         <h1 className="text-4xl font-bold mb-4">Watchlist</h1>
 
         <div className="flex flex-col gap-8">
-        <PinnedTable columns={columns} data={data}/>
-        <WatchlistTable columns={columns} data={data} />
+        {data && (
+
+          <StockContext.Provider value={{columns, data, setData}}>
+            <PinnedTable />
+            <WatchlistTable />
+          </StockContext.Provider>
+
+        )}
+
 
         </div>
 

@@ -31,8 +31,9 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Card } from "../ui/card";
+import { StockContext } from "@/app/dashboard/watchlist/page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -43,15 +44,13 @@ export interface CustomTableMeta {
   removeRow: (rowIndex: number) => void;
 }
 
-export function WatchlistTable<TData, TValue>({
-  columns,
-  data: initialData,
-}: DataTableProps<TData, TValue>) {
+export function WatchlistTable<TData, TValue>() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [data, setData] = useState<TData[]>(initialData);
+  //const [data, setData] = useState<TData[]>(initialData);
+  const { data, columns, setData } = useContext(StockContext)!;
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
@@ -71,7 +70,7 @@ export function WatchlistTable<TData, TValue>({
     meta: {
       removeRow: (rowIndex: number) => {
         setData((prevData) =>
-          prevData.filter((_, index) => index !== rowIndex)
+          (prevData ?? []).filter((_, index) => index !== rowIndex)
         );
       },
     } as CustomTableMeta,
