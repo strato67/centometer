@@ -9,6 +9,7 @@ import {
   getPaginationRowModel,
   SortingState,
   useReactTable,
+  ColumnDef,
 } from "@tanstack/react-table";
 
 import {
@@ -29,25 +30,31 @@ import {
 } from "../ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
-import React, { useContext, useMemo, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { StockContext } from "@/app/dashboard/watchlist/page";
 
-export interface CustomTableMeta {
+
+export interface CustomTableMetaPinned {
   removeRow: (rowIndex: number) => void;
 }
 
-export function PinnedTable<TData, TValue>() {
+interface DataTableProps<TData, TValue> {
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
+    setData: Dispatch<SetStateAction<StockResult[] | null>>;
+}
+
+export function PinnedTable<TData, TValue>({
+    columns,
+    data,
+    setData
+}: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const { data, columns, setData } = useContext(StockContext)!;
-
-  const pinnedStocks = useMemo(()=>data?.filter((stockItem)=>stockItem.pinned_stock === true), [data])
-
   const table = useReactTable({
-    data: pinnedStocks ?? [],
-    columns,
+    data: data ?? [],
+    columns:columns,
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
@@ -70,7 +77,7 @@ export function PinnedTable<TData, TValue>() {
           (prevData ?? []).filter((_, index) => index !== rowIndex)
         );
       },
-    } as CustomTableMeta,
+    } as CustomTableMetaPinned,
   });
 
   const router = useRouter();

@@ -31,19 +31,29 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import React, { useContext, useState } from "react";
+import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import { Card } from "../ui/card";
-import { StockContext } from "@/app/dashboard/watchlist/page";
+//import { StockContext } from "@/app/dashboard/watchlist/page";
 
 export interface CustomTableMeta {
   removeRow: (rowIndex: number) => void;
 }
 
-export function WatchlistTable<TData, TValue>() {
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  setData: Dispatch<SetStateAction<StockResult[] | null>>;
+}
+
+export function WatchlistTable<TData, TValue>({
+  columns,
+  data,
+  setData
+}: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   //const [data, setData] = useState<TData[]>(initialData);
-  const { data, columns, setData } = useContext(StockContext)!;
+  //const { data, columns, setData } = useContext(StockContext)!;
   const table = useReactTable({
     data: data ?? [],
     columns,

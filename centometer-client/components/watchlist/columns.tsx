@@ -15,6 +15,8 @@ import { pinWatchlistItem, removeWatchListItem } from "@/app/actions/stock-info"
 import { toast } from "sonner";
 import AnalystBadge from "../analyst-badge";
 import { CustomTableMeta } from "./watchlist-table";
+import { CustomTableMetaPinned } from "./pinned-table";
+import { TrashIcon, PinIcon,  PinOffIcon } from "lucide-react";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type StockResult = {
@@ -98,7 +100,6 @@ export const columns: ColumnDef<StockResult>[] = [
     cell: ({ row, table }) => {
       const symbol = row.getValue("symbol");
       const index = row.getValue("index");
-      const id = row.original.id
       const meta = table.options.meta as CustomTableMeta;
       return (
         <DropdownMenu>
@@ -125,14 +126,16 @@ export const columns: ColumnDef<StockResult>[] = [
                   symbolName: symbol as string,
                 })
 
-                if(!result){
+                if (!result) {
                   toast.error("Error pinning item.")
-                }else{
+                } else {
                   toast.success(result)
                 }
               }}
             >
+              <PinIcon className="mr-2" size={16}/>
               Pin symbol
+
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={async (e) => {
@@ -151,7 +154,8 @@ export const columns: ColumnDef<StockResult>[] = [
               }}
               className="text-destructive focus:text-destructive"
             >
-              Remove
+              <TrashIcon className="mr-2" size={16}/>
+              Remove Item
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -229,8 +233,7 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
     cell: ({ row, table }) => {
       const symbol = row.getValue("symbol");
       const index = row.getValue("index");
-      const id = row.original.id
-      const meta = table.options.meta as CustomTableMeta;
+      const meta = table.options.meta as CustomTableMetaPinned;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -256,34 +259,18 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
                   symbolName: symbol as string,
                 })
 
-                if(!result){
-                  toast.error("Error pinning item.")
-                }else{
-                  toast.success(result)
-                }
-              }}
-            >
-              Pin symbol
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={async (e) => {
-                e.stopPropagation();
-                const result = await removeWatchListItem({
-                  indexName: index as string,
-                  symbolName: symbol as string,
-                });
-                if (result === 0) {
-                  toast.error("Error updating watchlist.");
+                if (!result) {
+                  toast.error("Error unpinning item.")
                 } else {
-                  toast.success(`${symbol} removed from watchlist.`);
+                  toast.success(result)
                   meta.removeRow(row.index)
                 }
-
               }}
-              className="text-destructive focus:text-destructive"
             >
-              Remove
+              <PinOffIcon className="mr-2" size={16}/>
+              Unpin symbol
             </DropdownMenuItem>
+
           </DropdownMenuContent>
         </DropdownMenu>
       );
