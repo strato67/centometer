@@ -179,6 +179,8 @@ export const getUserWatchlist = async (): Promise<StockResult[]> => {
     headers: {
       "x-api-key": `${process.env.NEXT_PUBLIC_AWS_WATCHLIST}`,
     },
+    cache: "reload"
+
   });
   if (!response.ok) {
     return [];

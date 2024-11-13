@@ -27,9 +27,7 @@ export default function OverviewCard({
         </Card>
       </>
     );
-  } 
-
-
+  }
 
   return (
     <>
@@ -46,25 +44,38 @@ export default function OverviewCard({
 }
 
 function OverviewTable({ companyInfo }: { companyInfo: StockInfo }) {
-
-  const roundVal = (value: number) => Intl.NumberFormat("en", {notation: "compact"}).format(value)
+  const roundVal = (value: number) =>
+    Intl.NumberFormat("en", { notation: "compact" }).format(value);
 
   const data = {
     "Previous Close": companyInfo.previousClose?.toFixed(2),
     Open: companyInfo.open?.toFixed(2),
     Bid: companyInfo.bid?.toFixed(2),
     Ask: companyInfo.ask?.toFixed(2),
-    "Day Range": companyInfo.dayLow && companyInfo.dayHigh ? `${companyInfo.dayLow?.toFixed(2)} - ${companyInfo.dayHigh?.toFixed(2)}` : "N/A",
-    "52 Week Range": companyInfo.fiftyTwoWeekLow && companyInfo.fiftyTwoWeekHigh ? `${companyInfo.fiftyTwoWeekLow?.toFixed(2)} - ${companyInfo.fiftyTwoWeekHigh?.toFixed(2)}` : "N/A",
-    "Avg. Volume": companyInfo.averageVolume && roundVal(companyInfo.averageVolume),
+    "Day Range":
+      companyInfo.dayLow && companyInfo.dayHigh
+        ? `${companyInfo.dayLow?.toFixed(2)} - ${companyInfo.dayHigh?.toFixed(
+            2
+          )}`
+        : "N/A",
+    "52 Week Range":
+      companyInfo.fiftyTwoWeekLow && companyInfo.fiftyTwoWeekHigh
+        ? `${companyInfo.fiftyTwoWeekLow?.toFixed(
+            2
+          )} - ${companyInfo.fiftyTwoWeekHigh?.toFixed(2)}`
+        : "N/A",
+    "Avg. Volume":
+      companyInfo.averageVolume && roundVal(companyInfo.averageVolume),
     "Market Cap": companyInfo.marketCap && roundVal(companyInfo.marketCap),
     "P/E Ratio": companyInfo.pegRatio,
     EPS: companyInfo.trailingEps,
-    Dividend: companyInfo.dividendRate 
-    ? `${companyInfo.dividendRate?.toFixed(2)} (${
-        companyInfo.dividendYield ? (companyInfo.dividendYield * 100).toFixed(2) : "N/A"
-      }%)`
-    : "N/A"
+    Dividend: companyInfo.dividendRate
+      ? `${companyInfo.dividendRate?.toFixed(2)} (${
+          companyInfo.dividendYield
+            ? (companyInfo.dividendYield * 100).toFixed(2)
+            : "N/A"
+        }%)`
+      : "N/A",
   };
 
   return (
