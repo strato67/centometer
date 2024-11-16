@@ -39,13 +39,15 @@ export const columns: ColumnDef<StockResult>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className=""
         >
           Symbol
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => (
+      <div className="ml-4">{row.getValue("symbol")}</div>
+    ),
     enableHiding: false,
   },
   {
@@ -67,7 +69,7 @@ export const columns: ColumnDef<StockResult>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="">${parseFloat(row.getValue("price")).toFixed(2)}</div>
+      <div className="ml-4">${parseFloat(row.getValue("price")).toFixed(2)}</div>
     ),
   },
   {
@@ -75,14 +77,14 @@ export const columns: ColumnDef<StockResult>[] = [
     header: "Analyst Rating",
     cell: ({ row }) =>
       row.getValue("rating") === "N/A" ? (
-        <div className="w-16 flex items-center justify-center">
+        <div className="w-full">
           N/A
         </div>
 
       ) : (
-        <div className="w-16 flex items-center justify-center">
+        <div className="w-full">
           <AnalystBadge
-            className="text-sm w-fit items-center"
+            className="text-sm w-fit items-center text-center"
             consensus={row.getValue("rating") as string}
           />
 
@@ -179,6 +181,9 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => (
+      <div className="ml-4">{row.getValue("symbol")}</div>
+    ),
     enableHiding: false,
   },
   {
@@ -200,7 +205,7 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="">${parseFloat(row.getValue("price")).toFixed(2)}</div>
+      <div className="ml-4">${parseFloat(row.getValue("price")).toFixed(2)}</div>
     ),
   },
   {
@@ -208,14 +213,14 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
     header: "Analyst Rating",
     cell: ({ row }) =>
       row.getValue("rating") === "N/A" ? (
-        <div className="w-16 flex items-center justify-center">
+        <div className="w-full">
           N/A
         </div>
 
       ) : (
-        <div className="w-16 flex items-center justify-center">
+        <div className="w-full">
           <AnalystBadge
-            className="text-sm w-fit items-center"
+            className="text-sm w-fit items-center text-center"
             consensus={row.getValue("rating") as string}
           />
 

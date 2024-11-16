@@ -13,12 +13,12 @@ export default function AnalystBadge({
       strong_buy: {
         name: "Strong Buy",
         colour: "bg-green-900",
-        text: "",
+        text: "text-white",
       },
       buy: {
         name: "Buy",
         colour: "bg-green-600",
-        text: "",
+        text: "text-white",
       },
       hold: {
         name: "Hold",
@@ -28,12 +28,12 @@ export default function AnalystBadge({
       underperform: {
         name: "Underperform",
         colour: "bg-orange-500",
-        text: "",
+        text: "text-white",
       },
       sell: {
         name: "Sell",
         colour: "bg-red-800",
-        text: "",
+        text: "text-white",
       },
     };
   

@@ -31,7 +31,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import React, { Dispatch, SetStateAction, useContext, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Card } from "../ui/card";
 //import { StockContext } from "@/app/dashboard/watchlist/page";
 
@@ -52,8 +52,6 @@ export function WatchlistTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
-  //const [data, setData] = useState<TData[]>(initialData);
-  //const { data, columns, setData } = useContext(StockContext)!;
   const table = useReactTable({
     data: data ?? [],
     columns,
@@ -93,8 +91,8 @@ export function WatchlistTable<TData, TValue>({
 
   return (
     <Card className=" w-full rounded-md border">
-      <div className="grid items-center  pt-4 pb-2 mx-4 grid-cols-1 md:grid-cols-2">
-        <div className="flex items-center gap-2 max-w-sm">
+      <div className="flex items-center  pt-4 pb-2 mx-6 mt-4 gap-2 ">
+
           <Input
             placeholder="Search by symbol..."
             value={
@@ -134,7 +132,7 @@ export function WatchlistTable<TData, TValue>({
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+
       </div>
       <Table>
         <TableHeader>
