@@ -180,14 +180,14 @@ export function PinnedTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                No pinned stocks found.
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
 
-      <div className="grid items-center py-2 mx-4 grid-cols-2">
+      <div className="grid items-center py-2 mx-6 grid-cols-2 mb-1">
         <div className="text-sm">{table.getRowCount()} Item(s)</div>
         <div className="flex justify-end space-x-2 items-center">
           <div className="text-sm">

@@ -180,7 +180,7 @@ export const getUserWatchlist = async (): Promise<StockResult[]> => {
       "x-api-key": `${process.env.NEXT_PUBLIC_AWS_WATCHLIST}`,
     },
     next: {
-      revalidate: 60
+      revalidate: 5
     }
 
   });

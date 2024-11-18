@@ -37,6 +37,7 @@ import { Card } from "../ui/card";
 
 export interface CustomTableMeta {
   removeRow: (rowIndex: number) => void;
+  updateRow: (stockId: string) => void;
 }
 
 interface DataTableProps<TData, TValue> {
@@ -76,6 +77,21 @@ export function WatchlistTable<TData, TValue>({
           (prevData ?? []).filter((_, index) => index !== rowIndex)
         );
       },
+      updateRow: (stockId: string) => {
+        setData((prevData) =>
+          (prevData ?? []).map((result) => {
+            if (result.id === stockId) {
+              result.pinned_stock = !result.pinned_stock
+
+              return {
+                ...result,
+                pinned_stock: !result.pinned_stock
+              }
+            }
+            return result
+          })
+        );
+      }
     } as CustomTableMeta,
   });
 
@@ -93,45 +109,45 @@ export function WatchlistTable<TData, TValue>({
     <Card className=" w-full rounded-md border">
       <div className="flex items-center  pt-4 pb-2 mx-6 mt-4 gap-2 ">
 
-          <Input
-            placeholder="Search by symbol..."
-            value={
-              (table.getColumn("symbol")?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn("symbol")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="ml-auto bg-foreground text-background dark:bg-inherit dark:text-foreground"
-              >
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <Input
+          placeholder="Search by symbol..."
+          value={
+            (table.getColumn("symbol")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("symbol")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="ml-auto bg-foreground text-background dark:bg-inherit dark:text-foreground"
+            >
+              Columns <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
       </div>
       <Table>
@@ -144,9 +160,9 @@ export function WatchlistTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 );
               })}
@@ -188,7 +204,7 @@ export function WatchlistTable<TData, TValue>({
         </TableBody>
       </Table>
 
-      <div className="grid items-center py-2 mx-4 grid-cols-2">
+      <div className="grid items-center py-2 mx-6 grid-cols-2 mb-1">
         <div className="text-sm">{table.getRowCount()} Item(s)</div>
         <div className="flex justify-end space-x-2 items-center">
           <div className="text-sm">

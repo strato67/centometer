@@ -15,7 +15,7 @@ import { pinWatchlistItem, removeWatchListItem } from "@/app/actions/stock-info"
 import { toast } from "sonner";
 import AnalystBadge from "../analyst-badge";
 import { CustomTableMeta } from "./watchlist-table";
-import { CustomTableMetaPinned } from "./pinned-table";
+import { CustomTableMetaPinned, PinnedTable } from "./pinned-table";
 import { TrashIcon, PinIcon,  PinOffIcon } from "lucide-react";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -103,6 +103,7 @@ export const columns: ColumnDef<StockResult>[] = [
       const symbol = row.getValue("symbol");
       const index = row.getValue("index");
       const meta = table.options.meta as CustomTableMeta;
+      
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -132,6 +133,7 @@ export const columns: ColumnDef<StockResult>[] = [
                   toast.error("Error pinning item.")
                 } else {
                   toast.success(result)
+                  meta.updateRow(row.getValue("id"))
                 }
               }}
             >

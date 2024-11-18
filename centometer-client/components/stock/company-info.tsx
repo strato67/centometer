@@ -81,7 +81,10 @@ export default function CompanyInfo({
 
             {companyInfo &&
               companyInfo.recommendationKey &&
-              companyInfo.numberOfAnalystOpinions && (
+              companyInfo.numberOfAnalystOpinions && 
+              companyInfo.recommendationKey &&
+              companyInfo.recommendationKey !== "none" &&
+              (
                 <div className="flex flex-col border rounded-2xl p-6 bg-background text-neutral gap-3  text-sm text-pretty overflow-hidden text-ellipsis max-h-56 overflow-y-auto items-center text-center  ">
                   <div className="text-lg font-semibold">Analyst Consensus</div>
                   <AnalystBadge consensus={companyInfo.recommendationKey} className="text-md md:text-lg min-w-fit max-w-full  py-2"/>

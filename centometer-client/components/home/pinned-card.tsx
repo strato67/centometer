@@ -15,6 +15,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Link from "next/link";
 
 export default function PinnedCard() {
   const tickers = ["NASDAQ:TSLA", "NASDAQ:AMD", "NASDAQ:INTC", "NASDAQ:AAPL", "NASDAQ:GOOGL", "NASDAQ:META"];
@@ -29,7 +30,9 @@ export default function PinnedCard() {
               One day activity of your pinned stocks
             </CardDescription>
           </div>
-          <Button className="ml-6">Add Ticker</Button>
+          <Link href={"/dashboard/watchlist"}>
+          <Button className="ml-6">Add Symbol</Button>
+          </Link>
         </CardHeader>
         <CardContent className="px-10 md:px-8">
           <Carousel className="w-full h-full ">
