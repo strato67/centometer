@@ -46,19 +46,28 @@ export default function AddSearchButton({
               });
 
               if (result === 0) {
-                toast.error("Error updating watchlist.");
+                toast.error("Error updating watchlist.", {
+                  action: {
+                    label: "Dismiss",
+                    onClick: () => { },
+                  },
+                });
               } else {
                 setAdded(!added);
                 toast.success(
                   `${added ? "Removed from" : "Added to"} watchlist.`
-                );
+                  , {
+                    action: {
+                      label: "Dismiss",
+                      onClick: () => { },
+                    },
+                  });
               }
             }}
-            className={`rounded-full hover:border-card-foreground  w-8 h-8 text-xl p-0  text-center ${
-              added
+            className={`rounded-full hover:border-card-foreground  w-8 h-8 text-xl p-0  text-center ${added
                 ? "bg-card-foreground hover:bg-card-foreground"
                 : "bg-card-background"
-            }`}
+              }`}
           >
             {added ? <Check size={16} className="text-background" /> : "+"}
           </Button>

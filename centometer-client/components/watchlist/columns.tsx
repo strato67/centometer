@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import AnalystBadge from "../analyst-badge";
 import { CustomTableMeta } from "./watchlist-table";
 import { CustomTableMetaPinned, PinnedTable } from "./pinned-table";
-import { TrashIcon, PinIcon,  PinOffIcon } from "lucide-react";
+import { TrashIcon, PinIcon, PinOffIcon } from "lucide-react";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type StockResult = {
@@ -103,7 +103,7 @@ export const columns: ColumnDef<StockResult>[] = [
       const symbol = row.getValue("symbol");
       const index = row.getValue("index");
       const meta = table.options.meta as CustomTableMeta;
-      
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -130,14 +130,24 @@ export const columns: ColumnDef<StockResult>[] = [
                 })
 
                 if (!result) {
-                  toast.error("Error pinning item.")
+                  toast.error("Error pinning item.", {
+                    action: {
+                      label: "Dismiss",
+                      onClick: () => {},
+                    },
+                  })
                 } else {
-                  toast.success(result)
-                  meta.updateRow(row.getValue("id"))
+                  toast.success(result, {
+                    action: {
+                      label: "Dismiss",
+                      onClick: () => {},
+                    },
+                  })
+                  //meta.updateRow(row.getValue("id"))
                 }
               }}
             >
-              <PinIcon className="mr-2" size={16}/>
+              <PinIcon className="mr-2" size={16} />
               Pin symbol
 
             </DropdownMenuItem>
@@ -149,16 +159,26 @@ export const columns: ColumnDef<StockResult>[] = [
                   symbolName: symbol as string,
                 });
                 if (result === 0) {
-                  toast.error("Error updating watchlist.");
+                  toast.error("Error updating watchlist.", {
+                    action: {
+                      label: "Dismiss",
+                      onClick: () => {},
+                    },
+                  });
                 } else {
-                  toast.success(`${symbol} removed from watchlist.`);
+                  toast.success(`${symbol} removed from watchlist.`, {
+                    action: {
+                      label: "Dismiss",
+                      onClick: () => {},
+                    },
+                  });
                   meta.removeRow(row.index)
                 }
 
               }}
               className="text-destructive focus:text-destructive"
             >
-              <TrashIcon className="mr-2" size={16}/>
+              <TrashIcon className="mr-2" size={16} />
               Remove Item
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -267,14 +287,24 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
                 })
 
                 if (!result) {
-                  toast.error("Error unpinning item.")
+                  toast.error("Error unpinning item.", {
+                    action: {
+                      label: "Dismiss",
+                      onClick: () => {},
+                    },
+                  })
                 } else {
-                  toast.success(result)
+                  toast.success(result, {
+                    action: {
+                      label: "Dismiss",
+                      onClick: () => {},
+                    },
+                  })
                   meta.removeRow(row.index)
                 }
               }}
             >
-              <PinOffIcon className="mr-2" size={16}/>
+              <PinOffIcon className="mr-2" size={16} />
               Unpin symbol
             </DropdownMenuItem>
 
