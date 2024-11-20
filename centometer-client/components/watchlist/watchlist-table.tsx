@@ -37,19 +37,21 @@ import { Card } from "../ui/card";
 
 export interface CustomTableMeta {
   removeRow: (rowIndex: number) => void;
-  updateRow: (stockId: string) => void;
+  modifyPinned: (stock: StockResult) => void;
 }
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  setData: Dispatch<SetStateAction<StockResult[] | null>>;
+  setData: Dispatch<SetStateAction<StockResult[]>>;
+  setPinnedData: Dispatch<SetStateAction<StockResult[]>>;
 }
 
 export function WatchlistTable<TData, TValue>({
   columns,
   data,
-  setData
+  setData,
+  setPinnedData,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -77,21 +79,33 @@ export function WatchlistTable<TData, TValue>({
           (prevData ?? []).filter((_, index) => index !== rowIndex)
         );
       },
-      updateRow: (stockId: string) => {
+      modifyPinned: (stock: StockResult) => {
+        const id = stock.id;
+        const isPinned = stock.pinned_stock;
+
+        const updatedObject = {
+          ...stock,
+          pinned_stock: !isPinned,
+        };
         setData((prevData) =>
           (prevData ?? []).map((result) => {
-            if (result.id === stockId) {
-              result.pinned_stock = !result.pinned_stock
-
-              return {
-                ...result,
-                pinned_stock: !result.pinned_stock
-              }
+            if (result.id === id) {
+              return updatedObject;
             }
-            return result
+            return result;
           })
         );
-      }
+        if (isPinned) {
+          setPinnedData((prevData) =>
+            (prevData ?? []).filter((result) => result.id !== id)
+          );
+        } else {
+          setPinnedData((prevData) => [
+            ...(prevData ?? []),
+            updatedObject as StockResult,
+          ]);
+        }
+      },
     } as CustomTableMeta,
   });
 
@@ -108,12 +122,9 @@ export function WatchlistTable<TData, TValue>({
   return (
     <Card className=" w-full rounded-md border">
       <div className="flex items-center  pt-4 pb-2 mx-6 mt-4 gap-2 ">
-
         <Input
           placeholder="Search by symbol..."
-          value={
-            (table.getColumn("symbol")?.getFilterValue() as string) ?? ""
-          }
+          value={(table.getColumn("symbol")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("symbol")?.setFilterValue(event.target.value)
           }
@@ -148,7 +159,6 @@ export function WatchlistTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-
       </div>
       <Table>
         <TableHeader>
@@ -160,9 +170,9 @@ export function WatchlistTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 );
               })}

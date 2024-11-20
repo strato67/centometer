@@ -11,7 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { pinWatchlistItem, removeWatchListItem } from "@/app/actions/stock-info";
+import {
+  pinWatchlistItem,
+  removeWatchListItem,
+} from "@/app/actions/stock-info";
 import { toast } from "sonner";
 import AnalystBadge from "../analyst-badge";
 import { CustomTableMeta } from "./watchlist-table";
@@ -29,7 +32,6 @@ export type StockResult = {
   pinned_stock: boolean;
 };
 
-
 // symbol, name, price, index
 export const columns: ColumnDef<StockResult>[] = [
   {
@@ -45,9 +47,7 @@ export const columns: ColumnDef<StockResult>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="ml-4">{row.getValue("symbol")}</div>
-    ),
+    cell: ({ row }) => <div className="ml-4">{row.getValue("symbol")}</div>,
     enableHiding: false,
   },
   {
@@ -69,7 +69,9 @@ export const columns: ColumnDef<StockResult>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="ml-4">${parseFloat(row.getValue("price")).toFixed(2)}</div>
+      <div className="ml-4">
+        ${parseFloat(row.getValue("price")).toFixed(2)}
+      </div>
     ),
   },
   {
@@ -77,19 +79,14 @@ export const columns: ColumnDef<StockResult>[] = [
     header: "Analyst Rating",
     cell: ({ row }) =>
       row.getValue("rating") === "N/A" ? (
-        <div className="w-full">
-          N/A
-        </div>
-
+        <div className="w-full">N/A</div>
       ) : (
         <div className="w-full">
           <AnalystBadge
             className="text-sm w-fit items-center text-center"
             consensus={row.getValue("rating") as string}
           />
-
         </div>
-
       ),
   },
   {
@@ -127,7 +124,7 @@ export const columns: ColumnDef<StockResult>[] = [
                 const result = await pinWatchlistItem({
                   indexName: index as string,
                   symbolName: symbol as string,
-                })
+                });
 
                 if (!result) {
                   toast.error("Error pinning item.", {
@@ -135,21 +132,20 @@ export const columns: ColumnDef<StockResult>[] = [
                       label: "Dismiss",
                       onClick: () => {},
                     },
-                  })
+                  });
                 } else {
                   toast.success(result, {
                     action: {
                       label: "Dismiss",
                       onClick: () => {},
                     },
-                  })
-                  //meta.updateRow(row.getValue("id"))
+                  });
+                  meta.modifyPinned(row.original);
                 }
               }}
             >
               <PinIcon className="mr-2" size={16} />
               Pin symbol
-
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={async (e) => {
@@ -172,9 +168,8 @@ export const columns: ColumnDef<StockResult>[] = [
                       onClick: () => {},
                     },
                   });
-                  meta.removeRow(row.index)
+                  meta.removeRow(row.index);
                 }
-
               }}
               className="text-destructive focus:text-destructive"
             >
@@ -203,9 +198,7 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="ml-4">{row.getValue("symbol")}</div>
-    ),
+    cell: ({ row }) => <div className="ml-4">{row.getValue("symbol")}</div>,
     enableHiding: false,
   },
   {
@@ -227,7 +220,9 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="ml-4">${parseFloat(row.getValue("price")).toFixed(2)}</div>
+      <div className="ml-4">
+        ${parseFloat(row.getValue("price")).toFixed(2)}
+      </div>
     ),
   },
   {
@@ -235,19 +230,14 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
     header: "Analyst Rating",
     cell: ({ row }) =>
       row.getValue("rating") === "N/A" ? (
-        <div className="w-full">
-          N/A
-        </div>
-
+        <div className="w-full">N/A</div>
       ) : (
         <div className="w-full">
           <AnalystBadge
             className="text-sm w-fit items-center text-center"
             consensus={row.getValue("rating") as string}
           />
-
         </div>
-
       ),
   },
   {
@@ -284,7 +274,7 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
                 const result = await pinWatchlistItem({
                   indexName: index as string,
                   symbolName: symbol as string,
-                })
+                });
 
                 if (!result) {
                   toast.error("Error unpinning item.", {
@@ -292,22 +282,21 @@ export const pinnedColumns: ColumnDef<StockResult>[] = [
                       label: "Dismiss",
                       onClick: () => {},
                     },
-                  })
+                  });
                 } else {
                   toast.success(result, {
                     action: {
                       label: "Dismiss",
                       onClick: () => {},
                     },
-                  })
-                  meta.removeRow(row.index)
+                  });
+                  meta.removeRow(row.index, row.original);
                 }
               }}
             >
               <PinOffIcon className="mr-2" size={16} />
               Unpin symbol
             </DropdownMenuItem>
-
           </DropdownMenuContent>
         </DropdownMenu>
       );

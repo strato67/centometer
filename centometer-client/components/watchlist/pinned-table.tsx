@@ -33,28 +33,29 @@ import { Button } from "../ui/button";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
-
 export interface CustomTableMetaPinned {
-  removeRow: (rowIndex: number) => void;
+  removeRow: (rowIndex: number, stock: StockResult) => void;
 }
 
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[];
-    data: TData[];
-    setData: Dispatch<SetStateAction<StockResult[] | null>>;
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  setData: Dispatch<SetStateAction<StockResult[]>>;
+  setWatchlist: Dispatch<SetStateAction<StockResult[]>>;
 }
 
 export function PinnedTable<TData, TValue>({
-    columns,
-    data,
-    setData
+  columns,
+  data,
+  setData,
+  setWatchlist,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
     data: data ?? [],
-    columns:columns,
+    columns: columns,
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
@@ -69,10 +70,24 @@ export function PinnedTable<TData, TValue>({
       pagination: {
         pageSize: 3,
       },
-      
     },
     meta: {
-      removeRow: (rowIndex: number) => {
+      removeRow: (rowIndex: number, stock: StockResult) => {
+        const id = stock.id;
+        const isPinned = stock.pinned_stock;
+        const updatedObject = {
+          ...stock,
+          pinned_stock: !isPinned,
+        };
+        setWatchlist((prevData) =>
+          (prevData ?? []).map((result) => {
+            if (result.id === id) {
+              return updatedObject;
+            }
+            return result;
+          })
+        );
+
         setData((prevData) =>
           (prevData ?? []).filter((_, index) => index !== rowIndex)
         );
