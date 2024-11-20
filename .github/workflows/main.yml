@@ -6,8 +6,9 @@ on:
       - development
       - main
     paths:
-      - stock-search/
-      - stock-overview/
+      - stock-search/**
+      - stock-overview/**
+      - watchlist-service/**
       - .github/workflows/**
 
 jobs:
@@ -66,3 +67,26 @@ jobs:
         run: |
             zip -r deploy.zip .
             aws lambda update-function-code --function-name=stockOverview --zip-file=fileb://deploy.zip
+  
+  deploy_watchlist_service:
+    name: Watchlist Service
+    runs-on: ubuntu-latest
+    defaults:
+      run: 
+        working-directory: ./watchlist-service
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
+
+      - name: Deploy function
+        run: |
+            rm tests.py
+            zip -r deploy.zip .
+            aws lambda update-function-code --function-name=watchlistService --zip-file=fileb://deploy.zip

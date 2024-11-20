@@ -1,8 +1,9 @@
 "use server";
 
+import { StockResult } from "@/components/watchlist/columns";
 import { createClient } from "@/utils/supabase/server";
 type StockQuery = {
-  indexName: string | undefined;
+  indexName: string;
   symbolName: string;
 };
 
@@ -40,7 +41,6 @@ export const getStockOverview = async (searchQuery: StockQuery) => {
 };
 
 export const getWatchlistItem = async (searchQuery: StockQuery) => {
-
   const supabase = createClient();
   try {
     const {
@@ -54,11 +54,7 @@ export const getWatchlistItem = async (searchQuery: StockQuery) => {
       .eq("user_id", user_id)
       .eq("symbol", searchQuery.symbolName);
 
-    if (searchQuery.indexName) {
-      query = query.eq("index", searchQuery.indexName);
-    } else {
-      query = query.is("index", null);
-    }
+    query = query.eq("index", searchQuery.indexName);
 
     const { data: watchlist } = await query;
 
@@ -67,13 +63,11 @@ export const getWatchlistItem = async (searchQuery: StockQuery) => {
     }
     return false;
   } catch (error) {
-
     return false;
   }
 };
 
 export const addWatchListItem = async (searchQuery: StockQuery) => {
-
   const supabase = createClient();
   try {
     const {
@@ -81,10 +75,9 @@ export const addWatchListItem = async (searchQuery: StockQuery) => {
     } = await supabase.auth.getUser();
     const user_id = user?.id;
 
-    if (await getWatchlistItem(searchQuery)){
+    if (await getWatchlistItem(searchQuery)) {
       throw Error;
     }
-
 
     const response = await supabase
       .from("watchlist")
@@ -113,35 +106,87 @@ export const removeWatchListItem = async (searchQuery: StockQuery) => {
     } = await supabase.auth.getUser();
     const user_id = user?.id;
 
-    if (!await getWatchlistItem(searchQuery)){
+    if (!(await getWatchlistItem(searchQuery))) {
       throw Error;
     }
 
     let error;
-
-    if (!searchQuery.indexName) {
-      const response = await supabase
-        .from("watchlist")
-        .delete()
-        .eq("user_id", user_id)
-        .eq("symbol", searchQuery.symbolName)
-        .is("index", null);
-      error = response.error;
-    } else {
-      const response = await supabase
-        .from("watchlist")
-        .delete()
-        .eq("user_id", user_id)
-        .eq("symbol", searchQuery.symbolName)
-        .eq("index", searchQuery.indexName);
-      error = response.error;
-    }
+    const response = await supabase
+      .from("watchlist")
+      .delete()
+      .eq("user_id", user_id)
+      .eq("symbol", searchQuery.symbolName)
+      .eq("index", searchQuery.indexName);
+    error = response.error;
 
     if (error) {
       throw error;
     }
   } catch (error) {
-    
     return 0;
   }
+};
+
+export const pinWatchlistItem = async (searchQuery: StockQuery) => {
+  const supabase = createClient();
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const user_id = user?.id;
+
+    const { data, error } = await supabase
+      .from("watchlist")
+      .select("pinned_stock")
+      .eq("user_id", user_id)
+      .eq("symbol", searchQuery.symbolName)
+      .eq("index", searchQuery.indexName);
+
+    if (error) {
+      throw error;
+    }
+
+    const isPinned: boolean = data[0].pinned_stock;
+
+    const response = await supabase
+      .from("watchlist")
+      .update({ pinned_stock: !isPinned })
+      .eq("user_id", user_id)
+      .eq("symbol", searchQuery.symbolName)
+      .eq("index", searchQuery.indexName);
+
+    if (response.error) {
+      throw response.error;
+    }
+    return `${searchQuery.symbolName} ${
+      isPinned === true ? "unpinned." : "pinned."
+    }`;
+  } catch (error) {
+    return;
+  }
+};
+
+export const getUserWatchlist = async (): Promise<StockResult[]> => {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const id = user?.id;
+  const url =
+    process.env.NEXT_PUBLIC_LAMBDA_SEARCH_URL + "watchlistService?id=";
+
+  const response = await fetch(`${url + id}`, {
+    headers: {
+      "x-api-key": `${process.env.NEXT_PUBLIC_AWS_WATCHLIST}`,
+    },
+    next: {
+      revalidate: 10
+    }
+
+  });
+  if (!response.ok) {
+    return [];
+  }
+  const json = await response.json();
+  return json.watchlist;
 };
