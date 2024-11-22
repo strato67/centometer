@@ -16,6 +16,7 @@ import AddStockButton from "@/components/stock/add-stock";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AnalysisSection from "@/components/stock/analysis-section";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -74,7 +75,7 @@ export default function Page() {
           )}
         </div>
 
-        <div className="grid xl:grid-cols-3 xl:gap-5 gap-4">
+        <div className="grid xl:grid-cols-3 xl:gap-5 gap-4 mb-4">
           <div className="flex flex-col xl:col-span-2 xl:h-auto">
             <div className="h-96">
               <StockChart ticker={symbol.includes(":") && symbol.split(":")[0] === "FOREX" ? symbol.split(":")[1] : symbol} />
@@ -84,7 +85,10 @@ export default function Page() {
           </div>
 
           <CompanyInfo companyInfo={companyInfo} loading={loading} />
+
         </div>
+          <AnalysisSection/>
+
       </div>
     </>
   );
