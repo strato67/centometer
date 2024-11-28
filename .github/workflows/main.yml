@@ -9,6 +9,7 @@ on:
       - stock-search/**
       - stock-overview/**
       - watchlist-service/**
+      - news-service/**
       - .github/workflows/**
 
 jobs:
@@ -90,3 +91,25 @@ jobs:
             rm tests.py
             zip -r deploy.zip .
             aws lambda update-function-code --function-name=watchlistService --zip-file=fileb://deploy.zip
+
+  deploy_news_service:
+    name: News Service
+    runs-on: ubuntu-latest
+    defaults:
+      run: 
+        working-directory: ./news-service
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
+
+      - name: Deploy function
+        run: |
+            zip -r deploy.zip .
+            aws lambda update-function-code --function-name=news-service --zip-file=fileb://deploy.zip
