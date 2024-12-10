@@ -111,5 +111,5 @@ jobs:
 
       - name: Deploy function
         run: |
-            zip -r deploy.zip .
+            zip -r deploy.zip . --exclude './news-ingestion/*'
             aws lambda update-function-code --function-name=news-service --zip-file=fileb://deploy.zip
