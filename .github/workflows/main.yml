@@ -133,5 +133,6 @@ jobs:
 
       - name: Deploy function
         run: |
+            cp ../pygooglenews.py .
             zip -r deploy.zip .
             aws lambda update-function-code --function-name=news-ingestion --zip-file=fileb://deploy.zip
