@@ -113,3 +113,25 @@ jobs:
         run: |
             zip -r deploy.zip . --exclude './news-ingestion/*'
             aws lambda update-function-code --function-name=news-service --zip-file=fileb://deploy.zip
+
+  deploy_news_ingestion:
+    name: News Ingestion
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./news-service/news-ingestion
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
+
+      - name: Deploy function
+        run: |
+            zip -r deploy.zip .
+            aws lambda update-function-code --function-name=news-ingestion --zip-file=fileb://deploy.zip

@@ -1,5 +1,6 @@
 import sys
 import os
+from datetime import datetime
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from pygooglenews import GoogleNews
@@ -10,11 +11,15 @@ def generate_response(news_data, category):
   response = []
   for entry in news_data:
 
+    time_struct = entry["published_parsed"]
+    date = datetime(*time_struct[:6])
+    iso_date = date.isoformat()+"Z"
+
     response.append({
       "category": {"S": category},
       'title': {"S": entry["title"]},
       'source': {"S": entry["source"]['title']},
-      'date': {"S": entry["published"]},
+      'date': {"S": iso_date},
       'url' : {"S":entry['links'][0]['href']}
     })
 
