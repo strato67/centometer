@@ -25,10 +25,10 @@ def lambda_handler(event, context):
             'statusCode': 200, 
             'body': "Table updated"
         }
-    
+    error_message = "\n".join(errors)
     return {
             'statusCode': 400, 
-            'body': {errors}
+            'body': {'errors': error_message}
         }
 
 def table_updater(news_data):
