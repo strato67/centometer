@@ -51,4 +51,3 @@ def table_updater(news_data):
             ]
         }
         client.batch_write_item(RequestItems=request_items)
-
