@@ -1,5 +1,5 @@
 import json
-from news_provider import get_stock_news, get_world_news, get_finance_news, get_pinned_news
+from news_provider import get_stock_news, get_pinned_news, get_archived_news
 
 def lambda_handler(event, context):
 
@@ -19,8 +19,8 @@ def lambda_handler(event, context):
 
     try:
         query_responses = {
-            'world': lambda: get_world_news(),
-            'business' : lambda: get_finance_news(),
+            'world': lambda: archived_news_handler('world', query_string_params),
+            'business' : lambda: archived_news_handler('business', query_string_params),
             'stock': lambda:stock_news_handler(query_string_params), 
             'pinned': lambda:pinned_news_handler(query_string_params)       
         }
@@ -55,7 +55,15 @@ def lambda_handler(event, context):
             'body': json.dumps({
                 'message': f"Missing required parameter: {str(ke)}"
             })
-        }   
+        }
+
+def archived_news_handler(news_type, query_string_obj):
+
+    if news_type != "world" and news_type != "business":
+        raise KeyError("Invalid news type") 
+
+    page_token = query_string_obj.get('page', None)
+    return get_archived_news(news_type, page_token)  
 
 def stock_news_handler(query_string_obj):
     stock_symbol = query_string_obj['symbol']
@@ -64,7 +72,6 @@ def stock_news_handler(query_string_obj):
         raise KeyError("No stock provided")
     
     return get_stock_news(stock_symbol)
-    
 
 def pinned_news_handler(query_string_obj):    
     user_id = query_string_obj['id']
@@ -73,4 +80,3 @@ def pinned_news_handler(query_string_obj):
         raise KeyError("No user id provided")
     
     return get_pinned_news(user_id)
-

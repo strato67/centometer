@@ -1,37 +1,50 @@
 from pygooglenews import GoogleNews
 from dotenv import load_dotenv
-import os
 from supabase import create_client, Client
+import os
+import boto3
+from boto3.dynamodb.conditions import Key
 
 gn = GoogleNews()
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('news-storage')
 load_dotenv()
 
 def generate_response(news_data):
-  count = 0
   response = []
   for entry in news_data:
 
     response.append({
-      'id': count,
       'title': entry["title"],
-      'source': entry["source"]['title'],
-      'date': entry["published"],
-      'url' : entry['links'][0]['href']
+      'source': entry["source"]['title'] if isinstance(entry["source"], dict) else entry["source"],
+      'date': entry["published"] if "published" in entry else entry["date"],
+      'url': entry['links'][0]['href'] if "links" in entry and entry['links'] else entry['url']
     })
-
-    count += 1
 
   return response
 
-def get_world_news():
-  top_news = gn.top_news()
-  entries = top_news["entries"]
-  return generate_response(entries)
+def get_archived_news(news_type, page_token=None):
+  query_params = {
+        'KeyConditionExpression': Key('category').eq(news_type),
+        'Limit': 20, 
+        'ScanIndexForward': False
+  }
 
-def get_finance_news():
-  business = gn.topic_headlines('BUSINESS', proxies=None, scraping_bee = None)
-  entries = business["entries"]
-  return generate_response(entries)
+  if page_token:
+    query_params["ExclusiveStartKey"] = {'category': news_type, 'date': page_token}
+
+  response_raw = table.query(**query_params)
+  items_raw = response_raw['Items']
+  items_processed = generate_response(items_raw)
+
+  response = {
+    'data': items_processed,
+  }
+
+  if response_raw.get('LastEvaluatedKey'):
+    response['LastEvaluatedKey'] = response_raw.get('LastEvaluatedKey').get('date')
+
+  return response
 
 def get_stock_news(stock_query):
   stock_news = gn.search(stock_query, when = '1h')
@@ -56,4 +69,4 @@ def get_pinned_news(user_id):
   news_list = get_stock_news(' OR '.join(query_list))
 
   return news_list
-  
+
