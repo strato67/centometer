@@ -10,18 +10,21 @@ function SymbolOverview({ticker}:{ticker:string}) {
       "https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js";
     script.type = "text/javascript";
     script.async = true;
-    script.innerText = `
-  {
-  "symbol": "${ticker}",
-  "width": "100%",
-  "height": "100%",
-  "locale": "en",
-  "dateRange": "1D",
-  "colorTheme": "dark",
-  "isTransparent": false,
-  "autosize": false,
-  "largeChartUrl": "${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/stock/"
-}`;
+
+    const widgetConfig = {
+      symbol: ticker,
+      width: "100%",
+      height: "100%",
+      locale: "en",
+      dateRange: "1D",
+      colorTheme: "dark",
+      isTransparent: false,
+      autosize: false,
+      largeChartUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/stock/`,
+    }
+
+    script.textContent = JSON.stringify(widgetConfig);
+    
     if (container.current) {
       container.current.appendChild(script);
     }
