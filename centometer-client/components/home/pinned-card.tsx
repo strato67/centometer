@@ -16,9 +16,18 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Link from "next/link";
+import { getUserPinnedStocks } from "@/app/actions/stock-info";
+import { useEffect, useState } from "react";
 
 export default function PinnedCard() {
-  const tickers = ["NASDAQ:TSLA", "NASDAQ:AMD", "NASDAQ:INTC", "NASDAQ:AAPL", "NASDAQ:GOOGL", "NASDAQ:META"];
+  const [tickers, setTickers] = useState<string[]>()
+
+  useEffect(()=>{
+    (async () => {
+      setTickers(await getUserPinnedStocks())
+    })()
+
+  },[])
 
   return (
     <>
@@ -37,7 +46,7 @@ export default function PinnedCard() {
         <CardContent className="px-10 md:px-8">
           <Carousel className="w-full h-full ">
             <CarouselContent>
-              {tickers.map((ticker, index) => {
+              {tickers && tickers.map((ticker, index) => {
                 return (
                   <CarouselItem
                     key={index}

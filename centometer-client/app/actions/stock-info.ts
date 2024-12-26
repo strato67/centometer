@@ -180,13 +180,32 @@ export const getUserWatchlist = async (): Promise<StockResult[]> => {
       "x-api-key": `${process.env.NEXT_PUBLIC_AWS_WATCHLIST}`,
     },
     next: {
-      revalidate: 10
-    }
-
+      revalidate: 10,
+    },
   });
   if (!response.ok) {
     return [];
   }
   const json = await response.json();
   return json.watchlist;
+};
+
+export const getUserPinnedStocks = async () => {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const id = user?.id;
+
+  const { data, error } = await supabase
+    .from("watchlist")
+    .select("symbol, index")
+    .eq("user_id", id)
+    .is("pinned_stock", true);
+
+  if (error || data.length === 0) {
+    return [];
+  }
+  const formattedList = data.map((item) => `${item.index}:${item.symbol}`);
+  return formattedList;
 };
