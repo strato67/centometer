@@ -13,8 +13,10 @@ export default function Page() {
           <NewsCard
             title="Watchlist News"
             description="The latest news on your watchlist stocks"
+            newsType="watchlist"
           />
-          <NewsCard title="Top News" description="Trending finance news" />
+          <NewsCard title="Business News" description="The latest business stories" newsType="business" />
+          <NewsCard title="World News" description="Trending stories from around the world" newsType="world" />
         </div>
       </div>
     </>
