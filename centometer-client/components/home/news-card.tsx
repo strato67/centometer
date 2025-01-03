@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Card,
   CardContent,
@@ -10,17 +12,15 @@ import { Separator } from "../ui/separator";
 import Link from "next/link";
 import DateConverter from "@/utils/hooks/dateconverter";
 import { NewsType } from "@/app/actions/news";
+import { getCardNews } from "@/app/actions/news";
+import { useState, useEffect } from "react";
 
-
-const articles = [
-  {
-    title:
-      "The best after-Christmas Amazon deals: Score Apple AirTags for a near record low and more - Yahoo Life",
-    source: "Yahoo Life",
-    date: "2024-12-29T19:00:35Z",
-    url: "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOZ2NheUs3NEo2aUlWaDk2cEpybFZNUDhDUk0zekZfaDlxUVhZenpYTGxYallRQzdXNEgwQWZROUZRLXRSZmtoeUVpRklDSmNGaVhGdU1oM29IZGlyNElrdzFjRHpUNU5XRnhCVWRNRE4wNjNZdV9MVVYySzk0TGpqSDZQbXhrZHh0ZTZzdWNUSWIzX1QyaVl2b1llTVJjV0p6MVlTMEN3TWQyTW5PVGY3akQzTlZGQXN5cVd2dHhDNFllVVRheDlRUmJpbUtEUEFoMVpROHVhRQ?oc=5",
-  },
-];
+type NewsArticle = {
+  title: string;
+  source: string;
+  date: string;
+  url: string;
+}
 
 export default function NewsCard({
   title,
@@ -31,6 +31,15 @@ export default function NewsCard({
   description: string;
   newsType: NewsType;
 }) {
+
+  const [articles, setArticles] = useState<NewsArticle[]>()
+
+  useEffect(()=>{
+    (async () => {
+      setArticles(await getCardNews(newsType))
+    })();
+  }, [newsType])
+
   return (
     <>
       <Card className="md:w-full rounded-2xl pt-2 ">
@@ -40,7 +49,7 @@ export default function NewsCard({
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-72 w-full rounded-md border">
-            {articles.map((article, index) => {
+            {articles && articles.map((article, index) => {
               return (
                 <NewsLink
                   title={article.title}
