@@ -1,5 +1,6 @@
 import PinnedCard from "@/components/home/pinned-card";
 import NewsCard from "@/components/home/news-card";
+import Heatmap from "@/components/widgets/heatmap";
 
 export default function Page() {
   return (
@@ -10,6 +11,7 @@ export default function Page() {
           <div className="md:col-span-2">
             <PinnedCard />
           </div>
+          <Heatmap/>
           <NewsCard
             title="Watchlist News"
             description="The latest news on your watchlist stocks"
@@ -17,6 +19,7 @@ export default function Page() {
           />
           <NewsCard title="Business News" description="The latest business stories" newsType="business" />
           <NewsCard title="World News" description="Trending stories from around the world" newsType="world" />
+
         </div>
       </div>
     </>
