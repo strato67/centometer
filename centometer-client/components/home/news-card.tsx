@@ -92,7 +92,7 @@ function NewsLink({
           <div className=" font-medium leading-none">{title}</div>
           <div className="text-sm text-muted-foreground overflow-y-hidden text-ellipsis select-none ">
             <p>
-              {relativeTime} &#x2022; {source}
+              {source} &#x2022; {relativeTime}
             </p>
           </div>
         </div>
