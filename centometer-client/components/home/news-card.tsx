@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Card,
   CardContent,
@@ -13,16 +11,17 @@ import Link from "next/link";
 import DateConverter from "@/utils/hooks/dateconverter";
 import { NewsType } from "@/app/actions/news";
 import { getCardNews } from "@/app/actions/news";
-import { useState, useEffect } from "react";
+import { Suspense } from "react";
+import LoadingCard from "../loading-card";
 
 type NewsArticle = {
   title: string;
   source: string;
   date: string;
   url: string;
-}
+};
 
-export default function NewsCard({
+export default async function NewsCard({
   title,
   description,
   newsType,
@@ -31,38 +30,36 @@ export default function NewsCard({
   description: string;
   newsType: NewsType;
 }) {
-
-  const [articles, setArticles] = useState<NewsArticle[]>()
-
-  useEffect(()=>{
-    (async () => {
-      setArticles(await getCardNews(newsType))
-    })();
-  }, [newsType])
+  const articles: NewsArticle[] = await getCardNews(newsType);
 
   return (
     <>
-      <Card className="md:w-full rounded-2xl pt-2 ">
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-72 w-full rounded-md border">
-            {articles && articles.map((article, index) => {
-              return (
-                <NewsLink
-                  title={article.title}
-                  source={article.source}
-                  date={article.date}
-                  url={article.url}
-                  key={index}
-                />
-              );
-            })}
-          </ScrollArea>
-        </CardContent>
-      </Card>
+      <Suspense
+        fallback={<LoadingCard className="md:w-full rounded-2xl pt-2" />}
+      >
+        <Card className="md:w-full rounded-2xl pt-2 ">
+          <CardHeader>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription>{description}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-72 w-full rounded-md border">
+              {articles &&
+                articles.map((article, index) => {
+                  return (
+                    <NewsLink
+                      title={article.title}
+                      source={article.source}
+                      date={article.date}
+                      url={article.url}
+                      key={index}
+                    />
+                  );
+                })}
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </Suspense>
     </>
   );
 }
