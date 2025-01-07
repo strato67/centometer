@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo } from "react";
+import { useEffect, useRef, memo } from "react";
 
 function SymbolOverview({ticker}:{ticker:string}) {
   const container = useRef<HTMLDivElement>(null);

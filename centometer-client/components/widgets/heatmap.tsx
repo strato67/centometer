@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, memo } from "react";
+import { useEffect, useRef, memo } from "react";
 
 function Heatmap() {
   const container = useRef<HTMLDivElement>(null);

@@ -1,6 +1,8 @@
 import PinnedCard from "@/components/home/pinned-card";
 import NewsCard from "@/components/home/news-card";
 import Heatmap from "@/components/widgets/heatmap";
+import TrendingStocks from "@/components/widgets/trending-stocks";
+import TrendingStocksCard from "@/components/home/trending-card";
 
 export default function Page() {
   return (
@@ -19,7 +21,7 @@ export default function Page() {
           />
           <NewsCard title="Business News" description="The latest business stories" newsType="business" />
           <NewsCard title="World News" description="Trending stories from around the world" newsType="world" />
-
+          <TrendingStocksCard/>
         </div>
       </div>
     </>
