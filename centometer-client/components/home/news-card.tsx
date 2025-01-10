@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Card,
   CardContent,
@@ -11,7 +13,7 @@ import Link from "next/link";
 import DateConverter from "@/utils/hooks/dateconverter";
 import { NewsType } from "@/app/actions/news";
 import { getCardNews } from "@/app/actions/news";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import LoadingCard from "../loading-card";
 
 type NewsArticle = {
@@ -21,7 +23,7 @@ type NewsArticle = {
   url: string;
 };
 
-export default async function NewsCard({
+export default function NewsCard({
   title,
   description,
   newsType,
@@ -30,14 +32,20 @@ export default async function NewsCard({
   description: string;
   newsType: NewsType;
 }) {
-  const articles: NewsArticle[] = await getCardNews(newsType);
+  const [articles, setArticles] = useState<NewsArticle[]>()
+  //const articles: NewsArticle[] = await getCardNews(newsType);
+  useEffect(()=>{(
+    async () => {
+      setArticles(await getCardNews(newsType))
+    }
+  )()},[newsType])
 
   return (
     <>
       <Suspense
         fallback={<LoadingCard className="md:w-full rounded-2xl pt-2" />}
       >
-        <Card className="md:w-full rounded-2xl pt-2 ">
+        <Card className="md:w-full rounded-2xl ">
           <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
