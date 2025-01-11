@@ -1,7 +1,6 @@
 "use client";
 
-import GridLayout from "react-grid-layout";
-
+import { Responsive, WidthProvider } from "react-grid-layout";
 import PinnedCard from "@/components/home/pinned-card";
 import NewsCard from "@/components/home/news-card";
 import Heatmap from "@/components/widgets/heatmap";
@@ -9,6 +8,9 @@ import TrendingStocksCard from "@/components/home/trending-card";
 import MarketScreenerCard from "@/components/home/market-screener-card";
 
 export default function DashboardCanvas() {
+
+  const ResponsiveGridLayout = WidthProvider(Responsive)
+
   const layout = [
     { i: "a", x: 0, y: 0, w: 12, h: 10, static: true },
     { i: "b", x: 0, y: 0, w: 6, h: 21 },
@@ -18,16 +20,23 @@ export default function DashboardCanvas() {
     { i: "f", x: 0, y: 0, w: 6, h: 13 },
   ];
 
+  const layouts = {
+    lg: layout,
+    sm: layout,
+
+}
+
   return (
     <>
       <h1 className="text-4xl font-bold mb-4">Home</h1>
-      <GridLayout
-        className="layout sticky"
-        layout={layout}
-        cols={12}
-        width={1610}
+      <ResponsiveGridLayout
+        className="layout sticky overflow-hidden"
+        layouts={layouts}
         rowHeight={23}
         isResizable
+        breakpoints={{ lg: 1200,  sm: 768,  }}
+        cols={{ lg: 12, sm: 6, }}
+
       >
         <div className="" key={"a"}>
           <PinnedCard />
@@ -61,7 +70,7 @@ export default function DashboardCanvas() {
           />
         </div>
         <Heatmap />
-      </GridLayout>
+      </ResponsiveGridLayout>
     </>
   );
 }

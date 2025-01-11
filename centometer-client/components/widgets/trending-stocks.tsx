@@ -44,7 +44,7 @@ function TrendingStocks() {
 
   return (
     <div
-      className="tradingview-widget-container w-full rounded-2xl "
+      className="tradingview-widget-container min-w-fit rounded-2xl min-h-96 "
       ref={container}
     ></div>
   );
