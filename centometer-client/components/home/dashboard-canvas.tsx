@@ -6,25 +6,34 @@ import NewsCard from "@/components/home/news-card";
 import Heatmap from "@/components/widgets/heatmap";
 import TrendingStocksCard from "@/components/home/trending-card";
 import MarketScreenerCard from "@/components/home/market-screener-card";
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
 
 export default function DashboardCanvas() {
+  const ResponsiveGridLayout = WidthProvider(Responsive);
 
-  const ResponsiveGridLayout = WidthProvider(Responsive)
-
-  const layout = [
+  const largeLayout = [
     { i: "a", x: 0, y: 0, w: 12, h: 10, static: true },
-    { i: "b", x: 0, y: 0, w: 6, h: 21 },
-    { i: "c", x: 6, y: 0, w: 6, h: 21 },
-    { i: "d", x: 0, y: 0, w: 6, h: 13 },
-    { i: "e", x: 6, y: 0, w: 6, h: 13 },
-    { i: "f", x: 0, y: 0, w: 6, h: 13 },
+    { i: "b", x: 0, y: 0, w: 6, h: 21, minH: 21, minW: 3, maxH: 21 },
+    { i: "c", x: 6, y: 0, w: 6, h: 21, minH: 21, minW: 3 , maxH: 21 },
+    { i: "d", x: 0, y: 0, w: 6, h: 14, minH: 14, minW: 3 , maxH: 14},
+    { i: "e", x: 6, y: 0, w: 6, h: 14, minH: 14, minW: 3 , maxH: 14},
+    { i: "f", x: 0, y: 0, w: 6, h: 14, minH: 14, minW: 3 , maxH: 14},
+  ];
+
+  const smallLayout = [
+    { i: "a", x: 0, y: 0, w: 12, h: 10, static: true },
+    { i: "b", x: 0, y: 0, w: 6, h: 21, maxH: 21, maxW: 6,minH: 21, minW: 6 },
+    { i: "c", x: 6, y: 0, w: 6, h: 21, maxH: 21, maxW: 6 ,minH: 21, minW: 6},
+    { i: "d", x: 0, y: 0, w: 6, h: 14, maxH: 13, maxW: 6 ,minH: 14, minW: 6},
+    { i: "e", x: 6, y: 0, w: 6, h: 14, maxH: 13, maxW: 6 ,minH: 14, minW: 6},
+    { i: "f", x: 0, y: 0, w: 6, h: 14, maxH: 13, maxW: 6 ,minH: 14, minW: 6},
   ];
 
   const layouts = {
-    lg: layout,
-    sm: layout,
-
-}
+    lg: largeLayout,
+    sm: smallLayout,
+  };
 
   return (
     <>
@@ -33,10 +42,10 @@ export default function DashboardCanvas() {
         className="layout sticky overflow-hidden"
         layouts={layouts}
         rowHeight={23}
-        isResizable
-        breakpoints={{ lg: 1200,  sm: 768,  }}
-        cols={{ lg: 12, sm: 6, }}
-
+        isResizable={true}
+        resizeHandles={["se"]}
+        breakpoints={{ lg: 1200, sm: 768 }}
+        cols={{ lg: 12, sm: 6 }}
       >
         <div className="" key={"a"}>
           <PinnedCard />

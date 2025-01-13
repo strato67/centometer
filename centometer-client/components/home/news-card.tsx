@@ -1,9 +1,10 @@
-'use client'
+"use client";
 
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -15,6 +16,7 @@ import { NewsType } from "@/app/actions/news";
 import { getCardNews } from "@/app/actions/news";
 import { Suspense, useEffect, useState } from "react";
 import LoadingCard from "../loading-card";
+import ResizeHandle from "../resize-handle";
 
 type NewsArticle = {
   title: string;
@@ -32,13 +34,13 @@ export default function NewsCard({
   description: string;
   newsType: NewsType;
 }) {
-  const [articles, setArticles] = useState<NewsArticle[]>()
+  const [articles, setArticles] = useState<NewsArticle[]>();
   //const articles: NewsArticle[] = await getCardNews(newsType);
-  useEffect(()=>{(
-    async () => {
-      setArticles(await getCardNews(newsType))
-    }
-  )()},[newsType])
+  useEffect(() => {
+    (async () => {
+      setArticles(await getCardNews(newsType));
+    })();
+  }, [newsType]);
 
   return (
     <>
@@ -66,6 +68,9 @@ export default function NewsCard({
                 })}
             </ScrollArea>
           </CardContent>
+          <CardFooter className="p-2 mb-1 pr-1  flex w-full items-end flex-col">
+            <ResizeHandle />
+          </CardFooter>
         </Card>
       </Suspense>
     </>
