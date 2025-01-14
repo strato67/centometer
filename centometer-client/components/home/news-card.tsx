@@ -16,7 +16,7 @@ import { NewsType } from "@/app/actions/news";
 import { getCardNews } from "@/app/actions/news";
 import { Suspense, useEffect, useState } from "react";
 import LoadingCard from "../loading-card";
-import ResizeHandle from "../resize-handle";
+import { MoveDiagonal2Icon } from "lucide-react";
 
 type NewsArticle = {
   title: string;
@@ -25,22 +25,19 @@ type NewsArticle = {
   url: string;
 };
 
-export default function NewsCard({
-  title,
-  description,
-  newsType,
-}: {
+interface NewsCardProps {
   title: string;
   description: string;
   newsType: NewsType;
-}) {
+}
+
+export default function NewsCard(props: NewsCardProps) {
   const [articles, setArticles] = useState<NewsArticle[]>();
-  //const articles: NewsArticle[] = await getCardNews(newsType);
   useEffect(() => {
     (async () => {
-      setArticles(await getCardNews(newsType));
+      setArticles(await getCardNews(props.newsType));
     })();
-  }, [newsType]);
+  }, [props.newsType]);
 
   return (
     <>
@@ -49,8 +46,8 @@ export default function NewsCard({
       >
         <Card className="md:w-full rounded-2xl ">
           <CardHeader>
-            <CardTitle>{title}</CardTitle>
-            <CardDescription>{description}</CardDescription>
+            <CardTitle>{props.title}</CardTitle>
+            <CardDescription>{props.description}</CardDescription>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-72 w-full rounded-md border">
@@ -69,7 +66,7 @@ export default function NewsCard({
             </ScrollArea>
           </CardContent>
           <CardFooter className="p-2 mb-1 pr-1  flex w-full items-end flex-col">
-            <ResizeHandle />
+            <MoveDiagonal2Icon size={20}/>
           </CardFooter>
         </Card>
       </Suspense>
@@ -77,32 +74,22 @@ export default function NewsCard({
   );
 }
 
-function NewsLink({
-  title,
-  source,
-  date,
-  url,
-}: {
-  title: string;
-  source: string;
-  date: string;
-  url: string;
-}) {
+function NewsLink(props:NewsArticle) {
   const { getRelativeTime } = DateConverter();
-  const relativeTime = getRelativeTime(date);
+  const relativeTime = getRelativeTime(props.date);
 
   return (
     <>
       <Link
-        href={url}
+        href={props.url}
         target="about:blank"
-        className=" flex items-center space-x-4  p-4"
+        className=" flex items-center space-x-4  p-4 -z-10"
       >
         <div className="flex-1 space-y-2 h-auto">
-          <div className=" font-medium leading-none">{title}</div>
+          <div className=" font-medium leading-none">{props.title}</div>
           <div className="text-sm text-muted-foreground overflow-y-hidden text-ellipsis select-none ">
             <p>
-              {source} &#x2022; {relativeTime}
+              {props.source} &#x2022; {relativeTime}
             </p>
           </div>
         </div>
