@@ -14,9 +14,9 @@ import Link from "next/link";
 import DateConverter from "@/utils/hooks/dateconverter";
 import { NewsType } from "@/app/actions/news";
 import { getCardNews } from "@/app/actions/news";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingCard from "../loading-card";
-import { MoveDiagonal2Icon } from "lucide-react";
+import { GripIcon, MoveDiagonal2Icon } from "lucide-react";
 
 type NewsArticle = {
   title: string;
@@ -33,19 +33,24 @@ interface NewsCardProps {
 
 export default function NewsCard(props: NewsCardProps) {
   const [articles, setArticles] = useState<NewsArticle[]>();
+  const [loading, setLoading] = useState<boolean>(true)
   useEffect(() => {
     (async () => {
       setArticles(await getCardNews(props.newsType));
+      setLoading(false)
     })();
   }, [props.newsType]);
 
+
+  if(loading){
+    return(<LoadingCard className="md:w-full rounded-2xl pt-2 h-[30rem]" />)
+  }
+
   return (
     <>
-      <Suspense
-        fallback={<LoadingCard className="md:w-full rounded-2xl pt-2" />}
-      >
         <Card className="md:w-full rounded-2xl ">
-          <CardHeader>
+        <GripIcon size={20} className="mx-4 mt-4 mb-0 drag-handle cursor-grab"/>
+          <CardHeader className="-mt-2">
             <CardTitle>{props.title}</CardTitle>
             <CardDescription>{props.description}</CardDescription>
           </CardHeader>
@@ -69,7 +74,6 @@ export default function NewsCard(props: NewsCardProps) {
             <MoveDiagonal2Icon size={20}/>
           </CardFooter>
         </Card>
-      </Suspense>
     </>
   );
 }
