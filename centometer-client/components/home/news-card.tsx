@@ -33,52 +33,51 @@ interface NewsCardProps {
 
 export default function NewsCard(props: NewsCardProps) {
   const [articles, setArticles] = useState<NewsArticle[]>();
-  const [loading, setLoading] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     (async () => {
       setArticles(await getCardNews(props.newsType));
-      setLoading(false)
+      setLoading(false);
     })();
   }, [props.newsType]);
 
-
-  if(loading){
-    return(<LoadingCard className="md:w-full rounded-2xl pt-2 h-[30rem]" />)
+  if (loading) {
+    return (
+      <LoadingCard className="md:w-full rounded-2xl pt-2 h-[30rem] drag-handle" />
+    );
   }
 
   return (
-    <>
-        <Card className="md:w-full rounded-2xl ">
-        <GripIcon size={20} className="mx-4 mt-4 mb-0 drag-handle cursor-grab"/>
-          <CardHeader className="-mt-2">
-            <CardTitle>{props.title}</CardTitle>
-            <CardDescription>{props.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-72 w-full rounded-md border">
-              {articles &&
-                articles.map((article, index) => {
-                  return (
-                    <NewsLink
-                      title={article.title}
-                      source={article.source}
-                      date={article.date}
-                      url={article.url}
-                      key={index}
-                    />
-                  );
-                })}
-            </ScrollArea>
-          </CardContent>
-          <CardFooter className="p-2 mb-1 pr-1  flex w-full items-end flex-col">
-            <MoveDiagonal2Icon size={20}/>
-          </CardFooter>
-        </Card>
-    </>
+    <Card className="md:w-full rounded-2xl ">
+      <GripIcon size={20} className="mx-4 mt-4 mb-0 drag-handle cursor-grab" />
+      <CardHeader className="-mt-2">
+        <CardTitle>{props.title}</CardTitle>
+        <CardDescription>{props.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ScrollArea className="h-72 w-full rounded-md border">
+          {articles &&
+            articles.map((article, index) => {
+              return (
+                <NewsLink
+                  title={article.title}
+                  source={article.source}
+                  date={article.date}
+                  url={article.url}
+                  key={index}
+                />
+              );
+            })}
+        </ScrollArea>
+      </CardContent>
+      <CardFooter className="p-2 mb-1 pr-1  flex w-full items-end flex-col">
+        <MoveDiagonal2Icon size={20} />
+      </CardFooter>
+    </Card>
   );
 }
 
-function NewsLink(props:NewsArticle) {
+function NewsLink(props: NewsArticle) {
   const { getRelativeTime } = DateConverter();
   const relativeTime = getRelativeTime(props.date);
 

@@ -20,20 +20,26 @@ import Link from "next/link";
 import { getUserPinnedStocks } from "@/app/actions/stock-info";
 import { useEffect, useState } from "react";
 import { GripIcon, MoveDiagonal2Icon } from "lucide-react";
+import { LoadingSpinner } from "../ui/loading-spinner";
 
 export default function PinnedCard() {
   const [tickers, setTickers] = useState<string[]>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     (async () => {
       setTickers(await getUserPinnedStocks());
+      setLoading(false);
     })();
   }, []);
 
   return (
     <>
       <Card className="w-full rounded-2xl min-h-80 max-h-fit">
-      <GripIcon size={20} className="mx-4 mt-4 mb-0 drag-handle cursor-grab"/>
+        <GripIcon
+          size={20}
+          className="mx-4 mt-4 mb-0 drag-handle cursor-grab"
+        />
         <CardHeader className="flex flex-row w-full justify-between -mt-2">
           <div className="space-y-1.5">
             <CardTitle>Pinned Stocks</CardTitle>
@@ -65,12 +71,23 @@ export default function PinnedCard() {
               <CarouselNext />
             </Carousel>
           ) : (
-            <div className="flex items-center flex-col justify-center w-full my-16">No pinned stocks.</div>
+            <>
+              {loading ? (
+                <div className="flex items-center justify-center w-full my-16 gap-2">
+                  <LoadingSpinner/>
+                  Loading...
+                </div>
+              ) : (
+                <div className="flex items-center flex-col justify-center w-full my-16">
+                  No pinned stocks.
+                </div>
+              )}
+            </>
           )}
         </CardContent>
         <CardFooter className="p-2 pt-3 ml-1 mt-1 flex w-full items-end flex-col">
-            <MoveDiagonal2Icon size={20}/>
-          </CardFooter>
+          <MoveDiagonal2Icon size={20} />
+        </CardFooter>
       </Card>
     </>
   );
