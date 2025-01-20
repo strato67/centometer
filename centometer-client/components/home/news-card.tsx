@@ -86,7 +86,7 @@ function NewsLink(props: NewsArticle) {
       <Link
         href={props.url}
         target="about:blank"
-        className=" flex items-center space-x-4  p-4 -z-10"
+        className=" flex items-center space-x-4  p-4"
       >
         <div className="flex-1 space-y-2 h-auto">
           <div className=" font-medium leading-none">{props.title}</div>
