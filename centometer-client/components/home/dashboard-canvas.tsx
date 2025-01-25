@@ -15,17 +15,27 @@ import {
   saveLayout,
 } from "@/utils/hooks/dashboardlayout";
 import { Layouts } from "react-grid-layout";
+import Loading from "@/app/dashboard/loading";
 
 export default function DashboardCanvas() {
   const ResponsiveGridLayout = WidthProvider(Responsive);
 
-  const [layouts, setLayouts] = useState<Layouts>(
-    () => loadLayout()
-  );
+  const [layouts, setLayouts] = useState<Layouts | null>();
+  useEffect(() => {
+    const fetchLayout = async () => {
+      const loadedLayout = await loadLayout();
+      setLayouts(loadedLayout);
+    };
+
+    fetchLayout();
+  }, []);
+
+  if (!layouts) {
+    return <Loading />;
+  }
 
   return (
     <>
-      <h1 className="text-4xl font-bold mb-4">Home</h1>
       <ResponsiveGridLayout
         className="layout sticky overflow-hidden"
         layouts={layouts}
@@ -34,8 +44,8 @@ export default function DashboardCanvas() {
         resizeHandles={["se"]}
         breakpoints={{ lg: 1200, md: 996, sm: 768 }}
         draggableHandle=".drag-handle"
-        onLayoutChange={(_, allLayouts) => {
-          saveLayout(allLayouts);
+        onLayoutChange={async (_, allLayouts) => {
+          await saveLayout(allLayouts);
         }}
         cols={{ lg: 12, md: 10, sm: 6 }}
       >

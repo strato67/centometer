@@ -1,6 +1,9 @@
-import { Layouts } from "react-grid-layout";
+'use client'
 
-export const defaultLayout : Layouts = {
+import { Layouts } from "react-grid-layout";
+import { createClient } from "../supabase/client";
+
+export const defaultLayout: Layouts = {
     lg: [
         { i: "pinned_card", x: 0, y: 0, w: 12, h: 11, minH: 11, minW: 6, maxH: 11 },
         { i: "trending_symbols", x: 0, y: 0, w: 6, h: 23, minH: 23, minW: 3, maxH: 23 },
@@ -30,20 +33,40 @@ export const defaultLayout : Layouts = {
     ],
 }
 
-export function loadLayout(){
+export async function loadLayout() {
 
-    if(typeof window !== "undefined" && localStorage){
-        const userLayout = localStorage.getItem('user_layout')
-        return userLayout ? JSON.parse(userLayout) : null;
+    const supabase = createClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    const user_id = user?.id;
+
+    const {data, error} = await supabase
+        .from('dashboard_config')
+        .select("config")
+        .eq("id", user_id)
+
+    if(error || data.length === 0){
+        return defaultLayout        
     }
-
-    return defaultLayout
+    
+    const [user_config] = data
+    return user_config.config
 
 }
 
-export function saveLayout(newLayout:Layouts){
-    if (localStorage) {
-        localStorage.setItem("user_layout",JSON.stringify(newLayout)
-        );
-    }
+export async function saveLayout(newLayout: Layouts) {
+
+    const supabase = createClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    const user_id = user?.id;
+
+    await supabase
+        .from('dashboard_config')
+        .upsert({ id: user_id, config: newLayout })
+
 }
