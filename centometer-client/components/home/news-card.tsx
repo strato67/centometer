@@ -17,6 +17,9 @@ import { getCardNews } from "@/app/actions/news";
 import { useEffect, useState } from "react";
 import LoadingCard from "../loading-card";
 import { GripIcon, MoveDiagonal2Icon } from "lucide-react";
+import CardDropDown from "./card-dropdown";
+import { WidgetKeys } from "@/utils/hooks/dashboardlayout";
+
 
 type NewsArticle = {
   title: string;
@@ -29,6 +32,8 @@ interface NewsCardProps {
   title: string;
   description: string;
   newsType: NewsType;
+  onRemove: (widgetKey: WidgetKeys) => Promise<void>;
+  widgetKey: WidgetKeys;
 }
 
 export default function NewsCard(props: NewsCardProps) {
@@ -48,8 +53,12 @@ export default function NewsCard(props: NewsCardProps) {
   }
 
   return (
-    <Card className="md:w-full rounded-2xl ">
-      <GripIcon size={20} className="mx-4 mt-4 mb-0 drag-handle cursor-grab" />
+    <Card className="md:w-full rounded-2xl z-10">
+      <div className="flex flex-row px-4 mt-4 mb-0 w-full justify-between">
+        <GripIcon size={20} className="drag-handle cursor-grab" />
+          <CardDropDown onRemove={props.onRemove} widgetKey={props.widgetKey}/>
+      </div>
+
       <CardHeader className="-mt-2">
         <CardTitle>{props.title}</CardTitle>
         <CardDescription>{props.description}</CardDescription>

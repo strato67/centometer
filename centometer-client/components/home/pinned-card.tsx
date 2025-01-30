@@ -19,10 +19,17 @@ import {
 import Link from "next/link";
 import { getUserPinnedStocks } from "@/app/actions/stock-info";
 import { useEffect, useState } from "react";
-import { GripIcon, MoveDiagonal2Icon } from "lucide-react";
+import {  GripIcon, MoveDiagonal2Icon } from "lucide-react";
 import { LoadingSpinner } from "../ui/loading-spinner";
+import CardDropDown from "./card-dropdown";
+import { WidgetKeys } from "@/utils/hooks/dashboardlayout";
 
-export default function PinnedCard() {
+interface PinnedCardProps {
+  onRemove: (widgetKey: WidgetKeys) => Promise<void>;
+  widgetKey: WidgetKeys;
+}
+
+export default function PinnedCard(props: PinnedCardProps) {
   const [tickers, setTickers] = useState<string[]>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -35,11 +42,11 @@ export default function PinnedCard() {
 
   return (
     <>
-      <Card className="w-full rounded-2xl min-h-80 max-h-fit">
-        <GripIcon
-          size={20}
-          className="mx-4 mt-4 mb-0 drag-handle cursor-grab"
-        />
+      <Card className="w-full rounded-2xl min-h-80 max-h-fit z-10">
+        <div className="flex flex-row px-4 mt-4 mb-0 w-full justify-between">
+          <GripIcon size={20} className="drag-handle cursor-grab" />
+          <CardDropDown onRemove={props.onRemove} widgetKey={props.widgetKey}/>
+        </div>
         <CardHeader className="flex flex-row w-full justify-between -mt-2">
           <div className="space-y-1.5">
             <CardTitle>Pinned Stocks</CardTitle>
@@ -74,7 +81,7 @@ export default function PinnedCard() {
             <>
               {loading ? (
                 <div className="flex items-center justify-center w-full my-16 gap-2">
-                  <LoadingSpinner/>
+                  <LoadingSpinner />
                   Loading...
                 </div>
               ) : (

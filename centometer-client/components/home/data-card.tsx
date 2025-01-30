@@ -1,4 +1,4 @@
-import { MoveDiagonal2Icon, GripIcon } from "lucide-react";
+import { MoveDiagonal2Icon, GripIcon, } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -7,21 +7,25 @@ import {
   CardContent,
   CardFooter,
 } from "../ui/card";
+import CardDropDown from "./card-dropdown";
+import { WidgetKeys } from "@/utils/hooks/dashboardlayout";
 
 interface DataCardProps {
   children: React.ReactNode;
   title: string;
   description: string;
+  onRemove: (widgetKey: WidgetKeys) => Promise<void>;
+  widgetKey: WidgetKeys;
 }
 
 export default function DataCard(props: DataCardProps) {
   return (
     <>
-      <Card className="md:w-full rounded-2xl min-w-96">
-        <GripIcon
-          size={20}
-          className="mx-4 mt-4 mb-0 drag-handle cursor-grab"
-        />
+      <Card className="md:w-full rounded-2xl min-w-96 z-10">
+        <div className="flex flex-row px-4 mt-4 mb-0 w-full justify-between">
+          <GripIcon size={20} className="drag-handle cursor-grab" />
+          <CardDropDown onRemove={props.onRemove} widgetKey={props.widgetKey}/>
+        </div>
         <CardHeader className="-mt-2 ">
           <CardTitle className="">{props.title}</CardTitle>
           <CardDescription>{props.description}</CardDescription>
