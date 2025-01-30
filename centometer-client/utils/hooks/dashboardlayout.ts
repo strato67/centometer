@@ -3,6 +3,17 @@
 import { Layouts } from "react-grid-layout";
 import { createClient } from "../supabase/client";
 
+export type VisibleWidgets = {
+  pinned_card: boolean;
+  trending_symbols: boolean;
+  market_screener: boolean;
+  heatmap: boolean;
+  watchlist_news: boolean;
+  business_news: boolean;
+  world_news: boolean;
+};
+
+
 export const defaultLayout: Layouts = {
   lg: [
     { i: "pinned_card", x: 0, y: 0, w: 12, h: 11, minH: 11, minW: 6, maxH: 11 },
@@ -141,7 +152,7 @@ export const defaultLayout: Layouts = {
   ],
 };
 
-export const defaultCards = {
+export const defaultCards: VisibleWidgets = {
   pinned_card: true,
   trending_symbols: true,
   market_screener: true,
@@ -193,3 +204,5 @@ export type WidgetKeys =
   | "watchlist_news"
   | "business_news"
   | "world_news";
+
+  
