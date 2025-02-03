@@ -26,12 +26,15 @@ export default function DashboardCanvas() {
   const ResponsiveGridLayout = WidthProvider(Responsive);
 
   const [layouts, setLayouts] = useState<Layouts | null>();
-  const [visibleWidgets, setVisibleWidgets] = useState<VisibleWidgets>(defaultCards);
+  const [visibleWidgets, setVisibleWidgets] = useState<VisibleWidgets | null>(
+    defaultCards
+  );
 
   useEffect(() => {
     const fetchLayout = async () => {
       const loadedLayout = await loadLayout();
-      setLayouts(loadedLayout);
+      setLayouts(loadedLayout.config);
+      setVisibleWidgets(loadedLayout.visible_cards);
     };
 
     fetchLayout();
@@ -39,23 +42,63 @@ export default function DashboardCanvas() {
 
   const resetDefaultLayout = async () => {
     setLayouts(defaultLayout);
-    setVisibleWidgets(defaultCards)
-    await saveLayout(defaultLayout);
+    setVisibleWidgets(defaultCards);
+    await saveLayout(defaultLayout, defaultCards);
+  };
+
+  const resetCardPosition = (widgetKey: WidgetKeys, layout: Layouts, visible: boolean) => {
+
+    const updatedLayout = { ...layout };
+
+    if (visible) {
+
+      Object.keys(updatedLayout).forEach((breakpoint) => {
+        updatedLayout[breakpoint] = updatedLayout[breakpoint].filter(
+          (item) => item.i !== widgetKey
+        );
+      });
+    } else {
+
+      Object.keys(defaultLayout).forEach((breakpoint) => {
+        if (!updatedLayout[breakpoint]) {
+          updatedLayout[breakpoint] = [];
+        }
+      
+        const defaultItems = defaultLayout[breakpoint].filter((item) => item.i === widgetKey);
+      
+        if (defaultItems.length > 0) {
+          const modifiedItems = defaultItems.map((item) => ({ ...item, y: Infinity }));
+      
+          updatedLayout[breakpoint] = [
+            ...updatedLayout[breakpoint].filter((item) => item.i !== widgetKey),
+            ...modifiedItems,
+          ];
+        }
+      });
+
+    }
+
+    return updatedLayout;
   };
 
   const toggleWidget = async (widgetKey: WidgetKeys) => {
-    if (!layouts) {
-      console.log("error");
+    if (!visibleWidgets || !layouts) {
       return;
     }
+    const visible = visibleWidgets[widgetKey];
+    const newVisibleWidgets = {
+      ...visibleWidgets,
+      [widgetKey]: !visibleWidgets[widgetKey],
+    };
+    
+    const newLayout = resetCardPosition(widgetKey, layouts, visible);
+    setVisibleWidgets(newVisibleWidgets);
+    setLayouts(newLayout)
+    await saveLayout(newLayout, newVisibleWidgets);
 
-    setVisibleWidgets((prev) => ({
-      ...prev,
-      [widgetKey]: !prev[widgetKey],
-    }));
-  };
+  }
 
-  if (!layouts) {
+  if (!layouts || !visibleWidgets) {
     return <Loading />;
   }
 
@@ -64,7 +107,11 @@ export default function DashboardCanvas() {
       <div className="grid w-full grid-cols-2  mb-4">
         <h1 className="text-4xl font-bold ">Home</h1>
         <div className=" justify-self-end">
-          <DashboardSettings onReset={resetDefaultLayout} visibleWidgets={visibleWidgets} onToggle={toggleWidget}/>
+          <DashboardSettings
+            onReset={resetDefaultLayout}
+            visibleWidgets={visibleWidgets}
+            onToggle={toggleWidget}
+          />
         </div>
       </div>
 
@@ -77,13 +124,13 @@ export default function DashboardCanvas() {
         breakpoints={{ lg: 1200, md: 996, sm: 768 }}
         draggableHandle=".drag-handle"
         onLayoutChange={async (_, allLayouts) => {
-          await saveLayout(allLayouts);
+          await saveLayout(allLayouts, visibleWidgets);
         }}
         cols={{ lg: 12, md: 10, sm: 6 }}
       >
         {visibleWidgets.pinned_card && (
           <div key={"pinned_card"}>
-            <PinnedCard onRemove={toggleWidget} widgetKey={'pinned_card'} />
+            <PinnedCard onRemove={toggleWidget} widgetKey={"pinned_card"} />
           </div>
         )}
 
@@ -93,7 +140,7 @@ export default function DashboardCanvas() {
               title="Trending Symbols"
               description="The most active stocks today"
               onRemove={toggleWidget}
-              widgetKey={'trending_symbols'}
+              widgetKey={"trending_symbols"}
             >
               <TrendingStocks />
             </DataCard>
@@ -106,7 +153,7 @@ export default function DashboardCanvas() {
               title="Market Screener"
               description="An overview of the market"
               onRemove={toggleWidget}
-              widgetKey={'market_screener'}
+              widgetKey={"market_screener"}
             >
               <MarketScreener />
             </DataCard>
@@ -120,7 +167,7 @@ export default function DashboardCanvas() {
               description="The latest news on your watchlist stocks"
               newsType="watchlist"
               onRemove={toggleWidget}
-              widgetKey={'watchlist_news'}
+              widgetKey={"watchlist_news"}
             />
           </div>
         )}
@@ -132,7 +179,7 @@ export default function DashboardCanvas() {
               description="The latest business stories"
               newsType="business"
               onRemove={toggleWidget}
-              widgetKey={'business_news'}
+              widgetKey={"business_news"}
             />
           </div>
         )}
@@ -144,7 +191,7 @@ export default function DashboardCanvas() {
               description="Trending stories from around the world"
               newsType="world"
               onRemove={toggleWidget}
-              widgetKey={'world_news'}
+              widgetKey={"world_news"}
             />
           </div>
         )}
@@ -155,7 +202,7 @@ export default function DashboardCanvas() {
               title="Heatmap"
               description="Market activity visualized"
               onRemove={toggleWidget}
-              widgetKey={'heatmap'}
+              widgetKey={"heatmap"}
             >
               <Heatmap />
             </DataCard>

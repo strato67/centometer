@@ -13,7 +13,6 @@ export type VisibleWidgets = {
   world_news: boolean;
 };
 
-
 export const defaultLayout: Layouts = {
   lg: [
     { i: "pinned_card", x: 0, y: 0, w: 12, h: 11, minH: 11, minW: 6, maxH: 11 },
@@ -106,7 +105,7 @@ export const defaultLayout: Layouts = {
     { i: "heatmap", x: 6, y: 0, w: 5, h: 23, maxH: 23, minH: 23, minW: 5 },
   ],
   sm: [
-    { i: "pinned_card", x: 0, y: 0, w: 6, h: 12, static: true },
+    { i: "pinned_card", x: 0, y: 0, w: 6, h: 12, },
     {
       i: "trending_symbols",
       x: 0,
@@ -172,18 +171,18 @@ export async function loadLayout() {
 
   const { data, error } = await supabase
     .from("dashboard_config")
-    .select("config")
+    .select("config, visible_cards")
     .eq("id", user_id);
 
   if (error || data.length === 0) {
-    return defaultLayout;
+    return {config: defaultLayout, visible_cards: defaultCards};
   }
-
+  console.log(data)
   const [user_config] = data;
-  return user_config.config;
+  return {config: user_config.config, visible_cards: user_config.visible_cards};
 }
 
-export async function saveLayout(newLayout: Layouts) {
+export async function saveLayout(newLayout: Layouts, cardSelection: VisibleWidgets) {
   const supabase = createClient();
 
   const {
@@ -193,8 +192,11 @@ export async function saveLayout(newLayout: Layouts) {
 
   await supabase
     .from("dashboard_config")
-    .upsert({ id: user_id, config: newLayout });
+    .upsert({ id: user_id, config: newLayout, visible_cards: cardSelection });
 }
+
+
+
 
 export type WidgetKeys =
   | "pinned_card"

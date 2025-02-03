@@ -21,7 +21,7 @@ interface DataCardProps {
 export default function DataCard(props: DataCardProps) {
   return (
     <>
-      <Card className="md:w-full rounded-2xl min-w-96 z-10">
+      <Card className="md:w-full rounded-2xl min-w-80 z-10">
         <div className="flex flex-row px-4 mt-4 mb-0 w-full justify-between">
           <GripIcon size={20} className="drag-handle cursor-grab" />
           <CardDropDown onRemove={props.onRemove} widgetKey={props.widgetKey}/>

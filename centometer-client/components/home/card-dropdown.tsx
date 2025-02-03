@@ -19,7 +19,7 @@ export default function CardDropDown(props: CardDropDownProps) {
         <EllipsisVerticalIcon size={20} className="justify-self-end" />
       </DropdownMenuTrigger>
       <DropdownMenuContent side="left">
-        <DropdownMenuItem onClick={() => props.onRemove(props.widgetKey)}>Remove Widget</DropdownMenuItem>
+        <DropdownMenuItem onClick={async() => await props.onRemove(props.widgetKey)}>Remove Widget</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
