@@ -11,14 +11,17 @@ export type VisibleWidgets = {
   watchlist_news: boolean;
   business_news: boolean;
   world_news: boolean;
+  quick_lookup: boolean;
 };
 
 export const defaultLayout: Layouts = {
   lg: [
     { i: "pinned_card", x: 0, y: 0, w: 12, h: 11, minH: 11, minW: 6, maxH: 11 },
+    { i: "heatmap", x: 6, y: 0, w: 6, h: 23, minH: 23, minW: 3, maxH: 23 },
+    { i: "quick_lookup", x: 0, y: 0, w: 6, h: 23, minH: 23, minW: 3, maxH: 23 },
     {
       i: "trending_symbols",
-      x: 0,
+      x: 6,
       y: 0,
       w: 6,
       h: 23,
@@ -28,7 +31,7 @@ export const defaultLayout: Layouts = {
     },
     {
       i: "market_screener",
-      x: 6,
+      x: 0,
       y: 0,
       w: 6,
       h: 23,
@@ -36,9 +39,10 @@ export const defaultLayout: Layouts = {
       minW: 3,
       maxH: 23,
     },
+
     {
       i: "watchlist_news",
-      x: 0,
+      x: 6,
       y: 0,
       w: 6,
       h: 15,
@@ -48,7 +52,7 @@ export const defaultLayout: Layouts = {
     },
     {
       i: "business_news",
-      x: 6,
+      x: 0,
       y: 0,
       w: 6,
       h: 15,
@@ -56,14 +60,15 @@ export const defaultLayout: Layouts = {
       minW: 3,
       maxH: 15,
     },
-    { i: "world_news", x: 0, y: 0, w: 6, h: 15, minH: 15, minW: 3, maxH: 15 },
-    { i: "heatmap", x: 6, y: 0, w: 6, h: 23, minH: 23, minW: 3, maxH: 23 },
+    { i: "world_news", x: 6, y: 0, w: 6, h: 15, minH: 15, minW: 3, maxH: 15 },
   ],
   md: [
     { i: "pinned_card", x: 0, y: 0, w: 10, h: 11, minH: 11, minW: 5, maxH: 11 },
+    { i: "heatmap", x: 6, y: 0, w: 5, h: 23, maxH: 23, minH: 23, minW: 5 },
+    { i: "quick_lookup", x: 0, y: 0, w: 5, h: 23, maxH: 23, minH: 23, minW: 5 },
     {
       i: "trending_symbols",
-      x: 0,
+      x: 6,
       y: 0,
       w: 5,
       h: 23,
@@ -73,7 +78,7 @@ export const defaultLayout: Layouts = {
     },
     {
       i: "market_screener",
-      x: 6,
+      x: 0,
       y: 0,
       w: 5,
       h: 23,
@@ -83,7 +88,7 @@ export const defaultLayout: Layouts = {
     },
     {
       i: "watchlist_news",
-      x: 0,
+      x: 6,
       y: 0,
       w: 5,
       h: 15,
@@ -93,7 +98,7 @@ export const defaultLayout: Layouts = {
     },
     {
       i: "business_news",
-      x: 6,
+      x: 0,
       y: 0,
       w: 5,
       h: 15,
@@ -101,14 +106,15 @@ export const defaultLayout: Layouts = {
       minH: 15,
       minW: 5,
     },
-    { i: "world_news", x: 0, y: 0, w: 5, h: 15, maxH: 15, minH: 15, minW: 5 },
-    { i: "heatmap", x: 6, y: 0, w: 5, h: 23, maxH: 23, minH: 23, minW: 5 },
+    { i: "world_news", x: 6, y: 0, w: 5, h: 15, maxH: 15, minH: 15, minW: 5 },
   ],
   sm: [
-    { i: "pinned_card", x: 0, y: 0, w: 6, h: 12, },
+    { i: "pinned_card", x: 0, y: 0, w: 6, h: 12 },
+    { i: "heatmap", x: 6, y: 0, w: 6, h: 23, maxH: 23, minH: 23, minW: 6 },
+    { i: "quick_lookup", x: 0, y: 0, w: 6, h: 23, maxH: 23, minH: 23, minW: 6 },
     {
       i: "trending_symbols",
-      x: 0,
+      x: 6,
       y: 0,
       w: 6,
       h: 23,
@@ -118,7 +124,7 @@ export const defaultLayout: Layouts = {
     },
     {
       i: "market_screener",
-      x: 6,
+      x: 0,
       y: 0,
       w: 6,
       h: 23,
@@ -126,9 +132,10 @@ export const defaultLayout: Layouts = {
       minH: 23,
       minW: 6,
     },
+
     {
       i: "watchlist_news",
-      x: 0,
+      x: 6,
       y: 0,
       w: 6,
       h: 15,
@@ -138,7 +145,7 @@ export const defaultLayout: Layouts = {
     },
     {
       i: "business_news",
-      x: 6,
+      x: 0,
       y: 0,
       w: 6,
       h: 15,
@@ -146,8 +153,7 @@ export const defaultLayout: Layouts = {
       minH: 15,
       minW: 6,
     },
-    { i: "world_news", x: 0, y: 0, w: 6, h: 15, maxH: 15, minH: 15, minW: 6 },
-    { i: "heatmap", x: 6, y: 0, w: 6, h: 23, maxH: 23, minH: 23, minW: 6 },
+    { i: "world_news", x: 6, y: 0, w: 6, h: 15, maxH: 15, minH: 15, minW: 6 },
   ],
 };
 
@@ -155,11 +161,12 @@ export const defaultCards: VisibleWidgets = {
   pinned_card: true,
   trending_symbols: true,
   market_screener: true,
-  heatmap: true, 
+  heatmap: true,
   watchlist_news: true,
   business_news: true,
   world_news: true,
-}
+  quick_lookup: true,
+};
 
 export async function loadLayout() {
   const supabase = createClient();
@@ -175,14 +182,20 @@ export async function loadLayout() {
     .eq("id", user_id);
 
   if (error || data.length === 0) {
-    return {config: defaultLayout, visible_cards: defaultCards};
+    return { config: defaultLayout, visible_cards: defaultCards };
   }
-  console.log(data)
+  console.log(data);
   const [user_config] = data;
-  return {config: user_config.config, visible_cards: user_config.visible_cards};
+  return {
+    config: user_config.config,
+    visible_cards: user_config.visible_cards,
+  };
 }
 
-export async function saveLayout(newLayout: Layouts, cardSelection: VisibleWidgets) {
+export async function saveLayout(
+  newLayout: Layouts,
+  cardSelection: VisibleWidgets
+) {
   const supabase = createClient();
 
   const {
@@ -195,9 +208,6 @@ export async function saveLayout(newLayout: Layouts, cardSelection: VisibleWidge
     .upsert({ id: user_id, config: newLayout, visible_cards: cardSelection });
 }
 
-
-
-
 export type WidgetKeys =
   | "pinned_card"
   | "trending_symbols"
@@ -205,6 +215,5 @@ export type WidgetKeys =
   | "heatmap"
   | "watchlist_news"
   | "business_news"
-  | "world_news";
-
-  
+  | "world_news"
+  | "quick_lookup";

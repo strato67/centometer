@@ -24,7 +24,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [companyInfo, setCompanyInfo] = useState<StockInfo>({});
   const [added, setAdded] = useState<null | boolean>(null);
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -50,7 +50,11 @@ export default function Page() {
         <StockBreadCrumb currentStock={symbol} />
         <div className="flex flex-col mt-4 mb-2 max-w-fit gap-2">
           <div className="text-3xl font-semibold flex gap-4 items-center">
-            <Button variant={"ghost"} onClick={() => router.back()} className="rounded-full p-2 -mr-1">
+            <Button
+              variant={"ghost"}
+              onClick={() => router.back()}
+              className="rounded-full p-2 -mr-1"
+            >
               <ArrowLeft />
             </Button>
 
@@ -67,9 +71,14 @@ export default function Page() {
             <Skeleton className="flex gap-x-4 w-64 h-6 rounded-full" />
           ) : (
             <CardDescription className="flex items-baseline gap-x-4">
-              {companyInfo.longName || companyInfo.symbol} - {companyInfo.quoteType}
+              {companyInfo.longName || companyInfo.symbol} -{" "}
+              {companyInfo.quoteType}
               {added !== null && (
-                <AddStockButton isAdded={added} setAdded={setAdded} symbol={symbol} />
+                <AddStockButton
+                  isAdded={added}
+                  setAdded={setAdded}
+                  symbol={symbol}
+                />
               )}
             </CardDescription>
           )}
@@ -78,17 +87,22 @@ export default function Page() {
         <div className="grid xl:grid-cols-3 xl:gap-5 gap-4 mb-4">
           <div className="flex flex-col xl:col-span-2 xl:h-auto">
             <div className="h-96">
-              <StockChart ticker={symbol.includes(":") && symbol.split(":")[0] === "FOREX" ? symbol.split(":")[1] : symbol} />
+              <StockChart
+                symbolChange={false}
+                ticker={
+                  symbol.includes(":") && symbol.split(":")[0] === "FOREX"
+                    ? symbol.split(":")[1]
+                    : symbol
+                }
+              />
             </div>
 
             <OverviewCard companyInfo={companyInfo} loading={loading} />
           </div>
 
           <CompanyInfo companyInfo={companyInfo} loading={loading} />
-
         </div>
-          <AnalysisSection/>
-
+        <AnalysisSection />
       </div>
     </>
   );

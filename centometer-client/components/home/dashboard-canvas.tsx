@@ -21,6 +21,7 @@ import {
 import { Layouts } from "react-grid-layout";
 import Loading from "@/app/dashboard/loading";
 import DashboardSettings from "./dashboard-settings";
+import StockChart from "../widgets/stock-chart";
 
 export default function DashboardCanvas() {
   const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -46,36 +47,41 @@ export default function DashboardCanvas() {
     await saveLayout(defaultLayout, defaultCards);
   };
 
-  const resetCardPosition = (widgetKey: WidgetKeys, layout: Layouts, visible: boolean) => {
-
+  const resetCardPosition = (
+    widgetKey: WidgetKeys,
+    layout: Layouts,
+    visible: boolean
+  ) => {
     const updatedLayout = { ...layout };
 
     if (visible) {
-
       Object.keys(updatedLayout).forEach((breakpoint) => {
         updatedLayout[breakpoint] = updatedLayout[breakpoint].filter(
           (item) => item.i !== widgetKey
         );
       });
     } else {
-
       Object.keys(defaultLayout).forEach((breakpoint) => {
         if (!updatedLayout[breakpoint]) {
           updatedLayout[breakpoint] = [];
         }
-      
-        const defaultItems = defaultLayout[breakpoint].filter((item) => item.i === widgetKey);
-      
+
+        const defaultItems = defaultLayout[breakpoint].filter(
+          (item) => item.i === widgetKey
+        );
+
         if (defaultItems.length > 0) {
-          const modifiedItems = defaultItems.map((item) => ({ ...item, y: Infinity }));
-      
+          const modifiedItems = defaultItems.map((item) => ({
+            ...item,
+            y: Infinity,
+          }));
+
           updatedLayout[breakpoint] = [
             ...updatedLayout[breakpoint].filter((item) => item.i !== widgetKey),
             ...modifiedItems,
           ];
         }
       });
-
     }
 
     return updatedLayout;
@@ -90,13 +96,12 @@ export default function DashboardCanvas() {
       ...visibleWidgets,
       [widgetKey]: !visibleWidgets[widgetKey],
     };
-    
+
     const newLayout = resetCardPosition(widgetKey, layouts, visible);
     setVisibleWidgets(newVisibleWidgets);
-    setLayouts(newLayout)
+    setLayouts(newLayout);
     await saveLayout(newLayout, newVisibleWidgets);
-
-  }
+  };
 
   if (!layouts || !visibleWidgets) {
     return <Loading />;
@@ -131,6 +136,32 @@ export default function DashboardCanvas() {
         {visibleWidgets.pinned_card && (
           <div key={"pinned_card"}>
             <PinnedCard onRemove={toggleWidget} widgetKey={"pinned_card"} />
+          </div>
+        )}
+
+        {visibleWidgets.quick_lookup && (
+          <div key={"quick_lookup"}>
+            <DataCard
+              title="Quick Lookup"
+              description="Query stocks on demand"
+              onRemove={toggleWidget}
+              widgetKey={"quick_lookup"}
+            >
+              <StockChart symbolChange ticker="CADUSD" />
+            </DataCard>
+          </div>
+        )}
+
+        {visibleWidgets.heatmap && (
+          <div key={"heatmap"}>
+            <DataCard
+              title="Heatmap"
+              description="Market activity visualized"
+              onRemove={toggleWidget}
+              widgetKey={"heatmap"}
+            >
+              <Heatmap />
+            </DataCard>
           </div>
         )}
 
@@ -193,19 +224,6 @@ export default function DashboardCanvas() {
               onRemove={toggleWidget}
               widgetKey={"world_news"}
             />
-          </div>
-        )}
-
-        {visibleWidgets.heatmap && (
-          <div key={"heatmap"}>
-            <DataCard
-              title="Heatmap"
-              description="Market activity visualized"
-              onRemove={toggleWidget}
-              widgetKey={"heatmap"}
-            >
-              <Heatmap />
-            </DataCard>
           </div>
         )}
       </ResponsiveGridLayout>

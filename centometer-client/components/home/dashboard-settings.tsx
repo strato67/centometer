@@ -28,10 +28,10 @@ export default function DashboardSettings(props: DashboardSettingProps) {
     trending_symbols: { itemName: "Trending Symbols",  },
     market_screener: { itemName: "Market Screener",  },
     heatmap: { itemName: "Heat Map", },
+    quick_lookup: { itemName: "Quick Lookup",},
     watchlist_news: { itemName: "Watchlist News" },
     business_news: { itemName: "Business News",  },
     world_news: { itemName: "World News",},
-
   };
 
   return (
