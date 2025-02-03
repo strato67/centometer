@@ -1,38 +1,42 @@
+"use client";
+
 import { useEffect, useRef, memo } from "react";
 
-function SymbolOverview({ticker}:{ticker:string}) {
+function MarketScreener() {
   const container = useRef<HTMLDivElement>(null);
-
 
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
-      "https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js";
+      "https://s3.tradingview.com/external-embedding/embed-widget-screener.js";
     script.type = "text/javascript";
     script.async = true;
 
     const widgetConfig = {
-      symbol: ticker,
       width: "100%",
       height: "100%",
-      locale: "en",
-      dateRange: "1D",
+      defaultColumn: "overview",
+      defaultScreen: "most_capitalized",
+      market: "america",
+      showToolbar: true,
       colorTheme: "dark",
-      isTransparent: false,
-      autosize: false,
+      locale: "en",
       largeChartUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/stock/`,
-    }
-
+    };
     script.textContent = JSON.stringify(widgetConfig);
-    
+
     if (container.current) {
       container.current.appendChild(script);
     }
     return () => script.remove();
-  }, [ticker]);
+  }, []);
 
-  return <div className="tradingview-widget-container" ref={container}></div>;
+  return (
+    <div
+      className="tradingview-widget-container w-full min-h-96 rounded-2xl"
+      ref={container}
+    ></div>
+  );
 }
 
-export default memo(SymbolOverview);
-
+export default memo(MarketScreener);
