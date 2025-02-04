@@ -59,7 +59,7 @@ export default function PinnedCard(props: PinnedCardProps) {
           </Link>
         </CardHeader>
         <CardContent className="px-10 md:px-8">
-          {tickers ? (
+          {tickers && tickers.length !== 0 ? (
             <Carousel className="w-full h-full ">
               <CarouselContent>
                 {tickers &&
