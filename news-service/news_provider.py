@@ -47,7 +47,7 @@ def get_archived_news(news_type, page_token=None):
   return response
 
 def get_stock_news(stock_query):
-  stock_news = gn.search(stock_query, when = '1h')
+  stock_news = gn.search(stock_query, when = '1w')
   entries = stock_news["entries"]
   return generate_response(entries)
 
