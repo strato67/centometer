@@ -86,7 +86,7 @@ export default function NewsCard(props: NewsCardProps) {
   );
 }
 
-function NewsLink(props: NewsArticle) {
+export function NewsLink(props: NewsArticle) {
   const { getRelativeTime } = DateConverter();
   const relativeTime = getRelativeTime(props.date);
 

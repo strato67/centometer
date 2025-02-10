@@ -44,3 +44,20 @@ const getWatchlistNews = async () => {
   const json = await response.json();
   return json;
 };
+
+export const getStockNews = async (query: string) => {
+  const url: string =
+    process.env.NEXT_PUBLIC_LAMBDA_SEARCH_URL +
+    `news-service?type=stock&symbol=${query}`;
+
+  const response = await fetch(url, {
+    next: {
+      revalidate: 3600,
+    },
+  });
+  if (!response.ok) {
+    return [];
+  }
+  const json = await response.json();
+  return json;
+};

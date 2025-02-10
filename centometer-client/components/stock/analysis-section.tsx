@@ -11,7 +11,7 @@ export default function AnalysisSection() {
   ];
 
   return (
-    <Tabs defaultValue="news" className="w-full grid grid-flow-row gap-x-4">
+    <Tabs defaultValue="news" className="w-full ">
       <TabsList className="grid w-full grid-cols-3">
         {tabOptions.map((tab, index) => (
           <TabsTrigger
@@ -24,7 +24,7 @@ export default function AnalysisSection() {
       </TabsList>
 
       {tabOptions.map((tab,index)=> (
-        <TabsContent value={tab.tabName} key={index}>
+        <TabsContent value={tab.tabName} key={index} className="">
           {tab.tabComponent}
         </TabsContent>
 

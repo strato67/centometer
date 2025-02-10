@@ -7,20 +7,17 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { StockInfo } from "./stockType";
 import LoadingCard from "../loading-card";
 import Link from "next/link";
-import { Badge } from "../ui/badge";
-import { AnalystConsensus } from "./stockType";
 import AnalystBadge from "../analyst-badge";
+import { useContext } from "react";
+import { LoadingContext, StockContext } from "@/utils/hooks/stockinfo";
 
-export default function CompanyInfo({
-  companyInfo,
-  loading,
-}: {
-  companyInfo: StockInfo;
-  loading: boolean;
-}) {
+export default function CompanyInfo() {
+
+  const loading = useContext(LoadingContext)
+  const companyInfo = useContext(StockContext)
+
   if (loading) {
     return <LoadingCard className="w-full rounded-2xl p-2 pb-12" />;
   }

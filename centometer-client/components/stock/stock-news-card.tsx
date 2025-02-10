@@ -1,27 +1,79 @@
-import { Button } from "../ui/button";
+import { LoadingContext, StockContext } from "@/utils/hooks/stockinfo";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "../ui/card";
+import { useContext } from "react";
+import { NewsLink } from "../home/news-card";
+import LoadingCard from "../loading-card";
 
 export default function StockNewsCard() {
+
+  const companyInfo = useContext(StockContext)
+  const loading = useContext(LoadingContext)
+
+  
+
+
+  if(loading){
+    return <LoadingCard className="max-h-[36rem]"/>
+  }
+
   return (
     <>
-      <Card className="h-[1000px] w-full">
+      <Card className="max-h-[36rem] overflow-scroll">
         <CardHeader>
           <CardTitle>News</CardTitle>
           <CardDescription>
-            Change your password here. After saving, l be logged out.
+            Top articles for {companyInfo.symbol}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2"></CardContent>
-        <CardFooter>
-          <Button>Save password</Button>
-        </CardFooter>
+        <CardContent className="grid md:grid-cols-2 col-span-1 gap-x-4 gap-y-2">
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <NewsLink title="hi" source="fake news" date="2025-01-29T10:01:25Z" url="https://news.google.com/" />
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <NewsLink title="hi" source="fake news" date="2025-01-29T10:01:25Z" url="https://news.google.com/" />
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <NewsLink title="hi" source="fake news" date="2025-01-29T10:01:25Z" url="https://news.google.com/" />
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <NewsLink title="hi" source="fake news" date="2025-01-29T10:01:25Z" url="https://news.google.com/" />
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <NewsLink title="hi" source="fake news" date="2025-01-29T10:01:25Z" url="https://news.google.com/" />
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <NewsLink title="hi" source="fake news" date="2025-01-29T10:01:25Z" url="https://news.google.com/" />
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <NewsLink title="hi" source="fake news" date="2025-01-29T10:01:25Z" url="https://news.google.com/" />
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <NewsLink title="hi" source="fake news" date="2025-01-29T10:01:25Z" url="https://news.google.com/" />
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <NewsLink title="hi" source="fake news" date="2025-01-29T10:01:25Z" url="https://news.google.com/" />
+          </div>
+
+
+
+
+        </CardContent>
+
       </Card>
     </>
   );
