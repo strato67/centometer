@@ -21,7 +21,7 @@ import CardDropDown from "./card-dropdown";
 import { WidgetKeys } from "@/utils/hooks/dashboardlayout";
 
 
-type NewsArticle = {
+export type NewsArticle = {
   title: string;
   source: string;
   date: string;
