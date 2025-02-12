@@ -12,6 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import { NewsArticle, NewsLink } from "../home/news-card";
 import LoadingCard from "../loading-card";
 import { getStockNews } from "@/app/actions/news";
+import StockSummary from "./stock-news-summary";
 
 export default function StockNewsCard() {
   const companyInfo = useContext(StockContext);
@@ -40,8 +41,10 @@ export default function StockNewsCard() {
             Top articles for {companyInfo.symbol}
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid md:grid-cols-2 col-span-1 gap-x-4 gap-y-4">
-        {!articles || articles.length === 0 ? (
+        <CardContent className="flex flex-col gap-y-4">
+          <StockSummary/>
+          <div className="grid md:grid-cols-2 col-span-1 gap-x-4 gap-y-4">
+          {!articles || articles.length === 0 ? (
             <div>No articles found</div>
           ) : (
             articles.map((article, index) => (
@@ -58,6 +61,8 @@ export default function StockNewsCard() {
               </div>
             ))
           )}
+          </div>
+
         </CardContent>
       </Card>
     </>
