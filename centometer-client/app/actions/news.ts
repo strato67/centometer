@@ -1,6 +1,9 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import { google, GoogleGenerativeAIProviderMetadata } from "@ai-sdk/google";
+import { generateText, streamText } from "ai";
+import { createStreamableValue } from "ai/rsc";
 
 export type NewsType = "world" | "business" | "watchlist";
 
@@ -60,4 +63,25 @@ export const getStockNews = async (query: string) => {
   }
   const json = await response.json();
   return json;
+};
+
+export const getNewsSummary = async (symbol: string) => {
+  const stream = createStreamableValue("");
+
+  (async () => {
+    const { textStream } = await streamText({
+      model: google("gemini-2.0-flash-exp", {
+        useSearchGrounding: true,
+      }),
+      prompt: `List 4 key points about the latest news on the ${symbol} stock symbol.`,
+    });
+
+    for await (const delta of textStream) {
+      stream.update(delta);
+    }
+
+    stream.done();
+  })();
+
+  return { output: stream.value };
 };
