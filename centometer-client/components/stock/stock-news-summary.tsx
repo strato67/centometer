@@ -49,7 +49,7 @@ export default function StockNewsSummary() {
       </CardContent>
 
       <CardFooter>
-        <div className="text-sm">Generative AI can make mistakes, verify your info</div>
+        <div className="text-sm">Generative AI can make mistakes, verify your info.</div>
       </CardFooter>
     </Card>
   );

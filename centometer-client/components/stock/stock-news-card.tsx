@@ -13,6 +13,7 @@ import { NewsArticle, NewsLink } from "../home/news-card";
 import LoadingCard from "../loading-card";
 import { getStockNews } from "@/app/actions/news";
 import StockSummary from "./stock-news-summary";
+import { Separator } from "../ui/separator";
 
 export default function StockNewsCard() {
   const companyInfo = useContext(StockContext);
@@ -34,7 +35,7 @@ export default function StockNewsCard() {
 
   return (
     <>
-      <Card className="max-h-[36rem] overflow-scroll">
+      <Card className="max-h-[60rem] overflow-scroll">
         <CardHeader>
           <CardTitle>News</CardTitle>
           <CardDescription>
@@ -43,6 +44,7 @@ export default function StockNewsCard() {
         </CardHeader>
         <CardContent className="flex flex-col gap-y-4">
           <StockSummary/>
+          <Separator/>
           <div className="grid md:grid-cols-2 col-span-1 gap-x-4 gap-y-4">
           {!articles || articles.length === 0 ? (
             <div>No articles found</div>
