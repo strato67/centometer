@@ -10,13 +10,13 @@ export default function MobileNewsView() {
         <TabsTrigger value="world">World</TabsTrigger>
       </TabsList>
       <TabsContent value="pinned">
-        <NewsReel />
+        <NewsReel newsType="watchlist" />
       </TabsContent>
       <TabsContent value="business">
-        <NewsReel />
+        <NewsReel newsType="business" />
       </TabsContent>
       <TabsContent value="world">
-        <NewsReel />
+        <NewsReel newsType="world" />
       </TabsContent>
     </Tabs>
   );

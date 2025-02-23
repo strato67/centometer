@@ -6,26 +6,27 @@ import {
 import NewsReel from "./news-reel";
 
 export default function NewsView() {
+
   return (
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel defaultSize={33}>
         <div className="w-full pr-4">
           <h2 className="text-xl font-semibold ml-3 mb-2">Pinned</h2>
-          <NewsReel/>
+          <NewsReel newsType="watchlist"/>
         </div>
       </ResizablePanel >
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={34}>
         <div className="w-full px-3 ">
           <h2 className="text-xl font-semibold ml-3 mb-2">Business</h2>
-          <NewsReel/>
+          <NewsReel newsType="business"/>
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={33}>
         <div className="w-full px-3">
           <h2 className="text-xl font-semibold ml-3 mb-2">World</h2>
-          <NewsReel/>
+          <NewsReel newsType="world"/>
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>

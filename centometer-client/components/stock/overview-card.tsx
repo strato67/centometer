@@ -72,7 +72,7 @@ function OverviewTable({ companyInfo }: { companyInfo: StockInfo }) {
     Dividend: companyInfo.dividendRate
       ? `${companyInfo.dividendRate?.toFixed(2)} (${
           companyInfo.dividendYield
-            ? (companyInfo.dividendYield * 100).toFixed(2)
+            ? (companyInfo.dividendYield).toFixed(2)
             : "N/A"
         }%)`
       : "N/A",
