@@ -21,7 +21,7 @@ import CardDropDown from "./card-dropdown";
 import { WidgetKeys } from "@/utils/hooks/dashboardlayout";
 
 
-type NewsArticle = {
+export type NewsArticle = {
   title: string;
   source: string;
   date: string;
@@ -86,7 +86,7 @@ export default function NewsCard(props: NewsCardProps) {
   );
 }
 
-function NewsLink(props: NewsArticle) {
+export function NewsLink(props: NewsArticle) {
   const { getRelativeTime } = DateConverter();
   const relativeTime = getRelativeTime(props.date);
 

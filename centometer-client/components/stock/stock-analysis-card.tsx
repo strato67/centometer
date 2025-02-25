@@ -11,7 +11,7 @@ import {
 export default function StockAnalysisCard() {
   return (
     <>
-      <Card className="h-[1000px] w-full">
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Analysis</CardTitle>
           <CardDescription>

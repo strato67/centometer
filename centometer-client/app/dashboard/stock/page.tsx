@@ -17,6 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnalysisSection from "@/components/stock/analysis-section";
+import { StockContext, LoadingContext } from "@/utils/hooks/stockinfo";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -45,7 +46,8 @@ export default function Page() {
   }
 
   return (
-    <>
+    <LoadingContext.Provider value={loading}>
+      <StockContext.Provider value={companyInfo}>
       <div className="my-4 md:my-6 md:px-1 w-full">
         <StockBreadCrumb currentStock={symbol} />
         <div className="flex flex-col mt-4 mb-2 max-w-fit gap-2">
@@ -97,13 +99,14 @@ export default function Page() {
               />
             </div>
 
-            <OverviewCard companyInfo={companyInfo} loading={loading} />
+            <OverviewCard />
           </div>
 
-          <CompanyInfo companyInfo={companyInfo} loading={loading} />
+          <CompanyInfo />
         </div>
         <AnalysisSection />
       </div>
-    </>
+      </StockContext.Provider>
+    </LoadingContext.Provider>
   );
 }

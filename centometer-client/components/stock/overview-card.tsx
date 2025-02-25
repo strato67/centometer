@@ -1,14 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StockInfo } from "./stockType";
 import LoadingCard from "../loading-card";
+import { useContext } from "react";
+import { StockContext, LoadingContext } from "@/utils/hooks/stockinfo";
 
-export default function OverviewCard({
-  companyInfo,
-  loading,
-}: {
-  companyInfo: StockInfo;
-  loading: boolean;
-}) {
+export default function OverviewCard() {
+
+  const loading = useContext(LoadingContext)
+  const companyInfo = useContext(StockContext)
+
   if (loading) {
     return (
       <LoadingCard className="w-full rounded-b-2xl rounded-t-none pt-2 md:px-2 pb-12" />
@@ -72,7 +72,7 @@ function OverviewTable({ companyInfo }: { companyInfo: StockInfo }) {
     Dividend: companyInfo.dividendRate
       ? `${companyInfo.dividendRate?.toFixed(2)} (${
           companyInfo.dividendYield
-            ? (companyInfo.dividendYield * 100).toFixed(2)
+            ? (companyInfo.dividendYield).toFixed(2)
             : "N/A"
         }%)`
       : "N/A",

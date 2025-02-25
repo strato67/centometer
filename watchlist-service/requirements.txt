@@ -48,4 +48,4 @@ urllib3==2.2.3
 webencodings==0.5.1
 websockets==13.1
 yarl==1.15.5
-yfinance==0.2.44
+yfinance==0.2.54
