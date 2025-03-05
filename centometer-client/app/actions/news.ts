@@ -3,8 +3,9 @@
 import { NewsArticle } from "@/components/home/news-card";
 import { createClient } from "@/utils/supabase/server";
 import { google } from "@ai-sdk/google";
-import { streamText } from "ai";
+import { streamText, generateText } from "ai";
 import { createStreamableValue } from "ai/rsc";
+import { getUserPinnedStocks } from "./stock-info";
 
 export type NewsType = "world" | "business" | "watchlist";
 
@@ -90,7 +91,7 @@ export const getStockNews = async (query: string) => {
   return json;
 };
 
-export const getNewsSummary = async (symbol: string) => {
+export const generateAIStreamSummary = async (prompt: string) => {
   const stream = createStreamableValue("");
 
   (async () => {
@@ -98,7 +99,7 @@ export const getNewsSummary = async (symbol: string) => {
       model: google("gemini-2.0-flash-exp", {
         useSearchGrounding: true,
       }),
-      prompt: `List 4 key points about the latest news on the ${symbol} stock symbol.`,
+      prompt: prompt,
     });
 
     for await (const delta of textStream) {
@@ -109,4 +110,16 @@ export const getNewsSummary = async (symbol: string) => {
   })();
 
   return { output: stream.value };
-};
+}
+
+export const generateAISummary = async (prompt:string) => {
+  const {text} = await generateText({
+    model: google("gemini-2.0-flash-exp", {
+        useSearchGrounding: true,
+      }),
+    prompt: prompt
+
+  })
+
+  return text
+}
