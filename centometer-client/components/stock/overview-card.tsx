@@ -67,7 +67,7 @@ function OverviewTable({ companyInfo }: { companyInfo: StockInfo }) {
     "Avg. Volume":
       companyInfo.averageVolume && roundVal(companyInfo.averageVolume),
     "Market Cap": companyInfo.marketCap && roundVal(companyInfo.marketCap),
-    "P/E Ratio": companyInfo.pegRatio,
+    "P/E Ratio": companyInfo.trailingPE && roundVal(companyInfo.trailingPE),
     EPS: companyInfo.trailingEps,
     Dividend: companyInfo.dividendRate
       ? `${companyInfo.dividendRate?.toFixed(2)} (${

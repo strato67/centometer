@@ -3,7 +3,7 @@
 import { NewsArticle } from "@/components/home/news-card";
 import { createClient } from "@/utils/supabase/server";
 import { google } from "@ai-sdk/google";
-import { streamText, generateText } from "ai";
+import { streamText, generateText, smoothStream } from "ai";
 import { createStreamableValue } from "ai/rsc";
 import { getUserPinnedStocks } from "./stock-info";
 
@@ -100,6 +100,7 @@ export const generateAIStreamSummary = async (prompt: string) => {
         useSearchGrounding: true,
       }),
       prompt: prompt,
+      experimental_transform: smoothStream()
     });
 
     for await (const delta of textStream) {

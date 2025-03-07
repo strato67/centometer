@@ -54,7 +54,15 @@ export default function Page() {
           <div className="text-3xl font-semibold flex gap-4 items-center">
             <Button
               variant={"ghost"}
-              onClick={() => router.back()}
+              onClick={() => {
+
+                  if (window.history.length <= 1) {
+                    router.push('/dashboard/search')
+                  } else {
+                    router.back()
+                  }
+          
+              }}
               className="rounded-full p-2 -mr-1"
             >
               <ArrowLeft />
