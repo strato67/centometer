@@ -1,10 +1,15 @@
 "use client";
 
-import { generateAISummary, NewsType } from "@/app/actions/news";
+import {
+  generateAIStreamSummary,
+  generateAISummary,
+  NewsType,
+} from "@/app/actions/news";
 import { getUserPinnedStocks } from "@/app/actions/stock-info";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { LoadingSpinner } from "../ui/loading-spinner";
+import { readStreamableValue } from "ai/rsc";
 
 export default function HighlightMarkdown({
   newsType,
@@ -16,14 +21,20 @@ export default function HighlightMarkdown({
   useEffect(() => {
     (async () => {
       let prompt = "";
+
       if (newsType === "watchlist") {
         const watchlist = await getUserPinnedStocks();
-        prompt = `For each stock symbol in this list: ${watchlist} list 1 key point about its latest news.`;
+        prompt = `For each stock symbol in this list: ${watchlist} list 1 key point about its latest news. Use external sources`;
       } else {
-        prompt = `List 4 key points about current ${newsType} news `;
+        prompt = `List exactly 4 points about current ${newsType} news. Use external sources `;
       }
-
-      setSummary(await generateAISummary(prompt));
+      const { output } = await generateAIStreamSummary(prompt);
+      let accumulatedText = "";
+      setSummary("");
+      for await (const delta of readStreamableValue(output)) {
+        accumulatedText += delta;
+        setSummary(accumulatedText);
+      }
       setLoading(false);
     })();
   }, [newsType]);
@@ -42,7 +53,7 @@ export default function HighlightMarkdown({
       className="overflow-auto"
       components={{
         li: ({ node, ...props }) => (
-          <li style={{ display: "block", marginTop: "0.5em" }} {...props} />
+          <li style={{ display: "block", marginTop: "0.75em" }} {...props} />
         ),
       }}
     >

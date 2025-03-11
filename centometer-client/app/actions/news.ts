@@ -5,7 +5,6 @@ import { createClient } from "@/utils/supabase/server";
 import { google } from "@ai-sdk/google";
 import { streamText, generateText, smoothStream } from "ai";
 import { createStreamableValue } from "ai/rsc";
-import { getUserPinnedStocks } from "./stock-info";
 
 export type NewsType = "world" | "business" | "watchlist";
 
@@ -100,7 +99,7 @@ export const generateAIStreamSummary = async (prompt: string) => {
         useSearchGrounding: true,
       }),
       prompt: prompt,
-      experimental_transform: smoothStream()
+      experimental_transform: smoothStream(),
     });
 
     for await (const delta of textStream) {
@@ -111,16 +110,16 @@ export const generateAIStreamSummary = async (prompt: string) => {
   })();
 
   return { output: stream.value };
-}
+};
 
-export const generateAISummary = async (prompt:string) => {
-  const {text} = await generateText({
+export const generateAISummary = async (prompt: string) => {
+  const { text } = await generateText({
     model: google("gemini-2.0-flash-exp", {
-        useSearchGrounding: true,
-      }),
-    prompt: prompt
+      useSearchGrounding: true,
+    }),
+    system: "You are providing news updates",
+    prompt: prompt,
+  });
 
-  })
-
-  return text
-}
+  return { text };
+};

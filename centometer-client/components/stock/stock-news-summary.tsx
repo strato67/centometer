@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { AsteriskIcon, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { StockContext } from "@/utils/hooks/stockinfo";
 import { generateAIStreamSummary } from "@/app/actions/news";
 import { readStreamableValue } from "ai/rsc";
@@ -23,12 +23,12 @@ import { Button } from "../ui/button";
 export default function StockNewsSummary() {
   const companyInfo = useContext(StockContext);
   const [summary, setSummary] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
       if (companyInfo.symbol) {
         setSummary("");
-        const prompt = `List 4 key points about the latest news on the ${companyInfo.symbol} stock symbol.`;
+        const prompt = `List 4 key points about the latest news on the ${companyInfo.exchange}:${companyInfo.symbol} stock symbol.`;
         const { output } = await generateAIStreamSummary(prompt);
         let accumulatedText = "";
 
@@ -48,21 +48,21 @@ export default function StockNewsSummary() {
         <CardHeader>
           <CollapsibleTrigger asChild className="cursor-pointer">
             <CardTitle className="flex items-center justify-between">
-              <div className="flex gap-1 select-none ">
-                <AsteriskIcon />
-                AI Summary
-              </div>
-
-              <Button variant={"ghost"} className="hover:bg-inherit">
+              <div className="flex select-none items-center">
+              <Button variant={"ghost"} className="hover:bg-inherit -ml-5">
                 {isOpen ? <ChevronUp /> : <ChevronDown />}
 
               </Button>
+                AI Summary
+              </div>
+
+
             </CardTitle>
           </CollapsibleTrigger>
 
         </CardHeader>
-        <CollapsibleContent>
-          <CardContent className="overflow-y-auto max-h-full">
+        <CollapsibleContent className="-mt-4">
+          <CardContent className="overflow-auto max-h-full">
             <ReactMarkdown
               className="flex flex-col "
               components={{
