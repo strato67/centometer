@@ -37,8 +37,8 @@ export default function DashboardSettings(props: DashboardSettingProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">
-          <SettingsIcon size={20} />
+        <Button variant="outline" size={"icon"}>
+          <SettingsIcon size={20}  />
         </Button>
       </SheetTrigger>
       <SheetContent>

@@ -14,7 +14,6 @@ import {
   NewspaperIcon,
   LogOut,
   Settings,
-  User,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import {
@@ -171,31 +170,28 @@ function SidebarDropdownMenu() {
           variant="ghost"
         >
           <Avatar>
-            <AvatarImage src={userMetadata.picture} />
+            <AvatarImage src={userMetadata.picture} alt={userMetadata.username} />
             <AvatarFallback>{userMetadata.email.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <p className="text-sm font-bold overflow-hidden">{userMetadata.username || userMetadata.email}</p>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 mx-auto">
+      <DropdownMenuContent className="w-56 ml-4">
         <DropdownMenuLabel className="text-lg">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-          </DropdownMenuItem>
-
+          <Link href={"/dashboard/settings"}>
           <DropdownMenuItem>
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signout()}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span className="font-bold">Log out</span>
+          <LogOut className="mr-2 h-4 w-4 " />
+          <span className="font-bold ">Sign out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
