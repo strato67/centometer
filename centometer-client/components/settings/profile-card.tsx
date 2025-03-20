@@ -43,11 +43,11 @@ export default async function ProfileCard() {
             <div className="md:col-span-3 grid min-w-96 items-center gap-y-4">
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" placeholder={user?.email} disabled />
+                <Input id="email" placeholder={user?.email} disabled readOnly/>
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="username">Username</Label>
-                <Input id="username" placeholder="Enter a username" value={user?.user_metadata.name || ""}/>
+                <Input id="username" placeholder="Enter a username" defaultValue={user?.user_metadata.name || ""}/>
               </div>
             </div>
           </div>
