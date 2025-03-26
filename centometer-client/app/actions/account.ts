@@ -40,15 +40,38 @@ export async function signout() {
   }
 }
 
-export async function changePassword(newPass:string) {
+export async function changePassword(newPass: string) {
   const supabase = createClient();
 
-  const {error} = await supabase.auth.updateUser({
-    password: newPass
-  })
+  const { error } = await supabase.auth.updateUser({
+    password: newPass,
+  });
 
   if (error) {
     return { error: { message: error.message } };
   }
-  
+}
+
+export async function changeUsername(data: {
+  name: string;
+  display_name: string;
+}) {
+  const supabase = createClient();
+
+  const { error } = await supabase.auth.updateUser({
+    data,
+  });
+
+  if (error) {
+    return { error: { message: error.message } };
+  }
+}
+
+export async function deleteUser() {
+  const supabase = createClient();
+
+  await supabase.functions.invoke("user-self-deletion");
+
+  await supabase.auth.signOut();
+  redirect("/");
 }

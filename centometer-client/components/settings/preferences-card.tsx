@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutIcon, MoonIcon, SunIcon } from "lucide-react";
+import { LayoutIcon, SunIcon } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -17,6 +17,7 @@ import {
 } from "@/utils/hooks/dashboardlayout";
 import { toast } from "sonner";
 import { ToggleMode } from "../toggle-mode";
+
 
 export default function PreferencesCard() {
   const resetLayout = async () => {

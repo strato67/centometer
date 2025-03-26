@@ -1,14 +1,7 @@
 import ProfileCard from "@/components/settings/profile-card";
 import PreferencesCard from "@/components/settings/preferences-card";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import SecurityCard from "@/components/settings/security-card";
+import DeleteAccountCard from "@/components/settings/delete-account-card";
 
 export default function Page() {
   return (
@@ -21,21 +14,7 @@ export default function Page() {
 
           <PreferencesCard />
 
-          <Card className="w-full md:w-11/12 lg:w-2/3 ">
-            <CardHeader>
-              <CardTitle className="text-destructive">Delete Account</CardTitle>
-              <CardDescription>
-                Deleting your account is permanent and cannot be undone.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="">
-                <Button variant={"destructive"} className="font-bold">
-                  Delete your account
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <DeleteAccountCard/>
         </div>
       </div>
     </>
