@@ -74,13 +74,17 @@ export async function deleteUser() {
 
   const access_token = data.session?.access_token
 
-  await supabase.functions.invoke('user-self-deletion', {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-    body: { name: 'Functions' },
-  })
-
+  try {
+    await supabase.functions.invoke('user-self-deletion', {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      body: { name: 'Functions' },
+    });
+  } catch (error) {
+    console.error("Error during user self-deletion:", error);
+    return { error: { message: "Failed to delete user account. Please try again later." } };
+  }
   await supabase.auth.signOut();
   redirect("/");
 }
