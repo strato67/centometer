@@ -56,7 +56,7 @@ export default function NewsReel(props: NewsReelProps) {
 
   return (
     <>
-      <div className=" w-full border-none h-[38rem] lg:h-[46rem] overflow-auto" onScroll={handleScroll} ref={scrollRef}>
+      <div className=" w-full border-none h-[33rem] md:h-[40rem] lg:h-[48rem] overflow-auto" onScroll={handleScroll} ref={scrollRef}>
         {articles &&
           articles.map((article) => (
             <NewsLink

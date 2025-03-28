@@ -47,7 +47,7 @@ export default function PinnedCard(props: PinnedCardProps) {
           <GripIcon size={20} className="drag-handle cursor-grab" />
           <CardDropDown onRemove={props.onRemove} widgetKey={props.widgetKey}/>
         </div>
-        <CardHeader className="flex flex-row w-full justify-between -mt-2">
+        <CardHeader className="flex flex-row w-full justify-between -mt-2 px-4">
           <div className="space-y-1.5">
             <CardTitle>Pinned Stocks</CardTitle>
             <CardDescription>
@@ -58,7 +58,7 @@ export default function PinnedCard(props: PinnedCardProps) {
             <Button className="ml-6">Add Symbol</Button>
           </Link>
         </CardHeader>
-        <CardContent className="px-10 md:px-8">
+        <CardContent className="px-8">
           {tickers && tickers.length !== 0 ? (
             <Carousel className="w-full h-full ">
               <CarouselContent>

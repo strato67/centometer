@@ -59,11 +59,11 @@ export default function NewsCard(props: NewsCardProps) {
           <CardDropDown onRemove={props.onRemove} widgetKey={props.widgetKey}/>
       </div>
 
-      <CardHeader className="-mt-2">
+      <CardHeader className="-my-2 px-4">
         <CardTitle>{props.title}</CardTitle>
         <CardDescription>{props.description}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-4">
         <ScrollArea className="h-72 w-full rounded-md border">
           {articles &&
             articles.map((article, index) => {
