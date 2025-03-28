@@ -69,8 +69,17 @@ export async function changeUsername(data: {
 
 export async function deleteUser() {
   const supabase = createClient();
+  const {data} = await supabase.auth.getSession()
 
-  await supabase.functions.invoke("user-self-deletion");
+
+  const access_token = data.session?.access_token
+
+  await supabase.functions.invoke('user-self-deletion', {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+    body: { name: 'Functions' },
+  })
 
   await supabase.auth.signOut();
   redirect("/");

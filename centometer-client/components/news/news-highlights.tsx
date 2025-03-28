@@ -22,6 +22,7 @@ import { Button } from "../ui/button";
 
 export default function NewsHighlights() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  
   return (
     <Card className="bg-gradient-to-r from-purple-500 to-purple-900 text-white  mx-2 ">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>

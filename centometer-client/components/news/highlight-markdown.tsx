@@ -24,6 +24,12 @@ export default function HighlightMarkdown({
 
       if (newsType === "watchlist") {
         const watchlist = await getUserPinnedStocks();
+
+        if (watchlist.length === 0) {
+          setSummary("Add pinned stocks from your watchlist.");
+          setLoading(false);
+          return;
+        }
         prompt = `For each stock symbol in this list: ${watchlist} list 1 key point about its latest news. Use external sources`;
       } else {
         prompt = `List exactly 4 points about current ${newsType} news. Use external sources `;
