@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 
-
 class OptionsProvider:
 
     def __init__(self, symbol, options_date=""):
@@ -51,7 +50,18 @@ class OptionsProvider:
         return response
     
     def get_options_chain(self):
-        return self.options_chain
+        return self.options_chain      
+    
+    def get_formatted_options(self):
+        options = self.get_options_chain()
+        formatted_options = {}
+        for key in options:
+            if hasattr(options[key], 'to_dict'):  
+                formatted_options[key] = options[key].to_dict(orient='records')
+            else:
+                formatted_options[key] = options[key] 
+
+        return formatted_options
 
     def put_call_ratio(self):
         #Short term sentiment
@@ -60,7 +70,6 @@ class OptionsProvider:
         open_interest_ratio = self.options_chain.get("puts")["openInterest"].sum()/self.options_chain.get("calls")["openInterest"].sum()   
         
         return {"volume": volume_ratio.item(), "open_interest": open_interest_ratio.item()}
-
 
     def open_interest_analysis(self):
        
@@ -72,24 +81,35 @@ class OptionsProvider:
         current_price = tk.info.get("currentPrice")
 
         calls_above = calls[calls["strike"] >= current_price]
-        resistance = calls_above.loc[calls_above['openInterest'].idxmax()]
+        top_resistances = calls_above.sort_values(by='openInterest', ascending=False).head(10)
+        top_resistances['distance'] = abs(top_resistances['strike'] - current_price)
+        top_resistances = top_resistances.sort_values(by='distance').head(3)
 
+        resistances = top_resistances[['strike', 'openInterest']].to_dict(orient='records')
+
+        # Top 3 support levels (PUT side)
         puts_below = puts[puts["strike"] <= current_price]
-        support = puts_below.loc[puts_below['openInterest'].idxmax()] 
+        top_supports = puts_below.sort_values(by='openInterest', ascending=False).head(10)
+        top_supports['distance'] = abs(puts_below['strike'] - current_price)
+        top_supports = top_supports.sort_values(by='distance').head(3)
 
-        return resistance["strike"]
+        supports = top_supports[['strike', 'openInterest']].to_dict(orient='records')
 
-    def iv_analysis():
-        pass
+        analysis_response = {
+            "resistance":resistances,
+            "support":supports
+        }
 
+        return analysis_response
 
-optionsinfo = OptionsProvider("AMD")
+    def iv_analysis(self):
+        options = self.get_options_chain()
+        calls = options['calls']
+        puts = options['puts']
 
+        callIV = calls[["strike", "impliedVolatility"]].rename(columns={"impliedVolatility": "callIV"})
+        putIV = puts[["strike", "impliedVolatility"]].rename(columns={"impliedVolatility": "putIV"})
 
-chain = optionsinfo.get_options_chain()
-pcr = optionsinfo.put_call_ratio()
-price = optionsinfo.open_interest_analysis()
-#pcr = put_call_ratio(chain)
-print(chain)
-print(pcr)
-print(price)
+        iv_merged = pd.merge(callIV, putIV, on="strike", how="outer")
+
+        return iv_merged.to_dict(orient='records')
