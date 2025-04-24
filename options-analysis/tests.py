@@ -2,6 +2,7 @@ import pytest
 import pandas as pd
 from unittest.mock import patch, MagicMock
 from options_provider import OptionsProvider
+from lambda_function import generate_option_response
 
 @pytest.fixture
 def mock_yf_ticker():
@@ -76,3 +77,44 @@ def test_invalid_symbol_raises():
 def test_invalid_option_date_uses_default(mock_yf_ticker):
     op = OptionsProvider("AAPL", options_date="2050-01-01")
     assert "option_dates" in op.options_chain
+
+@pytest.fixture
+def mock_options_provider():
+    with patch("options_provider.OptionsProvider") as MockProvider:  # Replace `your_module`
+        mock_instance = MagicMock()
+
+        mock_instance.get_formatted_options.return_value = {
+            "calls": [{"strike": 100}],
+            "puts": [{"strike": 90}],
+            "option_dates": ["2025-04-25", "2025-05-02"]
+        }
+        mock_instance.put_call_ratio.return_value = {
+            "volume": 0.8,
+            "open_interest": 0.75
+        }
+        mock_instance.open_interest_analysis.return_value = {
+            "resistance": [{"strike": 110, "openInterest": 1000}],
+            "support": [{"strike": 95, "openInterest": 900}]
+        }
+        mock_instance.iv_analysis.return_value = [
+            {"strike": 100, "callIV": 0.25, "putIV": 0.30}
+        ]
+
+        MockProvider.return_value = mock_instance
+        yield MockProvider
+
+def test_generate_option_response_valid(mock_options_provider):
+    response = generate_option_response("AAPL")
+
+    assert "optionsChain" in response
+    assert "putCallRatio" in response
+    assert "openInterestAnalysis" in response
+    assert "ivData" in response
+
+    options_chain = response["optionsChain"]
+    assert "option_dates" in options_chain
+    assert isinstance(options_chain["option_dates"], list)
+
+def test_generate_option_response_invalid_stock():
+    with pytest.raises(AttributeError):
+        generate_option_response("")

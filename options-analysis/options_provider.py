@@ -45,7 +45,7 @@ class OptionsProvider:
         }
 
         if self.options_date == "" or self.options_date not in expiration_dates:
-            response["option_dates"] = expiration_dates
+            response["option_dates"] = list(expiration_dates)
 
         return response
     
