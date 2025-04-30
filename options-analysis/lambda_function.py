@@ -8,9 +8,11 @@ def lambda_handler(event, context):
         query = event['queryStringParameters']['query']
         exp_date = event['queryStringParameters']['date']
 
+        response = generate_option_response(query, exp_date=exp_date)
+
         return {
             'statusCode': 200,
-            'body': json.dumps('Hello from Lambda!')
+            'body': json.dumps(response)
         }
     except Exception as e:
         print(e)
@@ -37,5 +39,3 @@ def generate_option_response(stock, exp_date=""):
         'openInterestAnalysis': options.open_interest_analysis(),
         'ivData': options.iv_analysis()
     }
-
-print(generate_option_response("AAPL", "2025-05-02"))
