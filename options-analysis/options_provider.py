@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import yfinance as yf
 
 class OptionsProvider:
@@ -56,7 +55,8 @@ class OptionsProvider:
         options = self.get_options_chain()
         formatted_options = {}
         for key in options:
-            if hasattr(options[key], 'to_dict'):  
+            if hasattr(options[key], 'to_dict'):
+                options[key]["lastTradeDate"] = options[key]["lastTradeDate"].astype(str)
                 formatted_options[key] = options[key].to_dict(orient='records')
             else:
                 formatted_options[key] = options[key] 

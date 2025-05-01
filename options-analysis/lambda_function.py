@@ -5,8 +5,9 @@ def lambda_handler(event, context):
 
     try:
         
-        query = event['queryStringParameters']['query']
-        exp_date = event['queryStringParameters']['date']
+        query_params = event.get('queryStringParameters', {})
+        query = query_params.get('query')
+        exp_date = query_params.get('date', "")
 
         response = generate_option_response(query, exp_date=exp_date)
 
