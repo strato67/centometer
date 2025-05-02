@@ -35,7 +35,7 @@ export default function StockNewsCard() {
 
   return (
     <>
-      <Card className="max-h-[60rem] overflow-scroll">
+      <Card className="max-h-[60rem] overflow-scroll ">
         <CardHeader>
           <CardTitle>News</CardTitle>
           <CardDescription>

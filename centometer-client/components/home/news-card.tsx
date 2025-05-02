@@ -106,7 +106,7 @@ export function NewsLink(props: NewsArticle) {
           </div>
         </div>
       </Link>
-      <Separator />
+
     </>
   );
 }
