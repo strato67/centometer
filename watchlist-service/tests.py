@@ -22,6 +22,7 @@ def test_invalid_user():
 
     assert not output["watchlist"]
 
+@pytest.mark.skip(reason="avoiding rate limits")
 def test_valid_user():
     user_id: str = os.environ.get("TEST_USER_ID")
 
@@ -41,6 +42,7 @@ def test_query_list():
     assert {'symbol': 'BCE', 'index': 'TSX', 'search_query': 'BCE.TO'} in query_list
     assert {'symbol': 'SPY', 'index': 'ASX', 'search_query': 'SPY.AX'} in query_list   
 
+@pytest.mark.skip(reason="avoiding rate limits")
 def test_yfinance():
     user_id: str = os.environ.get("TEST_USER_ID")
     watchlist = get_watchlist(user_id)

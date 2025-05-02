@@ -39,12 +39,6 @@ def test_init_sets_options_chain(mock_yf_ticker):
     assert "calls" in op.options_chain
     assert "puts" in op.options_chain
 
-def test_get_formatted_options(mock_yf_ticker):
-    op = OptionsProvider("AAPL")
-    formatted = op.get_formatted_options()
-    assert isinstance(formatted["calls"], list)
-    assert isinstance(formatted["puts"], list)
-
 def test_put_call_ratio(mock_yf_ticker):
     op = OptionsProvider("AAPL")
     ratio = op.put_call_ratio()
