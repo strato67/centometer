@@ -56,7 +56,9 @@ class OptionsProvider:
         formatted_options = {}
         for key in options:
             if hasattr(options[key], 'to_dict'):
-                options[key]["lastTradeDate"] = options[key]["lastTradeDate"].astype(str)
+                df = options[key].copy()
+                df["lastTradeDate"] = df["lastTradeDate"].astype(str)
+                df = df.where(pd.notnull(df), None)
                 formatted_options[key] = options[key].to_dict(orient='records')
             else:
                 formatted_options[key] = options[key] 
@@ -111,5 +113,6 @@ class OptionsProvider:
         putIV = puts[["strike", "impliedVolatility"]].rename(columns={"impliedVolatility": "putIV"})
 
         iv_merged = pd.merge(callIV, putIV, on="strike", how="outer")
+        iv_merged = iv_merged.where(pd.notnull(iv_merged), None)
 
         return iv_merged.to_dict(orient='records')
