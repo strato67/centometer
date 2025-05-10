@@ -9,7 +9,7 @@ def lambda_handler(event, context):
         query = query_params.get('query')
         exp_date = query_params.get('date', "")
 
-        response = generate_option_response(query, exp_date=exp_date)
+        response = json.dumps(generate_option_response(query, exp_date=exp_date))
 
         return {
             'statusCode': 200,
