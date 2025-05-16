@@ -10,7 +10,7 @@ import {
   CardContent,
   CardFooter,
 } from "../ui/card";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -18,10 +18,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { getStockOptions } from "@/app/actions/stock-info";
+import { useSearchParams } from "next/navigation";
 
 export default function StockOptionsCard() {
-  const companyInfo = useContext(StockContext);
+
+  const searchParams = useSearchParams();
+  const symbol = searchParams.get("tvwidgetsymbol");
   const [expiryDate, setExpiryDate] = useState("2024-05-17");
+  useEffect(()=>{
+    (async () => {
+
+      if (symbol) {
+        const stockMap = {
+          indexName: symbol?.includes(":") ? symbol.split(":")[0] : "",
+          symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol,
+        };
+        const optionsData = await getStockOptions(stockMap)
+
+        console.log(optionsData)
+      }
+    
+
+    })()
+  },[symbol])
+
+
   return (
     <>
       <Card className="max-h-[60rem] overflow-scroll ">
