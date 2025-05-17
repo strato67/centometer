@@ -218,9 +218,7 @@ export const getStockOptions = async (
     searchQuery.indexName &&
     YFinanceSymbols.hasOwnProperty(searchQuery.indexName)
   ) {
-    return {
-      response: `Options data for ${searchQuery.indexName} not supported.`,
-    };
+    return {};
   }
 
   const url =

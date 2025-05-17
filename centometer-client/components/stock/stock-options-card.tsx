@@ -22,35 +22,67 @@ import { getStockOptions } from "@/app/actions/stock-info";
 import { useSearchParams } from "next/navigation";
 import LoadingCard from "../loading-card";
 
-export default function StockOptionsCard() {
+const getDateString = (timeString: string) => {
+  const date = new Date(timeString);
 
+  const readable = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return readable;
+};
+
+export default function StockOptionsCard() {
   const searchParams = useSearchParams();
   const symbol = searchParams.get("tvwidgetsymbol");
-  const [expiryDate, setExpiryDate] = useState("2024-05-17");
-  const [expiryDates, setExpiryDates] = useState<string[]>([])
-  const [loading, setLoading] = useState(true)
+  const [expiryDate, setExpiryDate] = useState("");
+  const [expiryDates, setExpiryDates] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-
       if (symbol) {
         const stockMap = {
           indexName: symbol?.includes(":") ? symbol.split(":")[0] : "",
           symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol,
         };
-        const optionsData = await getStockOptions(stockMap)
-        console.log(optionsData)
+        const optionsData = await getStockOptions(stockMap);
+
+        if (Object.keys(optionsData).length === 0) {
+          setLoading(false);
+          return
+        }
+
+        setExpiryDates(optionsData.optionsChain.option_dates);
+        setExpiryDate(optionsData.optionsChain.option_dates[0]);
+
+        console.log(optionsData);
       }
 
-      setLoading(false)
-    })()
-  }, [symbol])
+      setLoading(false);
+    })();
+  }, [symbol]);
 
-
-  if (loading){
+  if (loading) {
     return <LoadingCard className="max-h-[36rem]" />;
   }
 
+  if (!loading && expiryDates.length === 0) {
+    return (
+      <Card className="max-h-[60rem] overflow-scroll ">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div className="flex flex-col gap-2">
+            <CardTitle>Options</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <div>Options not available for {symbol}</div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <>
@@ -65,10 +97,11 @@ export default function StockOptionsCard() {
               <SelectValue placeholder="Expiry Date" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="2024-05-17">May 17, 2024</SelectItem>
-              <SelectItem value="2024-05-24">May 24, 2024</SelectItem>
-              <SelectItem value="2024-05-31">May 31, 2024</SelectItem>
-              <SelectItem value="2024-06-21">Jun 21, 2024</SelectItem>
+              {expiryDates.map((date, _) => (
+                <SelectItem value={date} key={_}>
+                  {getDateString(date)}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </CardHeader>
