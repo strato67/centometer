@@ -54,12 +54,29 @@ class OptionsProvider:
     def get_formatted_options(self):
         options = self.get_options_chain()
         formatted_options = {}
+        numeric_cols = ["volume", "openInterest", "bid", "ask", "lastPrice", "impliedVolatility"]
+
         for key in options:
             if hasattr(options[key], 'to_dict'):
-                options[key]["lastTradeDate"] = options[key]["lastTradeDate"].astype(str)
-                formatted_options[key] = options[key].to_dict(orient='records')
+                df = options[key].copy()
+
+                # Replace NaN with 0 for key numeric fields
+                for col in numeric_cols:
+                    if col in df.columns:
+                        df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+
+                # Ensure volume and openInterest are integers
+                for col in ["volume", "openInterest"]:
+                    if col in df.columns:
+                        df[col] = df[col].astype(int)
+
+                # Convert timestamp to string for readability
+                if "lastTradeDate" in df.columns:
+                    df["lastTradeDate"] = df["lastTradeDate"].astype(str)
+
+                formatted_options[key] = df.to_dict(orient='records')
             else:
-                formatted_options[key] = options[key] 
+                formatted_options[key] = options[key]
 
         return formatted_options
 
@@ -111,5 +128,6 @@ class OptionsProvider:
         putIV = puts[["strike", "impliedVolatility"]].rename(columns={"impliedVolatility": "putIV"})
 
         iv_merged = pd.merge(callIV, putIV, on="strike", how="outer")
+        iv_merged.fillna(value=0, inplace=True)
 
         return iv_merged.to_dict(orient='records')

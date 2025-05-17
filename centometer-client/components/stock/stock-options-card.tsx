@@ -20,13 +20,17 @@ import {
 } from "../ui/select";
 import { getStockOptions } from "@/app/actions/stock-info";
 import { useSearchParams } from "next/navigation";
+import LoadingCard from "../loading-card";
 
 export default function StockOptionsCard() {
 
   const searchParams = useSearchParams();
   const symbol = searchParams.get("tvwidgetsymbol");
   const [expiryDate, setExpiryDate] = useState("2024-05-17");
-  useEffect(()=>{
+  const [expiryDates, setExpiryDates] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
     (async () => {
 
       if (symbol) {
@@ -35,13 +39,17 @@ export default function StockOptionsCard() {
           symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol,
         };
         const optionsData = await getStockOptions(stockMap)
-
         console.log(optionsData)
       }
-    
 
+      setLoading(false)
     })()
-  },[symbol])
+  }, [symbol])
+
+
+  if (loading){
+    return <LoadingCard className="max-h-[36rem]" />;
+  }
 
 
   return (

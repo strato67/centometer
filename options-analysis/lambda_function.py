@@ -9,7 +9,7 @@ def lambda_handler(event, context):
         query = query_params.get('query')
         exp_date = query_params.get('date', "")
 
-        response = json.dumps(generate_option_response(query, exp_date=exp_date))
+        response = generate_option_response(query, exp_date=exp_date)
 
         return {
             'statusCode': 200,
@@ -40,3 +40,6 @@ def generate_option_response(stock, exp_date=""):
         'openInterestAnalysis': options.open_interest_analysis(),
         'ivData': options.iv_analysis()
     }
+
+
+print(generate_option_response("AAPL"))
