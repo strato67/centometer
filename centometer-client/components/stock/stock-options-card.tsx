@@ -21,6 +21,8 @@ import {
 import { getStockOptions } from "@/app/actions/stock-info";
 import { useSearchParams } from "next/navigation";
 import LoadingCard from "../loading-card";
+import PutCallCard from "./options-card-components/put-call-card";
+import { PutCallObject } from "./stockType";
 
 const getDateString = (timeString: string) => {
   const date = new Date(timeString);
@@ -39,6 +41,7 @@ export default function StockOptionsCard() {
   const symbol = searchParams.get("tvwidgetsymbol");
   const [expiryDate, setExpiryDate] = useState("");
   const [expiryDates, setExpiryDates] = useState<string[]>([]);
+  const [putCallRatio, setPutCallRatio] = useState<PutCallObject>()
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,6 +60,7 @@ export default function StockOptionsCard() {
 
         setExpiryDates(optionsData.optionsChain.option_dates);
         setExpiryDate(optionsData.optionsChain.option_dates[0]);
+        setPutCallRatio(optionsData.putCallRatio)
 
         console.log(optionsData);
       }
@@ -107,27 +111,7 @@ export default function StockOptionsCard() {
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="md:col-span-2 bg-secondary">
-              <CardHeader className="pb-2">
-                <CardTitle>Put-Call Ratio</CardTitle>
-                <CardDescription>Current ratio: {1}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="relative pt-2">
-                  <div className="w-full h-2 bg-gray-200 rounded-full">
-                    <div
-                      className="h-2 bg-emerald-500 rounded-full"
-                      style={{ width: `${(1 / 2) * 100}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between mt-2 text-sm text-muted-foreground">
-                    <span>0.0 (Bullish)</span>
-                    <span>1.0 (Neutral)</span>
-                    <span>2.0 (Bearish)</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {putCallRatio && <PutCallCard putCallRatio={putCallRatio} />}
             <Card className="bg-secondary">
               <CardHeader className="pb-2">
                 <CardTitle>Market Summary</CardTitle>

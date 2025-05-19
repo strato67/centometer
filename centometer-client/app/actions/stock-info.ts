@@ -232,6 +232,7 @@ export const getStockOptions = async (
       const json = await response.json();
       return json;
     } catch (error) {
+      console.log(error)
       return {};
     }
 };

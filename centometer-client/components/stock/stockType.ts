@@ -144,3 +144,8 @@ export interface AnalystConsensus {
   colour: string;
   text: string;
 }
+
+export type PutCallObject = {
+  volume: number,
+  open_interest: number
+}
