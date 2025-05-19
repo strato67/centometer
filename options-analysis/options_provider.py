@@ -54,7 +54,7 @@ class OptionsProvider:
     def get_formatted_options(self):
         options = self.get_options_chain()
         formatted_options = {}
-        numeric_cols = ["volume", "openInterest", "bid", "ask", "lastPrice", "impliedVolatility"]
+        numeric_cols = ["volume", "openInterest", "bid", "ask", "lastPrice", "impliedVolatility", "percentChange"]
 
         for key in options:
             if hasattr(options[key], 'to_dict'):
