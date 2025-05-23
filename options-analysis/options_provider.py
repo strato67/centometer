@@ -93,10 +93,10 @@ class OptionsProvider:
 
         return {"volume": volume_ratio.item(), 
                 "open_interest": open_interest_ratio.item(), 
-                "total_call_oi": total_call_oi, 
-                "total_put_oi": total_put_oi, 
-                "total_call_vol": total_call_vol, 
-                "total_put_vol": total_put_vol
+                "total_call_oi": int(total_call_oi),
+                "total_put_oi": int(total_put_oi),
+                "total_call_vol": int(total_call_vol),
+                "total_put_vol": int(total_put_vol),
                 }
 
     def open_interest_analysis(self):
