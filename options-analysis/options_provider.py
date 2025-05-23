@@ -82,11 +82,22 @@ class OptionsProvider:
 
     def put_call_ratio(self):
         #Short term sentiment
-        volume_ratio = self.options_chain.get("puts")["volume"].sum()/self.options_chain.get("calls")["volume"].sum()
+        total_call_vol = self.options_chain.get("calls")["volume"].sum()
+        total_put_vol = self.options_chain.get("puts")["volume"].sum()
+        volume_ratio = total_put_vol/total_call_vol
         #Overall market positioning
-        open_interest_ratio = self.options_chain.get("puts")["openInterest"].sum()/self.options_chain.get("calls")["openInterest"].sum()   
-        
-        return {"volume": volume_ratio.item(), "open_interest": open_interest_ratio.item()}
+
+        total_call_oi = self.options_chain.get("calls")["openInterest"].sum()
+        total_put_oi = self.options_chain.get("puts")["openInterest"].sum()
+        open_interest_ratio = total_put_oi/total_call_oi
+
+        return {"volume": volume_ratio.item(), 
+                "open_interest": open_interest_ratio.item(), 
+                "total_call_oi": total_call_oi, 
+                "total_put_oi": total_put_oi, 
+                "total_call_vol": total_call_vol, 
+                "total_put_vol": total_put_vol
+                }
 
     def open_interest_analysis(self):
        
