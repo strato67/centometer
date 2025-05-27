@@ -10,7 +10,7 @@ import {
   CardContent,
   CardFooter,
 } from "../ui/card";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -22,7 +22,9 @@ import { getStockOptions } from "@/app/actions/stock-info";
 import { useSearchParams } from "next/navigation";
 import LoadingCard from "../loading-card";
 import PutCallCard from "./options-card-components/put-call-card";
-import { PutCallObject } from "./stockType";
+import { OpenInterestData, PutCallObject } from "./stockType";
+import MarketSummaryCard from "./options-card-components/market-summary-card";
+import OpenInterestCard from "./options-card-components/open-interest-card";
 
 const getDateString = (timeString: string) => {
   const date = new Date(timeString);
@@ -41,37 +43,49 @@ export default function StockOptionsCard() {
   const symbol = searchParams.get("tvwidgetsymbol");
   const [expiryDate, setExpiryDate] = useState("");
   const [expiryDates, setExpiryDates] = useState<string[]>([]);
-  const [putCallRatio, setPutCallRatio] = useState<PutCallObject>()
+  const [putCallRatio, setPutCallRatio] = useState<PutCallObject>();
+  const [optionList, setOptionList] = useState();
+  const [ivData, setIVData] = useState()
+  const [oiAnalysis, setOIAnalysis] = useState<OpenInterestData>()
   const [loading, setLoading] = useState(true);
+
+  const stockMap = useMemo(
+    () => ({
+      indexName: symbol!.includes(":") ? symbol!.split(":")[0] : "",
+      symbolName: symbol!.includes(":") ? symbol!.split(":")[1] : symbol!,
+    }),
+    [symbol]
+  );
 
   useEffect(() => {
     (async () => {
-      if (symbol) {
-        const stockMap = {
-          indexName: symbol?.includes(":") ? symbol.split(":")[0] : "",
-          symbolName: symbol?.includes(":") ? symbol.split(":")[1] : symbol,
-        };
-        const optionsData = await getStockOptions(stockMap);
+      const optionsData = await getStockOptions(stockMap);
 
-        if (Object.keys(optionsData).length === 0) {
-          setLoading(false);
-          return
-        }
-
-        setExpiryDates(optionsData.optionsChain.option_dates);
-        setExpiryDate(optionsData.optionsChain.option_dates[0]);
-        setPutCallRatio(optionsData.putCallRatio)
-
-        console.log(optionsData);
+      if (Object.keys(optionsData).length === 0) {
+        setLoading(false);
+        return;
       }
+
+      setExpiryDates(optionsData.optionsChain.option_dates);
+      setExpiryDate(optionsData.optionsChain.option_dates[0]);
+      setPutCallRatio(optionsData.putCallRatio);
+      setOIAnalysis(optionsData.openInterestAnalysis)
+
+      console.log(optionsData);
 
       setLoading(false);
     })();
-  }, [symbol]);
+  }, [symbol, stockMap]);
 
-  if (loading) {
-    return <LoadingCard className="max-h-[36rem]" />;
-  }
+  useEffect(() => {
+    const updateOptions = async (date: string) => {
+      setLoading(true);
+      const optionsData = await getStockOptions(stockMap, date);
+      setPutCallRatio(optionsData.putCallRatio);
+      setLoading(false);
+    };
+    updateOptions(expiryDate)
+  }, [expiryDate, stockMap]);
 
   if (!loading && expiryDates.length === 0) {
     return (
@@ -109,76 +123,33 @@ export default function StockOptionsCard() {
             </SelectContent>
           </Select>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {putCallRatio && <PutCallCard putCallRatio={putCallRatio} />}
-            <Card className="bg-secondary">
-              <CardHeader className="pb-2">
-                <CardTitle>Market Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      Underlying Price:
-                    </span>
-                    <span className="font-medium">$124.68</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Daily Change:</span>
-                    <span className="font-medium text-emerald-500">
-                      +1.24 (1.01%)
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      Total Call OI:
-                    </span>
-                    <span className="font-medium">124,568</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total Put OI:</span>
-                    <span className="font-medium">105,932</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Call Volume:</span>
-                    <span className="font-medium">45,321</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Put Volume:</span>
-                    <span className="font-medium">38,754</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+        {loading ? (
+          <LoadingCard className="max-h-[36rem]" />
+        ) : (
+          <CardContent className="space-y-2">
+            {putCallRatio && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <PutCallCard putCallRatio={putCallRatio} />
+                <MarketSummaryCard putCallRatio={putCallRatio} />
+              </div>
+            )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-secondary">
-              <CardHeader>
-                <CardTitle>Open Interest Analysis</CardTitle>
-                <CardDescription>
-                  Call vs Put open interest by strike price
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[300px]"></div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-secondary">
-              <CardHeader>
-                <CardTitle>IV Analysis</CardTitle>
-                <CardDescription>
-                  Implied volatility by strike price
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[300px]"></div>
-              </CardContent>
-            </Card>
-          </div>
-        </CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {oiAnalysis && <OpenInterestCard oiAnalysis={oiAnalysis}/>}
+              <Card className="bg-secondary">
+                <CardHeader>
+                  <CardTitle>IV Analysis</CardTitle>
+                  <CardDescription>
+                    Implied volatility by strike price
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[300px]"></div>
+                </CardContent>
+              </Card>
+            </div>
+          </CardContent>
+        )}
       </Card>
     </>
   );

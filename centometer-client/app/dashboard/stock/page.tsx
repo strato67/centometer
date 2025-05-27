@@ -37,6 +37,8 @@ export default function Page() {
         setCompanyInfo(await getStockOverview(stockMap));
         setAdded(await getWatchlistItem(stockMap));
         setLoading(false);
+
+        console.log(await getStockOverview(stockMap))
       }
     })();
   }, [symbol]);
@@ -69,9 +71,9 @@ export default function Page() {
             </Button>
 
             {symbol}
-            {companyInfo.currentPrice && (
+            {(companyInfo.currentPrice || companyInfo.regularMarketPrice) && (
               <Badge className="w-fit text-xl">
-                ${companyInfo.currentPrice.toFixed(2)}
+                ${companyInfo.currentPrice?.toFixed(2) || companyInfo.regularMarketPrice?.toFixed(2)}
               </Badge>
             )}
           </div>

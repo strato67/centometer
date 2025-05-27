@@ -222,7 +222,7 @@ export const getStockOptions = async (
   }
 
   const url =
-    process.env.NEXT_PUBLIC_LAMBDA_SEARCH_URL + `options-analysis?query=${searchQuery.symbolName}`;
+    process.env.NEXT_PUBLIC_LAMBDA_SEARCH_URL + `options-analysis?query=${searchQuery.symbolName}&date=${date}`;
     try {
 
       const response = await fetch(url);

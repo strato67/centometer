@@ -35,6 +35,7 @@ export type StockInfo = {
   regularMarketOpen?: number;
   regularMarketDayLow?: number;
   regularMarketDayHigh?: number;
+  regularMarketPrice?:number;
   exDividendDate?: number;
   beta?: number;
   trailingPE?: number;
@@ -146,6 +147,20 @@ export interface AnalystConsensus {
 }
 
 export type PutCallObject = {
-  volume: number,
-  open_interest: number
-}
+  volume: number;
+  open_interest: number;
+  total_call_oi: number;
+  total_put_oi: number;
+  total_call_vol: number;
+  total_put_vol: number;
+};
+
+type OpenInterestLevel = {
+  strike: number;
+  openInterest: number;
+};
+
+export type OpenInterestData = {
+  support: OpenInterestLevel[];
+  resistance: OpenInterestLevel[];
+};
