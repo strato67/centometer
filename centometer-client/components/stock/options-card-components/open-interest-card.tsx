@@ -18,19 +18,6 @@ import {
 } from "recharts";
 import { OpenInterestData } from "../stockType";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-
-const openInterestData = [
-  { strike: "100", calls: 2500, puts: 1200 },
-  { strike: "105", calls: 3200, puts: 1800 },
-  { strike: "110", calls: 4100, puts: 2200 },
-  { strike: "115", calls: 3800, puts: 2800 },
-  { strike: "120", calls: 2900, puts: 3500 },
-  { strike: "125", calls: 2100, puts: 4200 },
-  { strike: "130", calls: 1500, puts: 3800 },
-  { strike: "135", calls: 900, puts: 3100 },
-  { strike: "140", calls: 600, puts: 2400 },
-];
 
 export default function OpenInterestCard({
   oiAnalysis,

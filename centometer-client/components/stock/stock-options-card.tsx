@@ -96,7 +96,7 @@ export default function StockOptionsCard() {
           </div>
         </CardHeader>
         <CardContent className="space-y-2">
-          <div>Options not available for {symbol}</div>
+          <div>Options data unavailable for {symbol}</div>
         </CardContent>
       </Card>
     );

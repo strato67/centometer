@@ -44,19 +44,19 @@ export default function MarketSummaryCard({putCallRatio}: {putCallRatio: PutCall
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Total Call OI:</span>
-            <span className="font-medium">{putCallRatio.total_call_oi}</span>
+            <span className="font-medium">{putCallRatio.total_call_oi.toLocaleString()}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Total Put OI:</span>
-            <span className="font-medium">{putCallRatio.total_put_oi}</span>
+            <span className="font-medium">{putCallRatio.total_put_oi.toLocaleString()}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Call Volume:</span>
-            <span className="font-medium">{putCallRatio.total_call_vol}</span>
+            <span className="font-medium">{putCallRatio.total_call_vol.toLocaleString()}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Put Volume:</span>
-            <span className="font-medium">{putCallRatio.total_put_vol}</span>
+            <span className="font-medium">{putCallRatio.total_put_vol.toLocaleString()}</span>
           </div>
         </div>
       </CardContent>
