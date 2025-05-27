@@ -106,8 +106,6 @@ class OptionsProvider:
         puts = options_chain.get("puts")
 
         tk = yf.Ticker(self.symbol)
-        #TODO Handle if current price is not available
-
         
         current_price = tk.info.get("currentPrice")
         regular_market_price = tk.info.get("regularMarketPrice")
