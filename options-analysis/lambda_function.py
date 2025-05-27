@@ -40,6 +40,3 @@ def generate_option_response(stock, exp_date=""):
         'openInterestAnalysis': options.open_interest_analysis(),
         'ivData': options.iv_analysis()
     }
-
-
-print(generate_option_response("AAPL"))

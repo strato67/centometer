@@ -106,19 +106,28 @@ class OptionsProvider:
         puts = options_chain.get("puts")
 
         tk = yf.Ticker(self.symbol)
-        current_price = tk.info.get("currentPrice")
+        #TODO Handle if current price is not available
 
-        calls_above = calls[calls["strike"] >= current_price]
+        
+        current_price = tk.info.get("currentPrice")
+        regular_market_price = tk.get("regularMarketPrice")
+
+        analysis_price = current_price
+
+        if analysis_price is None:
+            analysis_price = regular_market_price
+
+        calls_above = calls[calls["strike"] >= analysis_price]
         top_resistances = calls_above.sort_values(by='openInterest', ascending=False).head(10)
-        top_resistances['distance'] = abs(top_resistances['strike'] - current_price)
+        top_resistances['distance'] = abs(top_resistances['strike'] - analysis_price)
         top_resistances = top_resistances.sort_values(by='distance').head(3)
 
         resistances = top_resistances[['strike', 'openInterest']].to_dict(orient='records')
 
         # Top 3 support levels (PUT side)
-        puts_below = puts[puts["strike"] <= current_price]
+        puts_below = puts[puts["strike"] <= analysis_price]
         top_supports = puts_below.sort_values(by='openInterest', ascending=False).head(10)
-        top_supports['distance'] = abs(puts_below['strike'] - current_price)
+        top_supports['distance'] = abs(puts_below['strike'] - analysis_price)
         top_supports = top_supports.sort_values(by='distance').head(3)
 
         supports = top_supports[['strike', 'openInterest']].to_dict(orient='records')
