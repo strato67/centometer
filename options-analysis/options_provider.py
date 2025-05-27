@@ -110,7 +110,7 @@ class OptionsProvider:
 
         
         current_price = tk.info.get("currentPrice")
-        regular_market_price = tk.get("regularMarketPrice")
+        regular_market_price = tk.info.get("regularMarketPrice")
 
         analysis_price = current_price
 
