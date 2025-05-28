@@ -51,7 +51,7 @@ export default function OpenInterestCard({
       <CardHeader>
         <CardTitle>Open Interest Analysis</CardTitle>
         <CardDescription>
-          Top current support and resistance levels
+          Top support and resistance levels
         </CardDescription>
       </CardHeader>
       <CardContent>

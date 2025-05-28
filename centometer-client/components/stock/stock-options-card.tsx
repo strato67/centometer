@@ -22,9 +22,10 @@ import { getStockOptions } from "@/app/actions/stock-info";
 import { useSearchParams } from "next/navigation";
 import LoadingCard from "../loading-card";
 import PutCallCard from "./options-card-components/put-call-card";
-import { OpenInterestData, PutCallObject } from "./stockType";
+import { IVDataPoint, OpenInterestData, PutCallObject } from "./stockType";
 import MarketSummaryCard from "./options-card-components/market-summary-card";
 import OpenInterestCard from "./options-card-components/open-interest-card";
+import IVAnalysisCard from "./options-card-components/iv-analysis-card";
 
 const getDateString = (timeString: string) => {
   const date = new Date(timeString);
@@ -45,7 +46,7 @@ export default function StockOptionsCard() {
   const [expiryDates, setExpiryDates] = useState<string[]>([]);
   const [putCallRatio, setPutCallRatio] = useState<PutCallObject>();
   const [optionList, setOptionList] = useState();
-  const [ivData, setIVData] = useState()
+  const [ivData, setIVData] = useState<IVDataPoint[]>()
   const [oiAnalysis, setOIAnalysis] = useState<OpenInterestData>()
   const [loading, setLoading] = useState(true);
 
@@ -68,8 +69,10 @@ export default function StockOptionsCard() {
 
       setExpiryDates(optionsData.optionsChain.option_dates);
       setExpiryDate(optionsData.optionsChain.option_dates[0]);
+
       setPutCallRatio(optionsData.putCallRatio);
       setOIAnalysis(optionsData.openInterestAnalysis)
+      setIVData(optionsData.ivData)
 
       console.log(optionsData);
 
@@ -81,7 +84,10 @@ export default function StockOptionsCard() {
     const updateOptions = async (date: string) => {
       setLoading(true);
       const optionsData = await getStockOptions(stockMap, date);
+
       setPutCallRatio(optionsData.putCallRatio);
+      setOIAnalysis(optionsData.openInterestAnalysis)
+      setIVData(optionsData.ivData)
       setLoading(false);
     };
     updateOptions(expiryDate)
@@ -136,17 +142,7 @@ export default function StockOptionsCard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {oiAnalysis && <OpenInterestCard oiAnalysis={oiAnalysis}/>}
-              <Card className="bg-secondary">
-                <CardHeader>
-                  <CardTitle>IV Analysis</CardTitle>
-                  <CardDescription>
-                    Implied volatility by strike price
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[300px]"></div>
-                </CardContent>
-              </Card>
+              {ivData && <IVAnalysisCard ivData={ivData}/>}
             </div>
           </CardContent>
         )}

@@ -164,3 +164,9 @@ export type OpenInterestData = {
   support: OpenInterestLevel[];
   resistance: OpenInterestLevel[];
 };
+
+export type IVDataPoint = {
+  strike: number;
+  callIV: number | null;
+  putIV: number | null;
+}
