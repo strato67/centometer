@@ -170,3 +170,24 @@ export type IVDataPoint = {
   callIV: number | null;
   putIV: number | null;
 }
+
+type OptionChainRow = {
+  contractSymbol: string;
+  lastTradeDate: string; 
+  strike: number;
+  lastPrice: number;
+  bid: number;
+  ask: number;
+  change: number;
+  percentChange: number;
+  volume: number;
+  openInterest: number;
+  impliedVolatility: number;
+  inTheMoney: boolean;
+};
+
+export interface OptionsChain{
+  calls: OptionChainRow[];
+  puts: OptionChainRow[]
+  option_dates?: string[]
+}

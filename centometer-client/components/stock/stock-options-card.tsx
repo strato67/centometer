@@ -1,16 +1,12 @@
 "use client";
 
-import { StockContext } from "@/utils/hooks/stockinfo";
-import { Button } from "../ui/button";
 import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardContent,
-  CardFooter,
 } from "../ui/card";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -21,11 +17,8 @@ import {
 import { getStockOptions } from "@/app/actions/stock-info";
 import { useSearchParams } from "next/navigation";
 import LoadingCard from "../loading-card";
-import PutCallCard from "./options-card-components/put-call-card";
-import { IVDataPoint, OpenInterestData, PutCallObject } from "./stockType";
-import MarketSummaryCard from "./options-card-components/market-summary-card";
-import OpenInterestCard from "./options-card-components/open-interest-card";
-import IVAnalysisCard from "./options-card-components/iv-analysis-card";
+import { OptionsChain } from "./stockType";
+import OptionChainTable from "./options-card-components/option-chain-table";
 
 const getDateString = (timeString: string) => {
   const date = new Date(timeString);
@@ -44,10 +37,7 @@ export default function StockOptionsCard() {
   const symbol = searchParams.get("tvwidgetsymbol");
   const [expiryDate, setExpiryDate] = useState("");
   const [expiryDates, setExpiryDates] = useState<string[]>([]);
-  const [putCallRatio, setPutCallRatio] = useState<PutCallObject>();
-  const [optionList, setOptionList] = useState();
-  const [ivData, setIVData] = useState<IVDataPoint[]>()
-  const [oiAnalysis, setOIAnalysis] = useState<OpenInterestData>()
+  const [optionList, setOptionList] = useState<OptionsChain>();
   const [loading, setLoading] = useState(true);
 
   const stockMap = useMemo(
@@ -70,11 +60,7 @@ export default function StockOptionsCard() {
       setExpiryDates(optionsData.optionsChain.option_dates);
       setExpiryDate(optionsData.optionsChain.option_dates[0]);
 
-      setPutCallRatio(optionsData.putCallRatio);
-      setOIAnalysis(optionsData.openInterestAnalysis)
-      setIVData(optionsData.ivData)
-
-      console.log(optionsData);
+      setOptionList(optionsData.optionsChain)
 
       setLoading(false);
     })();
@@ -85,12 +71,11 @@ export default function StockOptionsCard() {
       setLoading(true);
       const optionsData = await getStockOptions(stockMap, date);
 
-      setPutCallRatio(optionsData.putCallRatio);
-      setOIAnalysis(optionsData.openInterestAnalysis)
-      setIVData(optionsData.ivData)
+
+      setOptionList(optionsData.optionsChain)
       setLoading(false);
     };
-    updateOptions(expiryDate)
+    updateOptions(expiryDate);
   }, [expiryDate, stockMap]);
 
   if (!loading && expiryDates.length === 0) {
@@ -133,17 +118,11 @@ export default function StockOptionsCard() {
           <LoadingCard className="max-h-[36rem]" />
         ) : (
           <CardContent className="space-y-2">
-            {putCallRatio && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <PutCallCard putCallRatio={putCallRatio} />
-                <MarketSummaryCard putCallRatio={putCallRatio} />
-              </div>
-            )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {oiAnalysis && <OpenInterestCard oiAnalysis={oiAnalysis}/>}
-              {ivData && <IVAnalysisCard ivData={ivData}/>}
+            <div>
+              {optionList && <OptionChainTable optionsChain={optionList} />}
             </div>
+
           </CardContent>
         )}
       </Card>
