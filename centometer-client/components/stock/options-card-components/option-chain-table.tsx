@@ -41,7 +41,7 @@ const TableSection = ({
           {data.map((contract) => (
             <TableRow
               key={contract.contractSymbol}
-              className={`${contract.inTheMoney ? "bg-secondary" : ""}`}
+              className={`font-semibold ${contract.inTheMoney ? "bg-secondary" : ""}`}
             >
               <TableCell className="font-medium">{contract.contractSymbol}</TableCell>
               <TableCell>{contract.lastTradeDate}</TableCell>
@@ -52,9 +52,9 @@ const TableSection = ({
               <TableCell
                 className={`${
                   contract.change > 0
-                    ? "text-[#22c55e]"
+                    ? "text-emerald-600"
                     : contract.change < 0
-                    ? "text-destructive"
+                    ? "text-red-600"
                     : ""
                 }`}
               >
@@ -64,9 +64,9 @@ const TableSection = ({
               <TableCell
                 className={`${
                   contract.percentChange > 0
-                    ? "text-[#22c55e]"
+                    ? "text-emerald-600"
                     : contract.percentChange < 0
-                    ? "text-destructive"
+                    ? "text-red-600"
                     : ""
                 }`}
               >
@@ -79,7 +79,7 @@ const TableSection = ({
               </TableCell>
               <TableCell>{contract.volume}</TableCell>
               <TableCell>{contract.openInterest}</TableCell>
-              <TableCell>{contract.impliedVolatility}</TableCell>
+              <TableCell>{(contract.impliedVolatility*100).toFixed(2)}%</TableCell>
             </TableRow>
           ))}
         </TableBody>

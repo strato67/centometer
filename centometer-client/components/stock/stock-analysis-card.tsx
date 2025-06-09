@@ -121,7 +121,7 @@ export default function StockAnalysisCard() {
         {loading ? (
           <LoadingCard className="max-h-[36rem]" />
         ) : (
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-6">
             {putCallRatio && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <PutCallCard putCallRatio={putCallRatio} />
