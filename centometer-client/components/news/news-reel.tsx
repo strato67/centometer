@@ -5,6 +5,8 @@ import { NewsType } from "@/app/actions/news";
 import { useEffect, useRef, useState } from "react";
 import { getNewsFeed } from "@/app/actions/news";
 import { LoadingSpinner } from "../ui/loading-spinner";
+import { Separator } from "../ui/separator";
+import React from "react";
 
 interface NewsReelProps {
   newsType: NewsType;
@@ -12,7 +14,7 @@ interface NewsReelProps {
 
 export default function NewsReel(props: NewsReelProps) {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
-  const [lastKey, setLastKey] = useState<string>('');
+  const [lastKey, setLastKey] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -21,53 +23,63 @@ export default function NewsReel(props: NewsReelProps) {
       const newsFeed = await getNewsFeed(props.newsType);
       if (Array.isArray(newsFeed)) {
         setArticles(newsFeed);
-        setLastKey('');
+        setLastKey("");
       } else {
         setArticles(newsFeed.data);
-        setLastKey(newsFeed.LastEvaluatedKey || '');
+        setLastKey(newsFeed.LastEvaluatedKey || "");
       }
-      setLoading(false)
+      setLoading(false);
     })();
   }, [props.newsType]);
 
-  const updateArticles = async()=> {
-    setLoading(true)
+  const updateArticles = async () => {
+    setLoading(true);
 
     const newsFeed = await getNewsFeed(props.newsType, lastKey);
-    setTimeout(()=>{
+    setTimeout(() => {
       if (!Array.isArray(newsFeed)) {
-    
-        setArticles(prevArticles => [...prevArticles, ...newsFeed.data]);
-        setLastKey(newsFeed.LastEvaluatedKey || '');
-      }    
-      setLoading(false)
-    }, 800)
-    
-  }
+        setArticles((prevArticles) => [...prevArticles, ...newsFeed.data]);
+        setLastKey(newsFeed.LastEvaluatedKey || "");
+      }
+      setLoading(false);
+    }, 800);
+  };
 
   const handleScroll = async (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
-    const isBottom = target.scrollHeight - target.scrollTop <= target.clientHeight + 1;
+    const isBottom =
+      target.scrollHeight - target.scrollTop <= target.clientHeight + 1;
 
     if (isBottom) {
-      await updateArticles()
+      await updateArticles();
     }
   };
 
   return (
     <>
-      <div className=" w-full border-none h-[33rem] md:h-[40rem] lg:h-[48rem] overflow-auto" onScroll={handleScroll} ref={scrollRef}>
+      <div
+        className=" w-full border-none h-[33rem] md:h-[40rem] lg:h-[48rem] overflow-auto"
+        onScroll={handleScroll}
+        ref={scrollRef}
+      >
         {articles &&
           articles.map((article) => (
-            <NewsLink
-              key={crypto.randomUUID()}
-              title={article.title}
-              source={article.source}
-              date={article.date}
-              url={article.url}
-            />
+            <React.Fragment key={crypto.randomUUID()}>
+              <NewsLink
+                
+                title={article.title}
+                source={article.source}
+                date={article.date}
+                url={article.url}
+              />
+              <Separator />
+              </React.Fragment>
           ))}
-        {loading && (<div className="mt-4 flex items-center justify-center"><LoadingSpinner/></div>)}
+        {loading && (
+          <div className="mt-4 flex items-center justify-center">
+            <LoadingSpinner />
+          </div>
+        )}
       </div>
     </>
   );

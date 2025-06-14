@@ -209,3 +209,30 @@ export const getUserPinnedStocks = async () => {
   const formattedList = data.map((item) => `${item.index}:${item.symbol}`);
   return formattedList;
 };
+
+export const getStockOptions = async (
+  searchQuery: StockQuery,
+  date?: string
+) => {
+  if (
+    searchQuery.indexName &&
+    YFinanceSymbols.hasOwnProperty(searchQuery.indexName)
+  ) {
+    return {};
+  }
+
+  const url =
+    process.env.NEXT_PUBLIC_LAMBDA_SEARCH_URL + `options-analysis?query=${searchQuery.symbolName}&date=${date}`;
+    try {
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        return {};
+      }
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      console.log(error)
+      return {};
+    }
+};

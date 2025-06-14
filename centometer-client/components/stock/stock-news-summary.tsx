@@ -19,16 +19,18 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 import { Button } from "../ui/button";
+import { useSearchParams } from "next/navigation";
 
 export default function StockNewsSummary() {
-  const companyInfo = useContext(StockContext);
+  const searchParams = useSearchParams();
+  const symbol = searchParams.get("tvwidgetsymbol");
   const [summary, setSummary] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
-      if (companyInfo.symbol) {
+      if (symbol) {
         setSummary("");
-        const prompt = `List 4 key points about the latest news on the ${companyInfo.exchange}:${companyInfo.symbol} stock symbol.`;
+        const prompt = `List 4 key points about the latest news on the ${symbol} stock symbol.`;
         const { output } = await generateAIStreamSummary(prompt);
         let accumulatedText = "";
 
@@ -40,10 +42,10 @@ export default function StockNewsSummary() {
         setSummary("Could not generate summary.");
       }
     })();
-  }, [companyInfo, companyInfo.symbol]);
+  }, [symbol]);
 
   return (
-    <Card className="bg-gradient-to-r from-indigo-600 to-cyan-600 text-white max-h-96">
+    <Card className="bg-gradient-to-r from-indigo-600 to-cyan-600 text-white max-h-fit">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CardHeader>
           <CollapsibleTrigger asChild className="cursor-pointer">
@@ -62,7 +64,7 @@ export default function StockNewsSummary() {
 
         </CardHeader>
         <CollapsibleContent className="-mt-4">
-          <CardContent className="overflow-auto max-h-full">
+          <CardContent className="max-h-80 overflow-y-auto">
             <ReactMarkdown
               className="flex flex-col "
               components={{

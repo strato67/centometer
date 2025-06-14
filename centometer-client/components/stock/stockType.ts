@@ -35,6 +35,7 @@ export type StockInfo = {
   regularMarketOpen?: number;
   regularMarketDayLow?: number;
   regularMarketDayHigh?: number;
+  regularMarketPrice?:number;
   exDividendDate?: number;
   beta?: number;
   trailingPE?: number;
@@ -143,4 +144,50 @@ export interface AnalystConsensus {
   name: string;
   colour: string;
   text: string;
+}
+
+export type PutCallObject = {
+  volume: number;
+  open_interest: number;
+  total_call_oi: number;
+  total_put_oi: number;
+  total_call_vol: number;
+  total_put_vol: number;
+};
+
+type OpenInterestLevel = {
+  strike: number;
+  openInterest: number;
+};
+
+export type OpenInterestData = {
+  support: OpenInterestLevel[];
+  resistance: OpenInterestLevel[];
+};
+
+export type IVDataPoint = {
+  strike: number;
+  callIV: number | null;
+  putIV: number | null;
+}
+
+type OptionChainRow = {
+  contractSymbol: string;
+  lastTradeDate: string; 
+  strike: number;
+  lastPrice: number;
+  bid: number;
+  ask: number;
+  change: number;
+  percentChange: number;
+  volume: number;
+  openInterest: number;
+  impliedVolatility: number;
+  inTheMoney: boolean;
+};
+
+export interface OptionsChain{
+  calls: OptionChainRow[];
+  puts: OptionChainRow[]
+  option_dates?: string[]
 }
